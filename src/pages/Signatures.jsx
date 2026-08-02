@@ -1151,24 +1151,53 @@ export default function Signatures() {
           </AnimatePresence>
         </div>
 
-        {/* Back nav */}
+        {/* Bottom nav actions */}
         {activeStep > 1 && (
-          <motion.button
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            onClick={() => setActiveStep(s => s - 1)}
-            style={{
-              marginTop: 14, display: 'flex', alignItems: 'center', gap: 6,
-              padding: '8px 16px', borderRadius: 8,
-              background: 'transparent',
-              border: '1px solid rgba(59,140,255,0.15)',
-              color: '#7a8fb0', fontFamily: 'Manrope, sans-serif',
-              fontWeight: 500, fontSize: '0.8rem', cursor: 'pointer',
-            }}
-          >
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-            Back to Step {activeStep - 1}
-          </motion.button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 14 }}>
+            <motion.button
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              whileHover={{ scale: 1.02, backgroundColor: 'rgba(59,140,255,0.1)' }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => setActiveStep(s => s - 1)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 6,
+                padding: '8px 16px', borderRadius: 8,
+                background: 'transparent',
+                border: '1px solid rgba(59,140,255,0.25)',
+                color: '#7a8fb0', fontFamily: 'Manrope, sans-serif',
+                fontWeight: 600, fontSize: '0.8rem', cursor: 'pointer',
+                transition: 'all 0.2s',
+              }}
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+              Back to Step {activeStep - 1}
+            </motion.button>
+
+            <motion.button
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              whileHover={{ scale: 1.02, backgroundColor: 'rgba(239,68,68,0.1)' }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => {
+                setKeys(null);
+                setSig(null);
+                setActiveStep(1);
+              }}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 6,
+                padding: '8px 16px', borderRadius: 8,
+                background: 'transparent',
+                border: '1px solid rgba(239,68,68,0.25)',
+                color: '#ef4444', fontFamily: 'Manrope, sans-serif',
+                fontWeight: 600, fontSize: '0.8rem', cursor: 'pointer',
+                transition: 'all 0.2s',
+              }}
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+              Reset Tutorial
+            </motion.button>
+          </div>
         )}
       </div>
     </div>
