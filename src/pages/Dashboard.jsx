@@ -23,9 +23,9 @@ function makeBlock(data, prevHash) {
   return { ...b, hash: computeHash(b), status: 'valid' }
 }
 
-const B1 = makeBlock({ from: 'Mirae Asset',   to: 'Narayana School', amount: '₹18,000', milestone: 'Admission Confirmed', timestamp: '2024-06-01 09:14', index: 1 }, GENESIS)
-const B2 = makeBlock({ from: 'Arka Fincap',   to: 'Narayana School', amount: '₹24,000', milestone: 'Semester 1 Start',    timestamp: '2024-10-02 11:22', index: 2 }, B1.hash)
-const B3 = makeBlock({ from: 'Ratnaafin Lite',to: 'Narayana School', amount: '₹24,000', milestone: 'Semester 2 Start',    timestamp: '2025-02-01 08:45', index: 3 }, B2.hash)
+const B1 = makeBlock({ from: 'NBFC 1',   to: 'Partner Institute', amount: '₹18,000', milestone: 'Admission Confirmed', timestamp: '2024-06-01 09:14', index: 1 }, GENESIS)
+const B2 = makeBlock({ from: 'NBFC 2',   to: 'Partner Institute', amount: '₹24,000', milestone: 'Semester 1 Start',    timestamp: '2024-10-02 11:22', index: 2 }, B1.hash)
+const B3 = makeBlock({ from: 'NBFC 3',to: 'Partner Institute', amount: '₹24,000', milestone: 'Semester 2 Start',    timestamp: '2025-02-01 08:45', index: 3 }, B2.hash)
 
 const CLEAN_CHAIN = [B1, B2, B3]
 
@@ -38,12 +38,12 @@ const NBFC_TAMPERED_CHAIN = [B1, B2_TAMPERED, { ...B3, status: 'invalid' }]
 ═══════════════════════════════════════════════════════════════════════════ */
 
 const ENTITY_INITIALS = {
-  'Mirae Asset': 'MA', 'Arka Fincap': 'AF', 'Ratnaafin Lite': 'RL',
-  'Narayana School': 'NS',
+  'NBFC 1': 'N1', 'NBFC 2': 'N2', 'NBFC 3': 'N3',
+  'Partner Institute': 'PI',
 }
 const ENTITY_COLORS = {
-  'Mirae Asset': '#3b8cff', 'Arka Fincap': '#14b8a6',
-  'Ratnaafin Lite': '#a78bfa', 'Narayana School': '#10b981',
+  'NBFC 1': '#3b8cff', 'NBFC 2': '#14b8a6',
+  'NBFC 3': '#a78bfa', 'Partner Institute': '#10b981',
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -234,7 +234,7 @@ function NBFCContent({ chain, tampered }) {
         }}>AF</div>
         <div>
           <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.8rem', color: '#d4e0ef' }}>
-            Arka Fincap
+            NBFC 2
           </div>
           <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.65rem', color: '#7a8fb0' }}>
             Disbursement Console
@@ -283,7 +283,7 @@ function NBFCContent({ chain, tampered }) {
    GRAYQUEST APP CONTENT (phone frame)
 ═══════════════════════════════════════════════════════════════════════════ */
 
-function GrayQuestContent({ chain }) {
+function Fintech CompanyContent({ chain }) {
   const accentColor = '#f59e0b'
   return (
     <div style={{ padding: '0 10px 10px' }}>
@@ -302,7 +302,7 @@ function GrayQuestContent({ chain }) {
         }}>⛓</div>
         <div>
           <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '0.78rem', color: '#fbbf24' }}>
-            GrayQuest
+            Fintech Company
           </div>
           <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.55rem', color: '#7a8fb0' }}>
             Education Finance
@@ -350,7 +350,7 @@ function GrayQuestContent({ chain }) {
                   fontSize: '0.92rem', color: '#10b981',
                 }}>{block.amount}</div>
                 <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.55rem', color: '#7a8fb0' }}>
-                  {block.from} → NS
+                  {block.from} → PI
                 </div>
               </div>
               <div style={{ textAlign: 'right' }}>
@@ -406,7 +406,7 @@ function InstitutionContent({ chain }) {
         }}>🏫</div>
         <div>
           <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.8rem', color: '#d4e0ef' }}>
-            Narayana School
+            Partner Institute
           </div>
           <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.65rem', color: '#7a8fb0' }}>
             Finance Office Portal
@@ -497,7 +497,7 @@ function ConsensusPanel({ tampered }) {
           <div style={{ display: 'flex', gap: 10, marginTop: 16, flexWrap: 'wrap' }}>
             {[
               { node: '🏦 NBFC Node',        vote: 'DIVERGED', color: '#ef4444' },
-              { node: '📱 GrayQuest Node',   vote: 'CONSENSUS', color: '#10b981' },
+              { node: '📱 Fintech Node',   vote: 'CONSENSUS', color: '#10b981' },
               { node: '🏫 Institution Node', vote: 'CONSENSUS', color: '#10b981' },
             ].map((n, i) => (
               <motion.div
@@ -545,9 +545,9 @@ function ConsensusPanel({ tampered }) {
 ═══════════════════════════════════════════════════════════════════════════ */
 
 const CHART_DATA = [
-  { milestone: 'Admission', amount: 18000, nbfc: 'Mirae Asset',    color: '#3b8cff' },
-  { milestone: 'Sem 1',     amount: 24000, nbfc: 'Arka Fincap',    color: '#14b8a6' },
-  { milestone: 'Sem 2',     amount: 24000, nbfc: 'Ratnaafin Lite', color: '#a78bfa' },
+  { milestone: 'Admission', amount: 18000, nbfc: 'NBFC 1',    color: '#3b8cff' },
+  { milestone: 'Sem 1',     amount: 24000, nbfc: 'NBFC 2',    color: '#14b8a6' },
+  { milestone: 'Sem 2',     amount: 24000, nbfc: 'NBFC 3', color: '#a78bfa' },
 ]
 
 const CustomTooltip = ({ active, payload, label }) => {
@@ -627,7 +627,7 @@ function DisbursementChart({ tampered }) {
             fontFamily: 'Manrope, sans-serif', fontSize: '0.76rem', color: '#f87171',
           }}
         >
-          📊 Chart shows NBFC's tampered local value. Consensus value (from GrayQuest + Institution nodes): ₹24,000
+          📊 Chart shows NBFC's tampered local value. Consensus value (from Fintech Company + Institution nodes): ₹24,000
         </motion.div>
       )}
     </div>
@@ -665,7 +665,7 @@ export default function Dashboard() {
             fontFamily: 'Manrope, sans-serif', fontSize: '0.9rem',
             color: '#7a8fb0', margin: 0, maxWidth: 560, lineHeight: 1.65,
           }}>
-            NBFC, GrayQuest Platform, and Institution each hold an independent, identical copy of the ledger.
+            NBFC, Fintech Company, and Institution each hold an independent, identical copy of the ledger.
             No single party controls the record — this is the village council principle.
           </p>
         </motion.div>
@@ -746,10 +746,10 @@ export default function Dashboard() {
             </BrowserFrame>
           </div>
 
-          {/* ── GrayQuest (Phone) ─────────────────────────────────── */}
+          {/* ── Fintech Company (Phone) ─────────────────────────────────── */}
           <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
             <PhoneFrame accentColor="#f59e0b" isConsensus={tampered}>
-              <GrayQuestContent chain={CLEAN_CHAIN} />
+              <Fintech CompanyContent chain={CLEAN_CHAIN} />
             </PhoneFrame>
             {tampered && (
               <motion.div
@@ -804,7 +804,7 @@ export default function Dashboard() {
           {[
             { icon: '🏛',  title: 'Village Council',  text: 'No single node has the authority to alter the ledger. The majority decides what is true — exactly like a village council.' },
             { icon: '📖', title: 'Wikipedia Analogy', text: 'Anyone can read the ledger. You trust the cryptographic proof, not the institution presenting it.' },
-            { icon: '⚙',  title: 'Node vs Transactor', text: 'NBFC, GrayQuest, and Institution are nodes — they hold full ledger copies. The student is a transactor — they only need a wallet address.' },
+            { icon: '⚙',  title: 'Node vs Transactor', text: 'NBFC, Fintech Company, and Institution are nodes — they hold full ledger copies. The student is a transactor — they only need a wallet address.' },
           ].map(item => (
             <div key={item.title} style={{ display: 'flex', gap: 12 }}>
               <span style={{ fontSize: '1.2rem', flexShrink: 0 }}>{item.icon}</span>

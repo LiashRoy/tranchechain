@@ -31,17 +31,17 @@ const uid = () => `block-${++_uid}-${Date.now()}`
 ═══════════════════════════════════════════════════════════════════════════ */
 
 const ENTITIES = {
-  'Mirae Asset':          { color: '#3b8cff', bg: 'rgba(59,140,255,0.15)',  initials: 'MA', type: 'nbfc' },
-  'Arka Fincap':          { color: '#14b8a6', bg: 'rgba(20,184,166,0.15)',  initials: 'AF', type: 'nbfc' },
-  'Ratnaafin Lite':       { color: '#a78bfa', bg: 'rgba(167,139,250,0.15)',initials: 'RL', type: 'nbfc' },
-  'GrayQuest Platform':   { color: '#f59e0b', bg: 'rgba(245,158,11,0.15)', initials: 'GQ', type: 'platform' },
-  'Narayana School':      { color: '#10b981', bg: 'rgba(16,185,129,0.15)', initials: 'NS', type: 'institution' },
+  'NBFC 1':          { color: '#3b8cff', bg: 'rgba(59,140,255,0.15)',  initials: 'N1', type: 'nbfc' },
+  'NBFC 2':          { color: '#14b8a6', bg: 'rgba(20,184,166,0.15)',  initials: 'N2', type: 'nbfc' },
+  'NBFC 3':       { color: '#a78bfa', bg: 'rgba(167,139,250,0.15)',initials: 'N3', type: 'nbfc' },
+  'Fintech Company':   { color: '#f59e0b', bg: 'rgba(245,158,11,0.15)', initials: 'GQ', type: 'platform' },
+  'Partner Institute':      { color: '#10b981', bg: 'rgba(16,185,129,0.15)', initials: 'PI', type: 'institution' },
   'BITS Pilani':          { color: '#f87171', bg: 'rgba(248,113,113,0.15)',initials: 'BP', type: 'institution' },
   'IIM Bangalore':        { color: '#fbbf24', bg: 'rgba(251,191,36,0.15)', initials: 'IB', type: 'institution' },
 }
 
-const FROM_OPTIONS = ['Mirae Asset', 'Arka Fincap', 'Ratnaafin Lite']
-const TO_OPTIONS   = ['GrayQuest Platform', 'Narayana School', 'BITS Pilani', 'IIM Bangalore']
+const FROM_OPTIONS = ['NBFC 1', 'NBFC 2', 'NBFC 3']
+const TO_OPTIONS   = ['Fintech Company', 'Partner Institute', 'BITS Pilani', 'IIM Bangalore']
 const MILESTONES   = ['Admission Confirmed', 'Semester 1 Start', 'Semester 2 Start', 'Final Disbursement']
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -55,19 +55,19 @@ function makeBlock(data, prevHash) {
 
 function buildInitialChain() {
   const b1 = makeBlock({
-    from: 'Mirae Asset', to: 'Narayana School',
+    from: 'NBFC 1', to: 'Partner Institute',
     amount: '₹18,000', milestone: 'Admission Confirmed',
     timestamp: '2024-06-01 09:14', index: 1,
   }, GENESIS_PREV)
 
   const b2 = makeBlock({
-    from: 'Arka Fincap', to: 'Narayana School',
+    from: 'NBFC 2', to: 'Partner Institute',
     amount: '₹24,000', milestone: 'Semester 1 Start',
     timestamp: '2024-10-02 11:22', index: 2,
   }, b1.hash)
 
   const b3 = makeBlock({
-    from: 'Ratnaafin Lite', to: 'Narayana School',
+    from: 'NBFC 3', to: 'Partner Institute',
     amount: '₹24,000', milestone: 'Semester 2 Start',
     timestamp: '2025-02-01 08:45', index: 3,
   }, b2.hash)

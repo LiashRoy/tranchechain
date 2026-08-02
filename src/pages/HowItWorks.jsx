@@ -23,17 +23,17 @@ const trunc = (h, n = 16) => h ? `${h.slice(0, n)}…` : ''
 const GENESIS_PREV = '0000000000000000000000000000000000000000000000000000000000000000'
 
 const BLOCK1_BASE = {
-  loanId: 'EDU-2024-001', from: 'Arka Fincap', to: 'Narayana School',
+  loanId: 'EDU-2024-001', from: 'NBFC 2', to: 'Partner Institute',
   amount: '₹18,000', milestone: 'Tranche 1 · Admission',
   timestamp: '2024-06-01T09:14:00Z',
 }
 const BLOCK2_BASE = {
-  loanId: 'EDU-2024-001', from: 'Arka Fincap', to: 'Narayana School',
+  loanId: 'EDU-2024-001', from: 'NBFC 2', to: 'Partner Institute',
   amount: '₹24,000', milestone: 'Tranche 2 · Mid-Year',
   timestamp: '2024-10-01T11:22:00Z',
 }
 const BLOCK3_BASE = {
-  loanId: 'EDU-2024-001', from: 'Arka Fincap', to: 'Narayana School',
+  loanId: 'EDU-2024-001', from: 'NBFC 2', to: 'Partner Institute',
   amount: '₹18,000', milestone: 'Tranche 3 · Final',
   timestamp: '2025-02-01T08:45:00Z',
 }
@@ -185,7 +185,7 @@ function DiffHash({ hashA, hashB }) {
 function Section1() {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-120px' })
-  const [input, setInput] = useState('₹18,000 | Arka Fincap → Narayana School | Tranche 2')
+  const [input, setInput] = useState('₹18,000 | NBFC 2 → Partner Institute | Tranche 2')
 
   const currentHash = useMemo(() => sha256(input), [input])
 
@@ -320,14 +320,14 @@ function Section1() {
 
 const BLOCK_FIELDS = [
   { key: 'loan_id',    label: 'loan_id',     value: 'EDU-2024-001',                color: '#3b8cff', desc: 'Unique loan reference' },
-  { key: 'from',       label: 'from_entity', value: 'Arka Fincap',                 color: '#3b8cff', desc: 'Disbursing NBFC node' },
-  { key: 'to',         label: 'to_entity',   value: 'Narayana School',             color: '#3b8cff', desc: 'Receiving institution node' },
+  { key: 'from',       label: 'from_entity', value: 'NBFC 2',                 color: '#3b8cff', desc: 'Disbursing NBFC node' },
+  { key: 'to',         label: 'to_entity',   value: 'Partner Institute',             color: '#3b8cff', desc: 'Receiving institution node' },
   { key: 'amount',     label: 'amount',      value: '₹18,000',                     color: '#10b981', desc: 'Tranche disbursement amount' },
   { key: 'milestone',  label: 'milestone',   value: 'Tranche 2 · Mid-Year Fee',    color: '#10b981', desc: 'Disbursement condition met' },
   { key: 'timestamp',  label: 'timestamp',   value: '2024-10-01T11:22:00Z',        color: '#a78bfa', desc: 'Block creation time (immutable)' },
   { key: 'prev_hash',  label: 'prev_hash',   value: 'a3f9c2…',                     color: '#f59e0b', desc: 'Fingerprint of the previous block — links the chain' },
   { key: 'this_hash',  label: 'this_hash',   value: 'e7b42d…',                     color: '#14b8a6', desc: 'Fingerprint of THIS block\'s contents' },
-  { key: 'signature',  label: 'signature',   value: '3045…(ECDSA)',                color: '#ef4444', desc: 'Arka Fincap\'s wax seal — Layer 1 tamper protection' },
+  { key: 'signature',  label: 'signature',   value: '3045…(ECDSA)',                color: '#ef4444', desc: 'NBFC 2\'s wax seal — Layer 1 tamper protection' },
 ]
 
 function Section2() {
@@ -1017,7 +1017,7 @@ function Section5() {
         <SectionTitle>The Wax Seal — NBFC as Signer</SectionTitle>
         <SectionSub>
           Cryptographic keys work like a trapdoor: easy to go from private → public, practically
-          impossible to reverse. The digital signature is Arka Fincap's wax seal — bound to both
+          impossible to reverse. The digital signature is NBFC 2's wax seal — bound to both
           their private key AND the exact tranche message.
         </SectionSub>
 
@@ -1049,7 +1049,7 @@ function Section5() {
                 color: '#a78bfa', marginBottom: '4px',
               }}>Private Key</div>
               <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.76rem', color: '#9badc8' }}>
-                Arka Fincap only
+                NBFC 2 only
               </div>
             </motion.div>
 
@@ -1079,7 +1079,7 @@ function Section5() {
               {[
                 'loan_id: EDU-2024-001',
                 'amount: ₹18,000',
-                'to: Narayana School',
+                'to: Partner Institute',
                 'milestone: Tranche 2',
               ].map(line => (
                 <div key={line} style={{
@@ -1123,17 +1123,17 @@ function Section5() {
           <div style={{
             fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.85rem',
             color: '#7a8fb0', marginBottom: '20px',
-          }}>Verification (anyone can do this — only Arka Fincap could have created it):</div>
+          }}>Verification (anyone can do this — only NBFC 2 could have created it):</div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', rowGap: '12px' }}>
             {[
-              { label: 'Public Key', sub: '(Published by Arka Fincap)', icon: '🔓', color: '#a78bfa' },
+              { label: 'Public Key', sub: '(Published by NBFC 2)', icon: '🔓', color: '#a78bfa' },
               { label: '+', sub: '', icon: null, color: '#7a8fb0' },
               { label: 'Signature', sub: '(from the block)', icon: '🪬', color: '#10b981' },
               { label: '+', sub: '', icon: null, color: '#7a8fb0' },
               { label: 'Message', sub: '(exact tranche data)', icon: '📋', color: '#3b8cff' },
               { label: '→', sub: '', icon: null, color: '#7a8fb0' },
-              { label: '✓ Authentic', sub: 'Only Arka Fincap\'s key\ncould produce this seal', icon: null, color: '#10b981' },
+              { label: '✓ Authentic', sub: 'Only NBFC 2\'s key\ncould produce this seal', icon: null, color: '#10b981' },
             ].map((item, i) => (
               item.icon !== null || item.label === '→' || item.label === '+' ? (
                 <div key={i} style={{
@@ -1177,9 +1177,9 @@ function Section5() {
 ═══════════════════════════════════════════════════════════════════════════════ */
 
 const NODES = [
-  { id: 'nbfc',     icon: '🏦', label: 'NBFC Node',              sub: 'Arka Fincap · Mirae Asset',      color: '#3b8cff' },
-  { id: 'platform', icon: '🔗', label: 'GrayQuest Platform Node', sub: 'Education Finance Intermediary', color: '#14b8a6' },
-  { id: 'inst',     icon: '🏫', label: 'Institution Node',        sub: 'Narayana School',                color: '#a78bfa' },
+  { id: 'nbfc',     icon: '🏦', label: 'NBFC Node',              sub: 'NBFC 2 · NBFC 1',      color: '#3b8cff' },
+  { id: 'platform', icon: '🔗', label: 'Fintech Company Node', sub: 'Education Finance Intermediary', color: '#14b8a6' },
+  { id: 'inst',     icon: '🏫', label: 'Institution Node',        sub: 'Partner Institute',                color: '#a78bfa' },
 ]
 
 function Section6() {
@@ -1211,7 +1211,7 @@ function Section6() {
         <SectionLabel num="06" label="Multiple Stakeholders, One Truth" color="#14b8a6" />
         <SectionTitle>The Village Council — No Single Authority</SectionTitle>
         <SectionSub>
-          NBFC, GrayQuest-style platform, and institution each hold a full copy of the chain.
+          NBFC, Fintech Company-style platform, and institution each hold a full copy of the chain.
           Like Wikipedia — anyone can read it, you trust the mathematics, not an institution.
           When a new tranche block is added, it broadcasts to every node simultaneously.
         </SectionSub>
@@ -1444,8 +1444,8 @@ export default function HowItWorks() {
             fontFamily: 'Manrope, sans-serif', fontSize: '1rem', color: '#7a8fb0',
             maxWidth: '560px', margin: '0 auto 0', lineHeight: 1.65,
           }}>
-            Six concepts. One running example: Arka Fincap disbursing education loan
-            tranches to Narayana School. Each section maps to your course material exactly.
+            Six concepts. One running example: NBFC 2 disbursing education loan
+            tranches to Partner Institute. Each section maps to your course material exactly.
           </p>
         </motion.div>
       </div>

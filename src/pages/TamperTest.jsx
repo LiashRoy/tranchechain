@@ -22,16 +22,16 @@ const ORIGINAL_AMOUNT = '₹24,000'
 const TAMPERED_AMOUNT  = '₹75,000'
 
 function buildChain(b2Amount = ORIGINAL_AMOUNT) {
-  const b1d = { from: 'Mirae Asset', to: 'GrayQuest Platform', amount: '₹18,000', milestone: 'Admission Confirmed', timestamp: '2024-06-01 09:14', prevHash: GENESIS_PREV }
+  const b1d = { from: 'NBFC 1', to: 'Fintech Company', amount: '₹18,000', milestone: 'Admission Confirmed', timestamp: '2024-06-01 09:14', prevHash: GENESIS_PREV }
   const b1h = computeHash(b1d)
 
-  const b2d = { from: 'Arka Fincap', to: 'Narayana School', amount: b2Amount, milestone: 'Semester 1 Start', timestamp: '2024-10-02 11:22', prevHash: b1h }
+  const b2d = { from: 'NBFC 2', to: 'Partner Institute', amount: b2Amount, milestone: 'Semester 1 Start', timestamp: '2024-10-02 11:22', prevHash: b1h }
   const b2h = computeHash(b2d)
 
-  const b3d = { from: 'Arka Fincap', to: 'Narayana School', amount: '₹24,000', milestone: 'Semester 2 Start', timestamp: '2025-02-01 08:45', prevHash: b2h }
+  const b3d = { from: 'NBFC 2', to: 'Partner Institute', amount: '₹24,000', milestone: 'Semester 2 Start', timestamp: '2025-02-01 08:45', prevHash: b2h }
   const b3h = computeHash(b3d)
 
-  const b4d = { from: 'Ratnaafin Lite', to: 'Narayana School', amount: '₹18,000', milestone: 'Final Disbursement', timestamp: '2025-06-01 10:00', prevHash: b3h }
+  const b4d = { from: 'NBFC 3', to: 'Partner Institute', amount: '₹18,000', milestone: 'Final Disbursement', timestamp: '2025-06-01 10:00', prevHash: b3h }
   const b4h = computeHash(b4d)
 
   return [
@@ -74,11 +74,11 @@ const PHASE_LABELS = [
 ═══════════════════════════════════════════════════════════════════════════ */
 
 const ENTITY_META = {
-  'Mirae Asset':        { color: '#3b8cff', initials: 'MA' },
-  'Arka Fincap':        { color: '#14b8a6', initials: 'AF' },
-  'Ratnaafin Lite':     { color: '#a78bfa', initials: 'RL' },
-  'GrayQuest Platform': { color: '#f59e0b', initials: 'GQ' },
-  'Narayana School':    { color: '#10b981', initials: 'NS' },
+  'NBFC 1':        { color: '#3b8cff', initials: 'N1' },
+  'NBFC 2':        { color: '#14b8a6', initials: 'N2' },
+  'NBFC 3':     { color: '#a78bfa', initials: 'N3' },
+  'Fintech Company': { color: '#f59e0b', initials: 'GQ' },
+  'Partner Institute':    { color: '#10b981', initials: 'PI' },
 }
 
 function EntityPill({ name }) {
@@ -574,7 +574,7 @@ function SecurityNote() {
             color: '#14b8a6',
             icon: '🔏',
             title: 'Digital Signature (Wax Seal)',
-            text: 'The attacker would also need to forge Arka Fincap\'s ECDSA private key to produce a valid signature over the manipulated amount. Without the private key, this is computationally infeasible — the trapdoor function cannot be reversed.',
+            text: 'The attacker would also need to forge NBFC 2\'s ECDSA private key to produce a valid signature over the manipulated amount. Without the private key, this is computationally infeasible — the trapdoor function cannot be reversed.',
           },
           {
             layer: 'Layer 2',

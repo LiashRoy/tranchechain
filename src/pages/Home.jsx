@@ -130,7 +130,7 @@ function MiniPreviewBlock({ amount, from, milestone }) {
         <span style={{ color: '#10b981', fontSize: '0.55rem' }}>✓</span>
       </div>
       <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.8rem', color: '#10b981', fontWeight: 800 }}>{amount}</div>
-      <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.5rem', color: '#7a8fb0' }}>{from} → NS</div>
+      <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.5rem', color: '#7a8fb0' }}>{from} → PI</div>
     </div>
   )
 }
@@ -141,7 +141,7 @@ const PROBLEMS = [
     icon: '📂',
     color: '#3b8cff',
     title: 'The Trust Gap',
-    desc: 'NBFC, GrayQuest-style platform, and institution each maintain separate records of the same tranche. No single source of truth — reconciliation happens by email.',
+    desc: 'NBFC, Fintech Company-style platform, and institution each maintain separate records of the same tranche. No single source of truth — reconciliation happens by email.',
     tag: 'Siloed Ledgers',
   },
   {
@@ -226,8 +226,8 @@ function ProblemCard({ card, i }) {
 
 /* ─── 3. FLOW DIAGRAM ───────────────────────────────────────────────────────── */
 const FLOW_NODES = [
-  { id: 'nbfc',     label: 'NBFC',              sub: 'Mirae Asset · Arka Fincap',   icon: '🏦', color: '#3b8cff' },
-  { id: 'platform', label: 'GrayQuest Platform', sub: 'Education Finance Node',      icon: '🔗', color: '#14b8a6' },
+  { id: 'nbfc',     label: 'NBFC',              sub: 'NBFC 1 · NBFC 2',   icon: '🏦', color: '#3b8cff' },
+  { id: 'platform', label: 'Fintech Company', sub: 'Education Finance Node',      icon: '🔗', color: '#14b8a6' },
   { id: 'inst',     label: 'Institution',        sub: 'Full Ledger Copy',            icon: '🏫', color: '#a78bfa' },
   { id: 'student',  label: 'Student / Parent',   sub: 'Wallet — no node required',  icon: '👤', color: '#9badc8' },
 ]
@@ -730,7 +730,7 @@ export default function Home() {
                   <MiniPreviewBlock 
                     key={i} 
                     amount={`₹${(12000 + i * 2000).toLocaleString('en-IN')}`} 
-                    from={['Arka Fincap', 'Mirae Asset', 'Ratnaafin Lite'][i % 3]}
+                    from={['NBFC 2', 'NBFC 1', 'NBFC 3'][i % 3]}
                     milestone={['Admission', 'Semester 1', 'Semester 2'][i % 3]}
                   />
                 ))}

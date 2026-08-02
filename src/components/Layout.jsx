@@ -98,7 +98,7 @@ export default function Layout() {
           fontSize: '0.72rem',
           color: '#243352',
         }}>
-          GrayQuest-style education finance platform
+          Fintech Company-style education finance platform
         </span>
       </footer>
     </div>

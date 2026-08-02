@@ -48,7 +48,7 @@ export default function About() {
           margin: 0,
         }}>
           TrancheChain is a PGDM Fintech course prototype — an original interactive demo
-          inspired by GrayQuest-style education finance platforms. It was built to demonstrate
+          inspired by Fintech Company-style education finance platforms. It was built to demonstrate
           blockchain primitives (hash chains, digital signatures, decentralised consensus)
           using the exact analogies taught in the course: hashes as fingerprints, the chain
           as a public ledger book, decentralisation as a village council, and signatures as
@@ -117,7 +117,7 @@ export default function About() {
           textAlign: 'center',
         }}>
           ⚠ This is an original prototype for educational purposes only.
-          Not affiliated with or endorsed by GrayQuest Financial Services.
+          Not affiliated with or endorsed by Fintech Company Financial Services.
           No real financial data or transactions.
         </p>
       </motion.div>

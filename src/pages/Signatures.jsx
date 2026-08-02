@@ -296,7 +296,7 @@ function Step1({ onComplete }) {
           fontFamily: 'Manrope, sans-serif', fontSize: '0.9rem',
           color: '#7a8fb0', margin: 0, lineHeight: 1.6, maxWidth: 600,
         }}>
-          Arka Fincap generates an ECDSA P-256 key pair. The private key is a trapdoor — easy to
+          NBFC 2 generates an ECDSA P-256 key pair. The private key is a trapdoor — easy to
           derive the public key from it, computationally infeasible to reverse.
         </p>
       </div>
@@ -363,11 +363,11 @@ function Step1({ onComplete }) {
                 transition={{ delay: 0.1, duration: 0.4 }}
               >
                 <HexCard
-                  label="Private Key — Arka Fincap ONLY"
+                  label="Private Key — NBFC 2 ONLY"
                   value={keys.privHex}
                   icon="🔒"
                   color="#ef4444"
-                  note="NEVER shared. Used only to sign. Without this, no one can forge Arka Fincap's signature."
+                  note="NEVER shared. Used only to sign. Without this, no one can forge NBFC 2's signature."
                   glow
                 />
               </motion.div>
@@ -401,7 +401,7 @@ function Step1({ onComplete }) {
                   value={keys.pubHex}
                   icon="🔓"
                   color="#10b981"
-                  note="Published by Arka Fincap. Anyone can use it to verify signatures — cannot be used to sign."
+                  note="Published by NBFC 2. Anyone can use it to verify signatures — cannot be used to sign."
                   glow
                 />
               </motion.div>
@@ -492,7 +492,7 @@ function Step2({ keys, tranche, onComplete }) {
           fontFamily: 'Manrope, sans-serif', fontSize: '0.9rem',
           color: '#7a8fb0', margin: 0, lineHeight: 1.6, maxWidth: 600,
         }}>
-          Arka Fincap applies their private key to the exact tranche message to produce a
+          NBFC 2 applies their private key to the exact tranche message to produce a
           digital signature — their wax seal. The signature is mathematically bound to both
           the private key <em>and</em> this exact message.
         </p>
@@ -604,7 +604,7 @@ function Step2({ keys, tranche, onComplete }) {
               value={sig.sigHex}
               icon="🪬"
               color="#10b981"
-              note="This signature is uniquely bound to Arka Fincap's private key AND the exact tranche message above. Change even one character in the message → signature becomes invalid."
+              note="This signature is uniquely bound to NBFC 2's private key AND the exact tranche message above. Change even one character in the message → signature becomes invalid."
               glow
             />
 
@@ -615,8 +615,8 @@ function Step2({ keys, tranche, onComplete }) {
               fontFamily: 'Manrope, sans-serif', fontSize: '0.82rem',
               color: '#7a8fb0', lineHeight: 1.6,
             }}>
-              🪬 The wax seal is applied. Anyone with Arka Fincap's <strong style={{ color: '#34d399' }}>public key</strong> can
-              verify this — but only Arka Fincap (holder of the private key) could have <em>created</em> it.
+              🪬 The wax seal is applied. Anyone with NBFC 2's <strong style={{ color: '#34d399' }}>public key</strong> can
+              verify this — but only NBFC 2 (holder of the private key) could have <em>created</em> it.
             </div>
 
             <motion.button
@@ -689,7 +689,7 @@ function Step3({ keys, tranche, sig, onComplete }) {
         display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
         gap: 12, marginBottom: 20,
       }}>
-        <HexCard label="Public Key (Arka Fincap)" value={keys.pubHex} icon="🔓" color="#10b981" />
+        <HexCard label="Public Key (NBFC 2)" value={keys.pubHex} icon="🔓" color="#10b981" />
         <TrancheMsgCard tranche={tranche} />
         <HexCard label="Signature (from block)" value={sig.sigHex} icon="🪬" color="#14b8a6" />
       </div>
@@ -775,7 +775,7 @@ function Step3({ keys, tranche, sig, onComplete }) {
               <div style={{
                 fontFamily: 'Manrope, sans-serif', fontSize: '0.88rem',
                 color: '#34d39990',
-              }}>Authorized by Arka Fincap · P-256 ECDSA · SHA-256</div>
+              }}>Authorized by NBFC 2 · P-256 ECDSA · SHA-256</div>
             </div>
           </motion.div>
         )}
@@ -905,7 +905,7 @@ function Step4({ keys, tranche, sig }) {
           value={sig.sigHex}
           icon="🪬"
           color="#f59e0b"
-          note="This signature was created for the original amount. The attacker cannot generate a new valid signature without Arka Fincap's private key."
+          note="This signature was created for the original amount. The attacker cannot generate a new valid signature without NBFC 2's private key."
         />
       </div>
 
@@ -996,7 +996,7 @@ function Step4({ keys, tranche, sig }) {
                 <div style={{
                   fontFamily: 'Manrope, sans-serif', fontSize: '0.88rem',
                   color: '#ef444490',
-                }}>Message does not match what was signed by Arka Fincap</div>
+                }}>Message does not match what was signed by NBFC 2</div>
               </div>
             </div>
 
@@ -1014,7 +1014,7 @@ function Step4({ keys, tranche, sig }) {
                 'The signature is cryptographically bound to the exact message that was signed — including the original amount.',
                 'Changing even one character (₹18,000 → any other amount) produces a completely different message hash.',
                 'The ECDSA verification algorithm rejects the signature because the message hash no longer matches.',
-                'To forge a valid signature for the new amount, the attacker would need Arka Fincap\'s private key — which was never shared.',
+                'To forge a valid signature for the new amount, the attacker would need NBFC 2\'s private key — which was never shared.',
               ].map((point, i) => (
                 <motion.div
                   key={i}
@@ -1083,7 +1083,7 @@ function Step4({ keys, tranche, sig }) {
 ═══════════════════════════════════════════════════════════════════════════ */
 
 const TRANCHE = {
-  from: 'Arka Fincap', to: 'Narayana School',
+  from: 'NBFC 2', to: 'Partner Institute',
   amount: '₹18,000', milestone: 'Semester 1 Start',
 }
 
@@ -1116,7 +1116,7 @@ export default function Signatures() {
             fontFamily: 'Manrope, sans-serif', fontSize: '0.95rem',
             color: '#7a8fb0', margin: 0, maxWidth: 580, lineHeight: 1.65,
           }}>
-            A four-step interactive walkthrough of real ECDSA cryptography using the Arka Fincap
+            A four-step interactive walkthrough of real ECDSA cryptography using the NBFC 2
             tranche scenario — from key generation to tamper detection. All operations run in your
             browser via the Web Crypto API.
           </p>
