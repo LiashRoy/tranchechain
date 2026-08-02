@@ -283,7 +283,7 @@ function NBFCContent({ chain, tampered }) {
    GRAYQUEST APP CONTENT (phone frame)
 ═══════════════════════════════════════════════════════════════════════════ */
 
-function Fintech CompanyContent({ chain }) {
+function FintechCompanyContent({ chain }) {
   const accentColor = '#f59e0b'
   return (
     <div style={{ padding: '0 10px 10px' }}>
@@ -749,7 +749,7 @@ export default function Dashboard() {
           {/* ── Fintech Company (Phone) ─────────────────────────────────── */}
           <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
             <PhoneFrame accentColor="#f59e0b" isConsensus={tampered}>
-              <Fintech CompanyContent chain={CLEAN_CHAIN} />
+              <FintechCompanyContent chain={CLEAN_CHAIN} />
             </PhoneFrame>
             {tampered && (
               <motion.div
