@@ -764,7 +764,7 @@ export default function TamperTab({ blocks, setBlocks }) {
                   status={blockStatus[i]}
                   isShaking={shakingBlock === i}
                 />
-                {i < CLEAN_CHAIN.length - 1 && (
+                {i < blocks.length - 1 && (
                   <DemoConnector
                     broken={connectorBroken[i]}
                     shockwavePassing={shockwaveConnector === i}
