@@ -1013,8 +1013,7 @@ function TamperBanner({ info, onDismiss }) {
    MAIN LEDGER PAGE
 ═══════════════════════════════════════════════════════════════════════════ */
 
-export default function Ledger() {
-  const [blocks, setBlocks] = useState(() => buildInitialChain())
+export default function LedgerTab({ blocks, setBlocks }) {
   const [visibleInvalid, setVisibleInvalid] = useState(new Set())
   const [tamperModal, setTamperModal] = useState(null)
   const [addPhase, setAddPhase] = useState('idle')
@@ -1130,33 +1129,7 @@ export default function Ledger() {
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* Page header */}
       <div style={{ padding: '28px 24px 0', maxWidth: 1300, margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          style={{ marginBottom: 18 }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-            <span className="badge badge-teal">📒 Public Ledger Book</span>
-            <span style={{
-              fontFamily: 'JetBrains Mono, monospace', fontSize: '0.68rem', color: '#243352',
-            }}>Loan: {LOAN_ID}</span>
-          </div>
-          <h1 style={{
-            fontFamily: 'Manrope, sans-serif', fontWeight: 800,
-            fontSize: 'clamp(1.5rem, 3.5vw, 2.4rem)', letterSpacing: '-0.025em',
-            color: '#d4e0ef', margin: '0 0 6px',
-          }}>
-            Live Tranche Ledger
-          </h1>
-          <p style={{
-            fontFamily: 'Manrope, sans-serif', fontSize: '0.88rem',
-            color: '#7a8fb0', margin: 0,
-          }}>
-            Add tranches, tamper with any block, watch the hash chain break in real time.
-            Every hash is real SHA-256. No mocks.
-          </p>
-        </motion.div>
+
 
         {/* Stats bar */}
         <motion.div
