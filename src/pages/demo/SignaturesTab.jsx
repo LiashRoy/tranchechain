@@ -1082,12 +1082,9 @@ function Step4({ keys, tranche, sig }) {
    MAIN PAGE
 ═══════════════════════════════════════════════════════════════════════════ */
 
-const TRANCHE = {
-  from: 'NBFC 2', to: 'Partner Institute',
-  amount: '₹18,000', milestone: 'Semester 1 Start',
-}
+// TRANCHE is now derived from latestBlock props
 
-export default function Signatures() {
+export default function SignaturesTab({ latestBlock }) {
   const [activeStep, setActiveStep] = useState(1)
   const [keys,  setKeys]  = useState(null)
   const [sig,   setSig]   = useState(null)
@@ -1097,30 +1094,7 @@ export default function Signatures() {
       <div style={{ maxWidth: 960, margin: '0 auto' }}>
 
         {/* Page header */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          style={{ marginBottom: 40 }}
-        >
-          <span className="badge badge-purple" style={{ marginBottom: 14, display: 'inline-flex' }}>
-            🪬 Digital Signatures — ECDSA P-256
-          </span>
-          <h1 style={{
-            fontFamily: 'Manrope, sans-serif', fontWeight: 800,
-            fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', letterSpacing: '-0.03em',
-            color: '#d4e0ef', margin: '0 0 10px',
-          }}>
-            The Wax Seal — Layer 1 Protection
-          </h1>
-          <p style={{
-            fontFamily: 'Manrope, sans-serif', fontSize: '0.95rem',
-            color: '#7a8fb0', margin: 0, maxWidth: 580, lineHeight: 1.65,
-          }}>
-            A four-step interactive walkthrough of real ECDSA cryptography using the NBFC 2
-            tranche scenario — from key generation to tamper detection. All operations run in your
-            browser via the Web Crypto API.
-          </p>
-        </motion.div>
+        
 
         {/* Progress bar */}
         <ProgressBar activeStep={activeStep} />
@@ -1135,17 +1109,17 @@ export default function Signatures() {
             )}
             {activeStep === 2 && (
               <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.3 }}>
-                <Step2 keys={keys} tranche={TRANCHE} onComplete={(s) => { setSig(s); setActiveStep(3) }} />
+                <Step2 keys={keys} tranche={latestBlock || {}} onComplete={(s) => { setSig(s); setActiveStep(3) }} />
               </motion.div>
             )}
             {activeStep === 3 && (
               <motion.div key="step3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.3 }}>
-                <Step3 keys={keys} tranche={TRANCHE} sig={sig} onComplete={() => setActiveStep(4)} />
+                <Step3 keys={keys} tranche={latestBlock || {}} sig={sig} onComplete={() => setActiveStep(4)} />
               </motion.div>
             )}
             {activeStep === 4 && (
               <motion.div key="step4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.3 }}>
-                <Step4 keys={keys} tranche={TRANCHE} sig={sig} />
+                <Step4 keys={keys} tranche={latestBlock || {}} sig={sig} />
               </motion.div>
             )}
           </AnimatePresence>

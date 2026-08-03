@@ -678,7 +678,7 @@ export default function Home() {
                 flexWrap: 'wrap',
               }}
             >
-              <Link to="/ledger" className="btn-primary" style={{ fontSize: '0.95rem', padding: '13px 28px' }}>
+              <Link to="/demo" className="btn-primary" style={{ fontSize: '0.95rem', padding: '13px 28px' }}>
                 <span>📒</span> Enter the Ledger
               </Link>
               <Link to="/how-it-works" className="btn-ghost" style={{ fontSize: '0.95rem', padding: '13px 28px' }}>

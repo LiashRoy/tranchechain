@@ -15,40 +15,6 @@ const blockStr = ({ from, to, amount, milestone, timestamp, prevHash }) =>
 const computeHash = (b) => sha256(blockStr(b))
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   CHAIN DATA (4 blocks, real SHA-256 hashes)
-═══════════════════════════════════════════════════════════════════════════ */
-
-const ORIGINAL_AMOUNT = '₹24,000'
-const TAMPERED_AMOUNT  = '₹75,000'
-
-function buildChain(b2Amount = ORIGINAL_AMOUNT) {
-  const b1d = { from: 'NBFC 1', to: 'Fintech Company', amount: '₹18,000', milestone: 'Admission Confirmed', timestamp: '2024-06-01 09:14', prevHash: GENESIS_PREV }
-  const b1h = computeHash(b1d)
-
-  const b2d = { from: 'NBFC 2', to: 'Partner Institute', amount: b2Amount, milestone: 'Semester 1 Start', timestamp: '2024-10-02 11:22', prevHash: b1h }
-  const b2h = computeHash(b2d)
-
-  const b3d = { from: 'NBFC 2', to: 'Partner Institute', amount: '₹24,000', milestone: 'Semester 2 Start', timestamp: '2025-02-01 08:45', prevHash: b2h }
-  const b3h = computeHash(b3d)
-
-  const b4d = { from: 'NBFC 3', to: 'Partner Institute', amount: '₹18,000', milestone: 'Final Disbursement', timestamp: '2025-06-01 10:00', prevHash: b3h }
-  const b4h = computeHash(b4d)
-
-  return [
-    { index: 1, ...b1d, hash: b1h },
-    { index: 2, ...b2d, hash: b2h },
-    { index: 3, ...b3d, hash: b3h },
-    { index: 4, ...b4d, hash: b4h },
-  ]
-}
-
-const CLEAN_CHAIN    = buildChain(ORIGINAL_AMOUNT)
-const TAMPERED_CHAIN = buildChain(TAMPERED_AMOUNT)
-
-// The new hash Block 2 gets after tampering
-const TAMPERED_B2_HASH = TAMPERED_CHAIN[1].hash
-
-/* ═══════════════════════════════════════════════════════════════════════════
    ANIMATION PHASES
 ═══════════════════════════════════════════════════════════════════════════ */
 
@@ -623,14 +589,14 @@ function SecurityNote() {
    MAIN PAGE
 ═══════════════════════════════════════════════════════════════════════════ */
 
-export default function TamperTest() {
+export default function TamperTab({ blocks, setBlocks }) {
   // Animation state
   const [phase, setPhase] = useState('idle')
   const [glitchFrame, setGlitchFrame] = useState(0)   // index into GLITCH_FRAMES
   const [hashStruck, setHashStruck] = useState(false)
   const [typingHash, setTypingHash] = useState(null)   // null | string (growing)
-  const [connectorBroken, setConnectorBroken] = useState([false, false, false]) // connectors 1-2, 2-3, 3-4
-  const [blockStatus, setBlockStatus] = useState(['valid', 'valid', 'valid', 'valid'])
+  const [connectorBroken, setConnectorBroken] = useState(Array(Math.max(3, blocks.length)).fill(false)) // connectors 1-2, 2-3, 3-4
+  const [blockStatus, setBlockStatus] = useState(Array(Math.max(4, blocks.length)).fill('valid'))
   const [shockwaveConnector, setShockwaveConnector] = useState(-1) // which connector is pulsing
   const [shakingBlock, setShakingBlock] = useState(-1)
 
@@ -739,7 +705,14 @@ export default function TamperTest() {
     })
   }, [phase])
 
-  const displayAmount = GLITCH_FRAMES[glitchFrame] || ORIGINAL_AMOUNT
+  // Dynamic references based on passed blocks
+  const targetBlockIndex = 1; // We always tamper with the 2nd block (index 1) for the demo, if it exists
+  const targetBlock = blocks[targetBlockIndex] || blocks[0] || {};
+  const ORIGINAL_AMOUNT = targetBlock.amount || '₹24,000';
+  const TAMPERED_AMOUNT = '₹75,000';
+  const TAMPERED_B2_HASH = computeHash({...targetBlock, amount: TAMPERED_AMOUNT});
+  
+  const displayAmount = GLITCH_FRAMES[glitchFrame] || ORIGINAL_AMOUNT;
 
   const isComplete = phase === 'complete'
   const isIdle     = phase === 'idle'
@@ -749,30 +722,7 @@ export default function TamperTest() {
       <div style={{ maxWidth: 1200, margin: '0 auto', width: '100%' }}>
 
         {/* ── PAGE HEADER ──────────────────────────────────────────── */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          style={{ textAlign: 'center', marginBottom: 32 }}
-        >
-          <span className="badge badge-gold" style={{ marginBottom: 14, display: 'inline-flex' }}>
-            🔨 Live Tamper Demo · Presentation Mode
-          </span>
-          <h1 style={{
-            fontFamily: 'Manrope, sans-serif', fontWeight: 800,
-            fontSize: 'clamp(1.8rem, 4vw, 3rem)', letterSpacing: '-0.03em',
-            color: '#d4e0ef', margin: '0 0 10px',
-          }}>
-            Break the Chain
-          </h1>
-          <p style={{
-            fontFamily: 'Manrope, sans-serif', fontSize: '1rem',
-            color: '#7a8fb0', margin: 0, maxWidth: 520, marginInline: 'auto',
-            lineHeight: 1.6,
-          }}>
-            An automated sequence that shows — step by step — how altering one block's amount
-            shatters the entire hash chain. Designed to be projected live.
-          </p>
-        </motion.div>
+        
 
         {/* ── TAMPER BANNER ────────────────────────────────────────── */}
         <AnimatePresence>
@@ -803,7 +753,7 @@ export default function TamperTest() {
             gap: 0, minWidth: 'max-content',
             padding: '8px 0',
           }}>
-            {CLEAN_CHAIN.map((block, i) => (
+            {blocks.map((block, i) => (
               <div key={block.index} style={{ display: 'flex', alignItems: 'flex-start' }}>
                 <DemoBlock
                   block={block}

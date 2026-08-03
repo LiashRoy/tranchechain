@@ -5,9 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 const NAV_LINKS = [
   { to: '/',             label: 'Home',          short: 'Home' },
   { to: '/how-it-works', label: 'How It Works',  short: 'Concepts' },
-  { to: '/ledger',       label: 'Ledger',        short: 'Ledger' },
-  { to: '/tamper-test',  label: 'Tamper Test',   short: 'Tamper' },
-  { to: '/signatures',   label: 'Signatures',    short: 'Signatures' },
+  { to: '/demo',         label: 'Live Demo',     short: 'Demo' },
   { to: '/dashboard',    label: 'Dashboard',     short: 'Dashboard' },
   { to: '/about',        label: 'About',         short: 'About' },
 ]

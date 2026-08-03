@@ -640,6 +640,7 @@ function DisbursementChart({ tampered }) {
 
 export default function Dashboard() {
   const [tampered, setTampered] = useState(false)
+  const [activeRole, setActiveRole] = useState('nbfc')
 
   return (
     <div style={{ minHeight: '100vh', padding: '28px 20px 60px' }}>
@@ -672,31 +673,38 @@ export default function Dashboard() {
 
         {/* Controls */}
         <div style={{ display: 'flex', gap: 12, marginBottom: 20, flexWrap: 'wrap', alignItems: 'center' }}>
-          <motion.button
-            whileHover={{ scale: tampered ? 1 : 1.03, y: tampered ? 0 : -1 }}
-            whileTap={{ scale: 0.97 }}
-            onClick={() => setTampered(t => !t)}
-            style={{
-              display: 'flex', alignItems: 'center', gap: 9,
-              padding: '12px 24px', borderRadius: 11, border: 'none',
-              background: tampered
-                ? 'rgba(59,140,255,0.12)'
-                : 'linear-gradient(135deg, #ef4444, #dc2626)',
-              color: tampered ? '#6aaeff' : '#fff',
-              borderColor: tampered ? 'rgba(59,140,255,0.3)' : 'transparent',
-              borderWidth: tampered ? 1 : 0, borderStyle: 'solid',
-              fontFamily: 'Manrope, sans-serif', fontWeight: 700,
-              fontSize: '0.9rem', cursor: 'pointer',
-              boxShadow: tampered ? 'none' : '0 6px 24px rgba(239,68,68,0.3)',
-              transition: 'all 0.3s',
-            }}
-          >
-            {tampered ? (
-              <><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> Restore Consensus</>
-            ) : (
-              <><span style={{ fontSize: '1.1rem' }}>🔨</span> Simulate Tamper at NBFC Node Only</>
+          <AnimatePresence>
+            {activeRole === 'nbfc' && (
+              <motion.button
+                initial={{ opacity: 0, width: 0 }}
+                animate={{ opacity: 1, width: 'auto' }}
+                exit={{ opacity: 0, width: 0 }}
+                whileHover={{ scale: tampered ? 1 : 1.03, y: tampered ? 0 : -1 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => setTampered(t => !t)}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 9,
+                  padding: '12px 24px', borderRadius: 11, border: 'none',
+                  background: tampered
+                    ? 'rgba(59,140,255,0.12)'
+                    : 'linear-gradient(135deg, #ef4444, #dc2626)',
+                  color: tampered ? '#6aaeff' : '#fff',
+                  borderColor: tampered ? 'rgba(59,140,255,0.3)' : 'transparent',
+                  borderWidth: tampered ? 1 : 0, borderStyle: 'solid',
+                  fontFamily: 'Manrope, sans-serif', fontWeight: 700,
+                  fontSize: '0.9rem', cursor: 'pointer',
+                  boxShadow: tampered ? 'none' : '0 6px 24px rgba(239,68,68,0.3)',
+                  transition: 'all 0.3s',
+                }}
+              >
+                {tampered ? (
+                  <><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> Restore Consensus</>
+                ) : (
+                  <><span style={{ fontSize: '1.1rem' }}>🔨</span> Simulate Tamper at NBFC Node</>
+                )}
+              </motion.button>
             )}
-          </motion.button>
+          </AnimatePresence>
 
           {tampered && (
             <motion.div
@@ -724,64 +732,76 @@ export default function Dashboard() {
         {/* Consensus rejection banner */}
         <ConsensusPanel tampered={tampered} />
 
-        {/* THREE DEVICE FRAMES */}
+        {/* ROLE SELECTOR */}
         <div style={{
-          display: 'flex', gap: 16, alignItems: 'flex-start',
-          overflowX: 'auto', paddingBottom: 8, marginBottom: 28,
+          display: 'flex', gap: 12, marginBottom: 32, flexWrap: 'wrap',
+          background: 'rgba(255,255,255,0.02)', padding: 8, borderRadius: 16,
+          border: '1px solid rgba(255,255,255,0.05)'
         }}>
-          {/* ── NBFC Portal (Browser) ─────────────────────────────── */}
-          <div style={{ flex: 1, minWidth: 260, display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <div style={{ textAlign: 'center' }}>
-              <span style={{
-                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem', color: '#3b8cff',
-                textTransform: 'uppercase', letterSpacing: '0.08em',
-              }}>💻 NBFC Node</span>
-            </div>
-            <BrowserFrame
-              url="nbfc.tranchechain.fi/console"
-              accentColor="#3b8cff"
-              isConsensus={!tampered}
-            >
-              <NBFCContent chain={tampered ? NBFC_TAMPERED_CHAIN : CLEAN_CHAIN} tampered={tampered} />
-            </BrowserFrame>
-          </div>
-
-          {/* ── Fintech Company (Phone) ─────────────────────────────────── */}
-          <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-            <PhoneFrame accentColor="#f59e0b" isConsensus={tampered}>
-              <FintechCompanyContent chain={CLEAN_CHAIN} />
-            </PhoneFrame>
-            {tampered && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+          {[
+            { id: 'nbfc', label: 'NBFC Node', icon: '💻', color: '#3b8cff' },
+            { id: 'fintech', label: 'Fintech Node', icon: '📱', color: '#f59e0b' },
+            { id: 'institution', label: 'Institution Node', icon: '🏫', color: '#a78bfa' },
+          ].map(role => {
+            const isActive = activeRole === role.id;
+            return (
+              <button
+                key={role.id}
+                onClick={() => setActiveRole(role.id)}
                 style={{
-                  padding: '5px 12px', borderRadius: 999,
-                  background: 'rgba(16,185,129,0.12)',
-                  border: '1px solid rgba(16,185,129,0.3)',
-                  fontFamily: 'Manrope, sans-serif', fontWeight: 700,
-                  fontSize: '0.65rem', color: '#34d399',
+                  flex: 1, padding: '12px 16px', borderRadius: 12, border: '1px solid',
+                  background: isActive ? `${role.color}15` : 'transparent',
+                  borderColor: isActive ? `${role.color}40` : 'transparent',
+                  color: isActive ? role.color : '#7a8fb0',
+                  fontFamily: 'Manrope, sans-serif', fontWeight: 600, fontSize: '0.9rem',
+                  cursor: 'pointer', transition: 'all 0.2s',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8
                 }}
-              >✓ Voting: REJECT NBFC VERSION</motion.div>
-            )}
-          </div>
+              >
+                <span>{role.icon}</span> {role.label}
+              </button>
+            )
+          })}
+        </div>
 
-          {/* ── Institution Portal (Browser) ──────────────────────── */}
-          <div style={{ flex: 1, minWidth: 260, display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <div style={{ textAlign: 'center' }}>
-              <span style={{
-                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem', color: '#a78bfa',
-                textTransform: 'uppercase', letterSpacing: '0.08em',
-              }}>💻 Institution Node</span>
-            </div>
-            <BrowserFrame
-              url="narayana.tranchechain.fi/finance"
-              accentColor="#a78bfa"
-              isConsensus={tampered}
-            >
-              <InstitutionContent chain={CLEAN_CHAIN} />
-            </BrowserFrame>
-          </div>
+        {/* ACTIVE ROLE VIEW */}
+        <div style={{ marginBottom: 32, display: 'flex', justifyContent: 'center' }}>
+          <AnimatePresence mode="wait">
+            {activeRole === 'nbfc' && (
+              <motion.div key="nbfc" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.3 }} style={{ width: '100%', maxWidth: 500, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <BrowserFrame url="nbfc.tranchechain.fi/console" accentColor="#3b8cff" isConsensus={!tampered}>
+                  <NBFCContent chain={tampered ? NBFC_TAMPERED_CHAIN : CLEAN_CHAIN} tampered={tampered} />
+                </BrowserFrame>
+              </motion.div>
+            )}
+            {activeRole === 'fintech' && (
+              <motion.div key="fintech" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.3 }} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+                <PhoneFrame accentColor="#f59e0b" isConsensus={tampered}>
+                  <FintechCompanyContent chain={CLEAN_CHAIN} />
+                </PhoneFrame>
+                {tampered && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    style={{
+                      padding: '5px 12px', borderRadius: 999,
+                      background: 'rgba(16,185,129,0.12)',
+                      border: '1px solid rgba(16,185,129,0.3)',
+                      fontFamily: 'Manrope, sans-serif', fontWeight: 700,
+                      fontSize: '0.65rem', color: '#34d399',
+                    }}
+                  >✓ Voting: REJECT NBFC VERSION</motion.div>
+                )}
+              </motion.div>
+            )}
+            {activeRole === 'institution' && (
+              <motion.div key="institution" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.3 }} style={{ width: '100%', maxWidth: 500, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <BrowserFrame url="narayana.tranchechain.fi/finance" accentColor="#a78bfa" isConsensus={tampered}>
+                  <InstitutionContent chain={CLEAN_CHAIN} />
+                </BrowserFrame>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* RECHARTS — Disbursement bar chart */}

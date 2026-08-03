@@ -1371,7 +1371,7 @@ function FloatingCTA() {
           }}
         >
           <Link
-            to="/ledger"
+            to="/demo"
             style={{
               display: 'flex', alignItems: 'center', gap: '9px',
               padding: '12px 22px', borderRadius: '12px',
@@ -1465,7 +1465,7 @@ export default function HowItWorks() {
 
       {/* Bottom CTA */}
       <div style={{ padding: '32px 24px 80px', textAlign: 'center' }}>
-        <Link to="/ledger" className="btn-primary" style={{ fontSize: '1rem', padding: '14px 32px' }}>
+        <Link to="/demo" className="btn-primary" style={{ fontSize: '1rem', padding: '14px 32px' }}>
           📒 Enter the Full Ledger Demo →
         </Link>
       </div>

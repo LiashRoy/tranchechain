@@ -3,9 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import Layout from './components/Layout'
 import Home from './pages/Home'
 import HowItWorks from './pages/HowItWorks'
-import Ledger from './pages/Ledger'
-import TamperTest from './pages/TamperTest'
-import Signatures from './pages/Signatures'
+import Demo from './pages/Demo'
 import Dashboard from './pages/Dashboard'
 import About from './pages/About'
 
@@ -30,9 +28,7 @@ function AnimatedRoutes() {
         <Route element={<Layout />}>
           <Route path="/"             element={<PageTransition><Home /></PageTransition>} />
           <Route path="/how-it-works" element={<PageTransition><HowItWorks /></PageTransition>} />
-          <Route path="/ledger"       element={<PageTransition><Ledger /></PageTransition>} />
-          <Route path="/tamper-test"  element={<PageTransition><TamperTest /></PageTransition>} />
-          <Route path="/signatures"   element={<PageTransition><Signatures /></PageTransition>} />
+          <Route path="/demo"         element={<PageTransition><Demo /></PageTransition>} />
           <Route path="/dashboard"    element={<PageTransition><Dashboard /></PageTransition>} />
           <Route path="/about"        element={<PageTransition><About /></PageTransition>} />
         </Route>
