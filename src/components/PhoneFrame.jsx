@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 
-export default function PhoneFrame({ accentColor = '#f59e0b', isConsensus = false, label = '📱 Mobile App', autoScroll = true, children }) {
+export default function PhoneFrame({ accentColor = '#f59e0b', isConsensus = false, label = 'Mobile App', autoScroll = true, children }) {
   const scrollRef = useRef(null)
 
   // Subtle auto-scroll to hint at scrollability

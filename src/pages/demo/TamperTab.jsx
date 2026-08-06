@@ -71,7 +71,7 @@ function EntityPill({ name }) {
    HASH DISPLAY — supports strikethrough + typing animation
 ═══════════════════════════════════════════════════════════════════════════ */
 
-function HashLine({ label, value, color, strikethrough = false, typingValue = null }) {
+function HashLine({ label, value, color, strikethrough = false, typingValue = null, tamperedHash = null }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
       <span style={{
@@ -107,7 +107,7 @@ function HashLine({ label, value, color, strikethrough = false, typingValue = nu
               }}
             >
               {typingValue.slice(0, 16)}
-              {typingValue.length < TAMPERED_B2_HASH.length && (
+              {typingValue.length < (tamperedHash ? tamperedHash.length : 64) && (
                 <motion.span
                   animate={{ opacity: [1, 0] }}
                   transition={{ duration: 0.45, repeat: Infinity }}
@@ -129,6 +129,9 @@ function HashLine({ label, value, color, strikethrough = false, typingValue = nu
 function DemoBlock({
   block,
   isTargeted,     // gold highlight ring
+  originalAmount,
+  tamperedAmount,
+  tamperedHash,
   displayAmount,  // override amount (glitch frames)
   hashStruck,     // bool — old hash struck through
   typingHash,     // string | null — new hash being typed
@@ -267,7 +270,7 @@ function DemoBlock({
               <motion.div
                 key={displayAmount}
                 animate={
-                  displayAmount !== ORIGINAL_AMOUNT && displayAmount !== TAMPERED_AMOUNT
+                  displayAmount !== originalAmount && displayAmount !== tamperedAmount
                     ? { opacity: [0.5, 1], y: [-2, 0] }
                     : {}
                 }
@@ -279,8 +282,8 @@ function DemoBlock({
                   letterSpacing: '-0.02em',
                   lineHeight: 1,
                   color:
-                    displayAmount === TAMPERED_AMOUNT ? '#ef4444' :
-                    displayAmount !== ORIGINAL_AMOUNT ? '#f59e0b' :
+                    displayAmount === tamperedAmount ? '#ef4444' :
+                    displayAmount !== originalAmount ? '#f59e0b' :
                     '#10b981',
                   transition: 'color 0.3s',
                 }}
@@ -310,6 +313,7 @@ function DemoBlock({
                 color={status === 'tampered' || hashStruck ? '#14b8a6' : '#14b8a6'}
                 strikethrough={hashStruck}
                 typingValue={typingHash}
+                tamperedHash={tamperedHash}
               />
             </div>
           </div>
@@ -719,7 +723,7 @@ export default function TamperTab({ blocks, setBlocks }) {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', padding: '28px 24px 60px' }}>
-      <div style={{ maxWidth: 1200, margin: '0 auto', width: '100%' }}>
+      <div style={{ maxWidth: 1500, margin: '0 auto', width: '100%' }}>
 
         {/* ── PAGE HEADER ──────────────────────────────────────────── */}
         
@@ -763,6 +767,9 @@ export default function TamperTab({ blocks, setBlocks }) {
                   typingHash={i === 1 ? typingHash : null}
                   status={blockStatus[i]}
                   isShaking={shakingBlock === i}
+                  originalAmount={ORIGINAL_AMOUNT}
+                  tamperedAmount={TAMPERED_AMOUNT}
+                  tamperedHash={TAMPERED_B2_HASH}
                 />
                 {i < blocks.length - 1 && (
                   <DemoConnector

@@ -1,16 +1,19 @@
 import { motion } from 'framer-motion'
+import { ClipboardList, AlertTriangle } from 'lucide-react'
+import { useIsMobile } from '../hooks/useIsMobile'
 
 export default function About() {
+  const isMobile = useIsMobile();
   return (
-    <div style={{ maxWidth: 800, margin: '0 auto', padding: '64px 24px 80px' }}>
+    <div style={{ maxWidth: 1200, margin: '0 auto', padding: isMobile ? '40px 16px 60px' : '64px 24px 80px' }}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
         style={{ textAlign: 'center', marginBottom: '52px' }}
       >
-        <span className="badge badge-blue" style={{ marginBottom: '16px', display: 'inline-flex' }}>
-          📋 Project Info
+        <span className="badge badge-blue" style={{ marginBottom: '16px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+          <ClipboardList size={14} /> Project Info
         </span>
         <h1 style={{
           fontFamily: 'Manrope, sans-serif',
@@ -29,7 +32,7 @@ export default function About() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.15 }}
         className="glass-card"
-        style={{ padding: '36px 32px', marginBottom: '20px' }}
+        style={{ padding: isMobile ? '24px 20px' : '36px 32px', marginBottom: '20px' }}
       >
         <h2 style={{
           fontFamily: 'Manrope, sans-serif',
@@ -47,12 +50,7 @@ export default function About() {
           lineHeight: 1.7,
           margin: 0,
         }}>
-          TrancheChain is a PGDM Fintech course prototype — an original interactive demo
-          inspired by Fintech Company-style education finance platforms. It was built to demonstrate
-          blockchain primitives (hash chains, digital signatures, decentralised consensus)
-          using the exact analogies taught in the course: hashes as fingerprints, the chain
-          as a public ledger book, decentralisation as a village council, and signatures as
-          wax seals. Every UI label and tooltip maps back to the professor's course material.
+          TrancheChain is an advanced prototype developed as a capstone project for the PGDM Fintech curriculum. Designed to demystify complex blockchain primitives, this interactive platform simulates a multi-party education finance ecosystem. It translates abstract cryptographic concepts into intuitive, real-world analogies taught in the classroom: cryptographic hashes serve as unforgeable fingerprints, the blockchain functions as an immutable public ledger, decentralized nodes act as a consensus-driven village council, and digital signatures provide the security of tamper-proof wax seals. Every interactive element has been meticulously crafted to bridge the gap between theoretical coursework and practical, real-world fintech applications.
         </p>
       </motion.div>
 
@@ -61,7 +59,7 @@ export default function About() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.25 }}
         className="glass-card"
-        style={{ padding: '36px 32px', marginBottom: '20px' }}
+        style={{ padding: isMobile ? '24px 20px' : '36px 32px', marginBottom: '20px' }}
       >
         <h2 style={{
           fontFamily: 'Manrope, sans-serif',
@@ -70,33 +68,27 @@ export default function About() {
           color: '#d4e0ef',
           margin: '0 0 14px',
         }}>
-          Tech Stack
+          Team Members
         </h2>
         {[
-          ['React + Vite', 'UI framework and build tool'],
-          ['Tailwind CSS', 'Utility-first styling'],
-          ['Framer Motion', 'Page and state transitions'],
-          ['React Router', 'Client-side routing'],
-          ['Recharts', 'Data visualisations'],
-          ['crypto-js / Custom SHA-256', 'Real hash computation — no mocks'],
-        ].map(([name, desc]) => (
+          'LIASH ROY',
+          'GOGISETTI NAGA VENKATA SAI CHAITANYA',
+          'ASHWINI BOTHRA',
+          'SAMBHAV JAIN',
+          'NITYAM ABICHANDANI'
+        ].map((name) => (
           <div key={name} style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: '10px 0',
+            padding: '12px 0',
             borderBottom: '1px solid rgba(59,140,255,0.07)',
           }}>
             <span style={{
-              fontFamily: 'JetBrains Mono, monospace',
-              fontSize: '0.82rem',
-              color: '#6aaeff',
-            }}>{name}</span>
-            <span style={{
               fontFamily: 'Manrope, sans-serif',
-              fontSize: '0.82rem',
-              color: '#7a8fb0',
-            }}>{desc}</span>
+              fontWeight: 800,
+              fontSize: '0.9rem',
+              color: '#d4e0ef',
+              textTransform: 'uppercase',
+              letterSpacing: '0.02em',
+            }}>{name}</span>
           </div>
         ))}
       </motion.div>
@@ -106,7 +98,7 @@ export default function About() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.35 }}
         className="glass-card"
-        style={{ padding: '28px 32px' }}
+        style={{ padding: isMobile ? '20px 20px' : '28px 32px' }}
       >
         <p style={{
           fontFamily: 'JetBrains Mono, monospace',
@@ -116,7 +108,8 @@ export default function About() {
           margin: 0,
           textAlign: 'center',
         }}>
-          ⚠ This is an original prototype for educational purposes only.
+          <AlertTriangle size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '6px', marginTop: '-2px' }} />
+          This is an original prototype for educational purposes only.
           Not affiliated with or endorsed by Fintech Company Financial Services.
           No real financial data or transactions.
         </p>

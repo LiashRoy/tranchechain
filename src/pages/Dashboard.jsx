@@ -1,3 +1,4 @@
+import { Globe, Smartphone, Monitor, Building2, Link as LinkIcon, Radio, CheckCircle2, AlertTriangle, XCircle, Settings, PenTool, Flame, Hammer, ShieldAlert, ShieldCheck, Clapperboard, ClipboardList, Key, Lock, Unlock, Fingerprint, Search, GraduationCap, Zap, Pencil, Landmark, BookOpen } from "lucide-react"
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
@@ -6,11 +7,12 @@ import {
 } from 'recharts'
 import CryptoJS from 'crypto-js'
 import PhoneFrame from '../components/PhoneFrame'
+import { useGlobalChain } from '../context/GlobalChainContext'
+import { useIsMobile } from '../hooks/useIsMobile'
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   CHAIN DATA (real SHA-256, same schema as /ledger)
+   CHAIN DATA
 ═══════════════════════════════════════════════════════════════════════════ */
-
 const sha256 = (s) => CryptoJS.SHA256(s).toString()
 const GENESIS = '0'.repeat(64)
 const bStr = ({ from, to, amount, milestone, timestamp, prevHash }) =>
@@ -18,54 +20,108 @@ const bStr = ({ from, to, amount, milestone, timestamp, prevHash }) =>
 const computeHash = (b) => sha256(bStr(b))
 const trunc = (h = '', n = 10) => `${h.slice(0, n)}…`
 
-function makeBlock(data, prevHash) {
-  const b = { ...data, prevHash }
-  return { ...b, hash: computeHash(b), status: 'valid' }
-}
-
-const B1 = makeBlock({ from: 'NBFC 1',   to: 'Partner Institute', amount: '₹18,000', milestone: 'Admission Confirmed', timestamp: '2024-06-01 09:14', index: 1 }, GENESIS)
-const B2 = makeBlock({ from: 'NBFC 2',   to: 'Partner Institute', amount: '₹24,000', milestone: 'Semester 1 Start',    timestamp: '2024-10-02 11:22', index: 2 }, B1.hash)
-const B3 = makeBlock({ from: 'NBFC 3',to: 'Partner Institute', amount: '₹24,000', milestone: 'Semester 2 Start',    timestamp: '2025-02-01 08:45', index: 3 }, B2.hash)
-
-const CLEAN_CHAIN = [B1, B2, B3]
-
-// Tampered version (only shown at NBFC node)
-const B2_TAMPERED = { ...B2, amount: '₹75,000', status: 'tampered' }
-const NBFC_TAMPERED_CHAIN = [B1, B2_TAMPERED, { ...B3, status: 'invalid' }]
+const ENTITY_INITIALS = { 'NBFC 1': 'N1', 'NBFC 2': 'N2', 'NBFC 3': 'N3', 'Partner Institute': 'PI' }
+const ENTITY_COLORS = { 'NBFC 1': '#3b8cff', 'NBFC 2': '#14b8a6', 'NBFC 3': '#a78bfa', 'Partner Institute': '#10b981' }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   ENTITY META
+   BLOCK EXPLORER MODAL
 ═══════════════════════════════════════════════════════════════════════════ */
+function BlockModal({ block, onClose, accentColor = '#3b8cff' }) {
+  if (!block) return null;
+  const statusColor = block.status === 'tampered' ? '#f59e0b' : block.status === 'invalid' ? '#ef4444' : '#10b981';
+  
+  return (
+    <div style={{
+      position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+      background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999,
+      padding: 20,
+    }}>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 10 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 10 }}
+        style={{
+          background: '#0a1120', border: `1px solid ${accentColor}40`,
+          borderRadius: 16, padding: '24px', width: '100%', maxWidth: 500,
+          boxShadow: `0 20px 40px rgba(0,0,0,0.4), 0 0 0 1px ${accentColor}10`,
+          position: 'relative',
+        }}
+      >
+        <button onClick={onClose} style={{
+          position: 'absolute', top: 16, right: 16,
+          background: 'transparent', border: 'none', color: '#7a8fb0', cursor: 'pointer',
+          padding: 4, display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}><XCircle size={20} /></button>
+        
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
+          <div style={{
+            width: 40, height: 40, borderRadius: 10,
+            background: `${statusColor}15`, border: `1px solid ${statusColor}30`,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            color: statusColor,
+          }}>
+            {block.status === 'valid' ? <CheckCircle2 size={20} /> : block.status === 'tampered' ? <AlertTriangle size={20} /> : <XCircle size={20} />}
+          </div>
+          <div>
+            <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '1.2rem', color: '#d4e0ef' }}>Block #{block.index}</div>
+            <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.8rem', color: statusColor }}>{block.status.toUpperCase()}</div>
+          </div>
+        </div>
 
-const ENTITY_INITIALS = {
-  'NBFC 1': 'N1', 'NBFC 2': 'N2', 'NBFC 3': 'N3',
-  'Partner Institute': 'PI',
-}
-const ENTITY_COLORS = {
-  'NBFC 1': '#3b8cff', 'NBFC 2': '#14b8a6',
-  'NBFC 3': '#a78bfa', 'Partner Institute': '#10b981',
+        <div style={{ display: 'grid', gap: 12 }}>
+          <div style={{ background: '#10192c', padding: '12px', borderRadius: 8, border: '1px solid #1e293b' }}>
+            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: '#7a8fb0', marginBottom: 4 }}>TRANSACTION</div>
+            <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.9rem', color: '#d4e0ef' }}>{block.from} → {block.to}</div>
+          </div>
+          <div style={{ background: '#10192c', padding: '12px', borderRadius: 8, border: '1px solid #1e293b' }}>
+            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: '#7a8fb0', marginBottom: 4 }}>AMOUNT</div>
+            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontWeight: 800, fontSize: '1.1rem', color: statusColor }}>{block.amount}</div>
+          </div>
+          <div style={{ background: '#10192c', padding: '12px', borderRadius: 8, border: '1px solid #1e293b' }}>
+            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: '#7a8fb0', marginBottom: 4 }}>TIMESTAMP</div>
+            <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.9rem', color: '#d4e0ef' }}>{block.timestamp}</div>
+          </div>
+          <div style={{ background: '#10192c', padding: '12px', borderRadius: 8, border: '1px solid #1e293b', overflow: 'hidden' }}>
+            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: '#7a8fb0', marginBottom: 4 }}>BLOCK HASH (SHA-256)</div>
+            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem', color: '#14b8a6', wordBreak: 'break-all' }}>{block.hash || 'Pending Computation...'}</div>
+          </div>
+          {block.prevHash && (
+            <div style={{ background: '#10192c', padding: '12px', borderRadius: 8, border: '1px solid #1e293b', overflow: 'hidden' }}>
+              <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: '#7a8fb0', marginBottom: 4 }}>PREVIOUS HASH</div>
+              <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem', color: '#94a3b8', wordBreak: 'break-all' }}>{block.prevHash}</div>
+            </div>
+          )}
+        </div>
+      </motion.div>
+    </div>
+  )
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   PORTAL BLOCK (compact, fits inside small device frames)
+   PORTAL BLOCK
 ═══════════════════════════════════════════════════════════════════════════ */
-
-function PortalBlock({ block, accentColor, style = {} }) {
+function PortalBlock({ block, accentColor, style = {}, onClick }) {
   const statusColor =
     block.status === 'tampered' ? '#f59e0b' :
-    block.status === 'invalid'  ? '#ef4444' : '#10b981'
+    block.status === 'invalid'  ? '#ef4444' :
+    block.status === 'pending'  ? '#3b8cff' : '#10b981'
 
   const bg =
     block.status === 'tampered' ? 'rgba(245,158,11,0.07)' :
-    block.status === 'invalid'  ? 'rgba(239,68,68,0.07)'  : 'rgba(15,26,46,0.5)'
+    block.status === 'invalid'  ? 'rgba(239,68,68,0.07)'  :
+    block.status === 'pending'  ? 'rgba(59,140,255,0.07)' : 'rgba(15,26,46,0.5)'
 
   const border =
     block.status === 'tampered' ? 'rgba(245,158,11,0.35)' :
-    block.status === 'invalid'  ? 'rgba(239,68,68,0.35)'  : `${accentColor}20`
+    block.status === 'invalid'  ? 'rgba(239,68,68,0.35)'  :
+    block.status === 'pending'  ? 'rgba(59,140,255,0.35)' : `${accentColor}20`
 
   return (
     <motion.div
-      layout
+      onClick={() => onClick && onClick(block)}
+      whileHover={{ scale: 1.015, y: -2 }}
+      whileTap={{ scale: 0.98 }}
       animate={block.status !== 'valid' ? {
         boxShadow: [`0 0 0px ${statusColor}00`, `0 0 16px ${statusColor}40`, `0 0 8px ${statusColor}20`],
       } : { boxShadow: 'none' }}
@@ -75,10 +131,12 @@ function PortalBlock({ block, accentColor, style = {} }) {
         border: `1.5px solid ${border}`,
         background: bg,
         transition: 'border-color 0.4s, background 0.4s',
+        transform: 'translateZ(0)',
+        willChange: 'transform, box-shadow',
+        cursor: onClick ? 'pointer' : 'default',
         ...style,
       }}
     >
-      {/* Header row */}
       <div style={{
         padding: '7px 11px',
         borderBottom: `1px solid ${border}`,
@@ -98,13 +156,14 @@ function PortalBlock({ block, accentColor, style = {} }) {
           fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.6rem',
           color: statusColor,
         }}>
-          {block.status === 'valid' ? '✓ Valid' : block.status === 'tampered' ? '⚠ Tampered' : '✗ Invalid'}
+          {block.status === 'valid' ? <><CheckCircle2 size={16} /> Valid</> : 
+           block.status === 'pending' ? <><AlertTriangle size={16} /> Pending</> :
+           block.status === 'tampered' ? <><AlertTriangle size={16} /> Tampered</> : 
+           <><XCircle size={16} /> Invalid</>}
         </span>
       </div>
 
-      {/* Body */}
       <div style={{ padding: '9px 11px', display: 'flex', flexDirection: 'column', gap: 5 }}>
-        {/* From → To */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
           {[block.from, block.to].map((e, i) => (
             <span key={i} style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
@@ -120,7 +179,6 @@ function PortalBlock({ block, accentColor, style = {} }) {
           ))}
         </div>
 
-        {/* Amount */}
         <motion.div
           key={block.amount}
           initial={{ opacity: 0.5 }}
@@ -129,7 +187,8 @@ function PortalBlock({ block, accentColor, style = {} }) {
             fontFamily: 'JetBrains Mono, monospace', fontWeight: 800,
             fontSize: '1.05rem',
             color: block.status === 'tampered' ? '#fbbf24' :
-                   block.status === 'invalid'  ? '#f87171' : '#10b981',
+                   block.status === 'invalid'  ? '#f87171' : 
+                   block.status === 'pending'  ? '#6aaeff' : '#10b981',
             letterSpacing: '-0.01em',
           }}
         >{block.amount}</motion.div>
@@ -138,7 +197,6 @@ function PortalBlock({ block, accentColor, style = {} }) {
           {block.milestone}
         </div>
 
-        {/* Hash row */}
         <div style={{ borderTop: `1px solid ${border}`, paddingTop: 5 }}>
           <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.55rem', color: '#14b8a690' }}>
             hash: {trunc(block.hash)}
@@ -152,14 +210,11 @@ function PortalBlock({ block, accentColor, style = {} }) {
 /* ═══════════════════════════════════════════════════════════════════════════
    BROWSER WINDOW FRAME
 ═══════════════════════════════════════════════════════════════════════════ */
-
-function BrowserFrame({ url, title, accentColor, isConsensus, children }) {
+function BrowserFrame({ url, accentColor, isConsensus, children }) {
   return (
     <motion.div
-      animate={isConsensus ? {
-        boxShadow: [`0 0 0px ${accentColor}00`, `0 0 32px ${accentColor}35`, `0 0 16px ${accentColor}15`],
-      } : {
-        boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
+      animate={{
+        boxShadow: `0 0 24px ${accentColor}25`
       }}
       transition={{ duration: 0.7 }}
       style={{
@@ -170,20 +225,17 @@ function BrowserFrame({ url, title, accentColor, isConsensus, children }) {
         display: 'flex', flexDirection: 'column',
       }}
     >
-      {/* Title bar */}
       <div style={{
         background: '#10192c',
         padding: '9px 14px',
         borderBottom: '1px solid rgba(255,255,255,0.05)',
         display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0,
       }}>
-        {/* Traffic lights */}
         <div style={{ display: 'flex', gap: 5, flexShrink: 0 }}>
           {['#ef4444', '#f59e0b', '#10b981'].map((c, i) => (
             <div key={i} style={{ width: 10, height: 10, borderRadius: '50%', background: c, opacity: 0.85 }} />
           ))}
         </div>
-        {/* URL bar */}
         <div style={{
           flex: 1, background: '#080f1c', borderRadius: 6,
           padding: '4px 10px', display: 'flex', alignItems: 'center', gap: 5,
@@ -198,8 +250,6 @@ function BrowserFrame({ url, title, accentColor, isConsensus, children }) {
           }}>{url}</span>
         </div>
       </div>
-
-      {/* Content (scrollable) */}
       <div style={{
         flex: 1, overflowY: 'auto', maxHeight: 460,
         scrollbarWidth: 'thin',
@@ -211,14 +261,12 @@ function BrowserFrame({ url, title, accentColor, isConsensus, children }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   NBFC PORTAL CONTENT (browser frame 1)
+   NODE CONTENTS
 ═══════════════════════════════════════════════════════════════════════════ */
-
-function NBFCContent({ chain, tampered }) {
+function NBFCContent({ chain, onBlockClick, step, setStep, pendingBlock }) {
   const accentColor = '#3b8cff'
   return (
     <div style={{ padding: '14px', display: 'flex', flexDirection: 'column', gap: 10 }}>
-      {/* Portal header */}
       <div style={{
         padding: '12px 14px', borderRadius: 10,
         background: 'rgba(59,140,255,0.08)',
@@ -233,37 +281,21 @@ function NBFCContent({ chain, tampered }) {
           fontSize: '0.7rem', color: accentColor, flexShrink: 0,
         }}>AF</div>
         <div>
-          <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.8rem', color: '#d4e0ef' }}>
-            NBFC 2
+          <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '1.05rem', color: '#d4e0ef' }}>
+            NBFC 3
           </div>
-          <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.65rem', color: '#7a8fb0' }}>
+          <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem', color: '#7a8fb0' }}>
             Disbursement Console
           </div>
         </div>
         <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
-          <AnimatePresence>
-            {tampered ? (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                style={{
-                  padding: '3px 8px', borderRadius: 999,
-                  background: 'rgba(245,158,11,0.15)',
-                  border: '1px solid rgba(245,158,11,0.4)',
-                  fontFamily: 'Manrope, sans-serif', fontWeight: 700,
-                  fontSize: '0.6rem', color: '#fbbf24',
-                }}
-              >⚠ LOCAL EDIT</motion.div>
-            ) : (
-              <div style={{
-                padding: '3px 8px', borderRadius: 999,
-                background: 'rgba(16,185,129,0.12)',
-                border: '1px solid rgba(16,185,129,0.3)',
-                fontFamily: 'Manrope, sans-serif', fontWeight: 700,
-                fontSize: '0.6rem', color: '#34d399',
-              }}>✓ SYNCED</div>
-            )}
-          </AnimatePresence>
+          <div style={{
+            padding: '3px 8px', borderRadius: 999,
+            background: 'rgba(16,185,129,0.12)',
+            border: '1px solid rgba(16,185,129,0.3)',
+            fontFamily: 'Manrope, sans-serif', fontWeight: 700,
+            fontSize: '0.6rem', color: '#34d399',
+          }}><CheckCircle2 size={16} /> SYNCED</div>
         </div>
       </div>
 
@@ -273,21 +305,53 @@ function NBFCContent({ chain, tampered }) {
       }}>LOAN: EDU-2024-001 · 3 tranches</div>
 
       {chain.map(block => (
-        <PortalBlock key={block.index} block={block} accentColor={accentColor} />
+        <PortalBlock key={block.index} block={block} accentColor={accentColor} onClick={onBlockClick} />
       ))}
+      
+      {/* APPROVAL WORKFLOW INJECTION */}
+      <AnimatePresence>
+        {step === 0 && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            style={{ overflow: 'hidden' }}
+          >
+            <div style={{
+              marginTop: 10, padding: 12, borderRadius: 10,
+              background: 'rgba(59,140,255,0.1)', border: '1px dashed rgba(59,140,255,0.4)',
+              display: 'flex', flexDirection: 'column', gap: 10
+            }}>
+              <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem', color: '#6aaeff', fontWeight: 600 }}>
+                Pending Disbursement (Semester 3)
+              </div>
+              <PortalBlock block={pendingBlock} accentColor={accentColor} />
+              <button 
+                onClick={() => setStep(1)}
+                style={{
+                  padding: '8px 16px', borderRadius: 8, background: '#3b8cff', color: '#fff',
+                  border: 'none', fontFamily: 'Manrope, sans-serif', fontWeight: 700, cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6
+                }}>
+                <PenTool size={16} /> Approve & Sign Transaction
+              </button>
+            </div>
+          </motion.div>
+        )}
+        {step > 0 && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            <PortalBlock block={{...pendingBlock, status: 'valid', hash: computeHash({...pendingBlock, amount: '₹24,000'})}} accentColor={accentColor} onClick={onBlockClick} />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   GRAYQUEST APP CONTENT (phone frame)
-═══════════════════════════════════════════════════════════════════════════ */
-
-function FintechCompanyContent({ chain }) {
+function FintechCompanyContent({ chain, onBlockClick, step, pendingBlock }) {
   const accentColor = '#f59e0b'
   return (
     <div style={{ padding: '0 10px 10px' }}>
-      {/* App header */}
       <div style={{
         padding: '8px 4px 12px',
         display: 'flex', alignItems: 'center', gap: 8,
@@ -299,31 +363,20 @@ function FintechCompanyContent({ chain }) {
           background: 'linear-gradient(135deg, #f59e0b, #d97706)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           fontSize: '0.8rem', flexShrink: 0,
-        }}>⛓</div>
+        }}><LinkIcon size={16} /></div>
         <div>
-          <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '0.78rem', color: '#fbbf24' }}>
+          <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '1.05rem', color: '#fbbf24' }}>
             Fintech Company
           </div>
-          <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.55rem', color: '#7a8fb0' }}>
+          <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem', color: '#7a8fb0' }}>
             Education Finance
           </div>
         </div>
-        {/* Notification bell */}
-        <svg style={{ marginLeft: 'auto' }} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7a8fb0" strokeWidth="2">
-          <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/>
-        </svg>
-      </div>
-
-      <div style={{
-        fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.7rem',
-        color: '#d4e0ef', marginBottom: 8, paddingLeft: 2,
-      }}>
-        Active Disbursements
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {chain.map(block => (
-          <div key={block.index} style={{
+          <motion.div key={block.index} onClick={() => onBlockClick && onBlockClick(block)} whileHover={{ scale: 1.015, y: -1 }} whileTap={{ scale: 0.98 }} style={{ cursor: "pointer", 
             borderRadius: 10,
             background: 'rgba(245,158,11,0.05)',
             border: '1px solid rgba(245,158,11,0.12)',
@@ -341,7 +394,7 @@ function FintechCompanyContent({ chain }) {
               <span style={{
                 fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.62rem',
                 color: '#10b981',
-              }}>✓</span>
+              }}><CheckCircle2 size={16} /></span>
             </div>
             <div style={{ padding: '8px 10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div>
@@ -363,11 +416,55 @@ function FintechCompanyContent({ chain }) {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
+        
+        {/* NEW BLOCK */}
+        {step >= 1 && (
+          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} onClick={() => onBlockClick && onBlockClick({...pendingBlock, status: step === 2 ? 'valid' : 'pending', hash: step === 2 ? computeHash({...pendingBlock, amount: '₹24,000'}) : ''})} whileHover={{ scale: 1.015, y: -1 }} whileTap={{ scale: 0.98 }} style={{ cursor: "pointer", 
+            borderRadius: 10,
+            background: step === 2 ? 'rgba(245,158,11,0.05)' : 'rgba(59,140,255,0.1)',
+            border: step === 2 ? '1px solid rgba(245,158,11,0.12)' : '1px dashed rgba(59,140,255,0.4)',
+            overflow: 'hidden',
+          }}>
+            <div style={{
+              padding: '8px 10px',
+              borderBottom: step === 2 ? '1px solid rgba(245,158,11,0.08)' : '1px solid rgba(59,140,255,0.2)',
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            }}>
+              <span style={{
+                fontFamily: 'Manrope, sans-serif', fontSize: '0.6rem',
+                color: step === 2 ? '#f59e0b' : '#3b8cff', fontWeight: 600,
+              }}>{pendingBlock.milestone}</span>
+              <span style={{
+                fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.62rem',
+                color: step === 2 ? '#10b981' : '#3b8cff',
+              }}>{step === 2 ? <CheckCircle2 size={16} /> : "Awaiting Inst..."}</span>
+            </div>
+            <div style={{ padding: '8px 10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div>
+                <div style={{
+                  fontFamily: 'JetBrains Mono, monospace', fontWeight: 800,
+                  fontSize: '0.92rem', color: step === 2 ? '#10b981' : '#3b8cff',
+                }}>{pendingBlock.amount}</div>
+                <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.55rem', color: '#7a8fb0' }}>
+                  {pendingBlock.from} → PI
+                </div>
+              </div>
+              <div style={{ textAlign: 'right' }}>
+                <div style={{
+                  fontFamily: 'JetBrains Mono, monospace', fontSize: '0.52rem',
+                  color: '#14b8a650',
+                }}>{step === 2 ? trunc(computeHash({...pendingBlock, amount: '₹24,000'}), 8) : 'PENDING'}</div>
+                <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.52rem', color: '#243352' }}>
+                  {pendingBlock.timestamp.split(' ')[0]}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
       </div>
 
-      {/* App footer stat */}
       <div style={{
         marginTop: 10, padding: '8px 10px', borderRadius: 9,
         background: 'rgba(20,184,166,0.08)',
@@ -383,15 +480,10 @@ function FintechCompanyContent({ chain }) {
   )
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   INSTITUTION PORTAL CONTENT (browser frame 3)
-═══════════════════════════════════════════════════════════════════════════ */
-
-function InstitutionContent({ chain }) {
+function InstitutionContent({ chain, onBlockClick, step, setStep, pendingBlock }) {
   const accentColor = '#a78bfa'
   return (
     <div style={{ padding: '14px', display: 'flex', flexDirection: 'column', gap: 10 }}>
-      {/* Portal header */}
       <div style={{
         padding: '12px 14px', borderRadius: 10,
         background: 'rgba(167,139,250,0.08)',
@@ -403,12 +495,12 @@ function InstitutionContent({ chain }) {
           background: 'rgba(167,139,250,0.15)', border: '1px solid rgba(167,139,250,0.35)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           fontSize: '1rem', flexShrink: 0,
-        }}>🏫</div>
+        }}><Building2 size={16} /></div>
         <div>
-          <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.8rem', color: '#d4e0ef' }}>
+          <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '1.05rem', color: '#d4e0ef' }}>
             Partner Institute
           </div>
-          <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.65rem', color: '#7a8fb0' }}>
+          <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem', color: '#7a8fb0' }}>
             Finance Office Portal
           </div>
         </div>
@@ -419,7 +511,7 @@ function InstitutionContent({ chain }) {
             border: '1px solid rgba(16,185,129,0.3)',
             fontFamily: 'Manrope, sans-serif', fontWeight: 700,
             fontSize: '0.6rem', color: '#34d399',
-          }}>✓ VERIFIED</div>
+          }}><CheckCircle2 size={16} /> VERIFIED</div>
         </div>
       </div>
 
@@ -429,10 +521,46 @@ function InstitutionContent({ chain }) {
       }}>STUDENT LOAN: EDU-2024-001 · ₹66,000 total</div>
 
       {chain.map(block => (
-        <PortalBlock key={block.index} block={block} accentColor={accentColor} />
+        <PortalBlock key={block.index} block={block} accentColor={accentColor} onClick={onBlockClick} />
       ))}
+      
+      {/* APPROVAL WORKFLOW INJECTION */}
+      <AnimatePresence>
+        {step === 1 && (
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, height: 0 }}
+            style={{ overflow: 'hidden' }}
+          >
+            <div style={{
+              marginTop: 10, padding: 12, borderRadius: 10,
+              background: 'rgba(167,139,250,0.1)', border: '1px dashed rgba(167,139,250,0.4)',
+              display: 'flex', flexDirection: 'column', gap: 10
+            }}>
+              <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem', color: '#c4b5fd', fontWeight: 600 }}>
+                Incoming Transfer Detected (Unverified)
+              </div>
+              <PortalBlock block={pendingBlock} accentColor={accentColor} />
+              <button 
+                onClick={() => setStep(2)}
+                style={{
+                  padding: '8px 16px', borderRadius: 8, background: '#a78bfa', color: '#10192c',
+                  border: 'none', fontFamily: 'Manrope, sans-serif', fontWeight: 800, cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6
+                }}>
+                <CheckCircle2 size={16} /> Acknowledge Receipt & Verify
+              </button>
+            </div>
+          </motion.div>
+        )}
+        {step === 2 && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            <PortalBlock block={{...pendingBlock, status: 'valid', hash: computeHash({...pendingBlock, amount: '₹24,000'})}} accentColor={accentColor} onClick={onBlockClick} />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {/* Running total */}
       <div style={{
         padding: '10px 12px', borderRadius: 9,
         background: 'rgba(167,139,250,0.07)',
@@ -445,191 +573,8 @@ function InstitutionContent({ chain }) {
         <span style={{
           fontFamily: 'JetBrains Mono, monospace', fontWeight: 800,
           fontSize: '0.9rem', color: '#c4b5fd',
-        }}>₹66,000</span>
+        }}>₹{42000 + (step === 2 ? 24000 : 0)}</span>
       </div>
-    </div>
-  )
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   CONSENSUS VOTE PANEL
-═══════════════════════════════════════════════════════════════════════════ */
-
-function ConsensusPanel({ tampered }) {
-  return (
-    <AnimatePresence>
-      {tampered && (
-        <motion.div
-          initial={{ opacity: 0, y: -16, scaleY: 0.85 }}
-          animate={{ opacity: 1, y: 0, scaleY: 1 }}
-          exit={{ opacity: 0, y: -16 }}
-          transition={{ type: 'spring', stiffness: 280, damping: 26 }}
-          style={{
-            padding: '20px 24px',
-            background: 'linear-gradient(135deg, rgba(239,68,68,0.1), rgba(245,158,11,0.06))',
-            border: '2px solid rgba(239,68,68,0.4)',
-            borderRadius: 14,
-            boxShadow: '0 0 50px rgba(239,68,68,0.12)',
-            marginBottom: 24,
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-            <motion.span
-              animate={{ rotate: [-3, 3, -3, 0] }}
-              transition={{ duration: 0.4, delay: 0.2 }}
-              style={{ fontSize: '1.6rem', lineHeight: 1 }}
-            >⚠️</motion.span>
-            <div>
-              <div style={{
-                fontFamily: 'Manrope, sans-serif', fontWeight: 800,
-                fontSize: '1rem', color: '#f87171', marginBottom: 3,
-              }}>Discrepancy Detected — Consensus Rejected</div>
-              <div style={{
-                fontFamily: 'Manrope, sans-serif', fontSize: '0.82rem', color: '#7a8fb0',
-              }}>
-                NBFC node's copy does not match network consensus.
-                Majority (<strong style={{ color: '#fbbf24' }}>2 of 3 nodes</strong>) reject this version.
-              </div>
-            </div>
-          </div>
-
-          {/* Vote row */}
-          <div style={{ display: 'flex', gap: 10, marginTop: 16, flexWrap: 'wrap' }}>
-            {[
-              { node: '🏦 NBFC Node',        vote: 'DIVERGED', color: '#ef4444' },
-              { node: '📱 Fintech Node',   vote: 'CONSENSUS', color: '#10b981' },
-              { node: '🏫 Institution Node', vote: 'CONSENSUS', color: '#10b981' },
-            ].map((n, i) => (
-              <motion.div
-                key={n.node}
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.15 + i * 0.12 }}
-                style={{
-                  flex: 1, minWidth: 140, padding: '10px 14px', borderRadius: 9,
-                  background: `${n.color}10`,
-                  border: `1.5px solid ${n.color}35`,
-                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                }}
-              >
-                <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.76rem', color: '#9badc8' }}>
-                  {n.node}
-                </span>
-                <span style={{
-                  fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '0.68rem',
-                  color: n.color,
-                }}>
-                  {n.vote === 'DIVERGED' ? '✗ DIVERGED' : '✓ VALID'}
-                </span>
-              </motion.div>
-            ))}
-          </div>
-
-          <div style={{
-            marginTop: 12, padding: '10px 14px', borderRadius: 9,
-            background: 'rgba(59,140,255,0.06)', border: '1px solid rgba(59,140,255,0.15)',
-            fontFamily: 'Manrope, sans-serif', fontSize: '0.8rem', color: '#7a8fb0', lineHeight: 1.6,
-          }}>
-            🏛 <strong style={{ color: '#6aaeff' }}>This is decentralization in action.</strong>{' '}
-            Like a village council — no single authority can rewrite the shared record.
-            The honest majority always overrules a rogue node.
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  )
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   RECHARTS — DISBURSEMENT TIMELINE
-═══════════════════════════════════════════════════════════════════════════ */
-
-const CHART_DATA = [
-  { milestone: 'Admission', amount: 18000, nbfc: 'NBFC 1',    color: '#3b8cff' },
-  { milestone: 'Sem 1',     amount: 24000, nbfc: 'NBFC 2',    color: '#14b8a6' },
-  { milestone: 'Sem 2',     amount: 24000, nbfc: 'NBFC 3', color: '#a78bfa' },
-]
-
-const CustomTooltip = ({ active, payload, label }) => {
-  if (!active || !payload?.length) return null
-  const d = payload[0]?.payload
-  return (
-    <div style={{
-      background: 'rgba(15,26,46,0.95)', border: '1px solid rgba(59,140,255,0.25)',
-      borderRadius: 10, padding: '12px 16px',
-      fontFamily: 'Manrope, sans-serif', fontSize: '0.8rem',
-    }}>
-      <div style={{ color: '#d4e0ef', fontWeight: 700, marginBottom: 4 }}>{d?.milestone} Disbursement</div>
-      <div style={{ color: '#10b981', fontWeight: 800, fontSize: '1rem' }}>₹{d?.amount?.toLocaleString('en-IN')}</div>
-      <div style={{ color: '#7a8fb0', marginTop: 2 }}>NBFC: {d?.nbfc}</div>
-    </div>
-  )
-}
-
-function DisbursementChart({ tampered }) {
-  const data = tampered
-    ? [...CHART_DATA.slice(0, 1), { ...CHART_DATA[1], amount: 75000 }, CHART_DATA[2]]
-    : CHART_DATA
-
-  return (
-    <div className="glass-card" style={{ padding: '24px' }}>
-      <div style={{
-        fontFamily: 'Manrope, sans-serif', fontWeight: 700,
-        fontSize: '0.9rem', color: '#d4e0ef', marginBottom: 4,
-      }}>
-        📊 Disbursement Timeline — EDU-2024-001
-      </div>
-      <div style={{
-        fontFamily: 'Manrope, sans-serif', fontSize: '0.76rem', color: '#7a8fb0', marginBottom: 20,
-      }}>
-        {tampered ? (
-          <span style={{ color: '#f87171' }}>
-            ⚠ NBFC node reports ₹75,000 for Semester 1 — other nodes show ₹24,000
-          </span>
-        ) : 'Tranche amounts across disbursement milestones · All 3 nodes in consensus'}
-      </div>
-
-      <div style={{ height: 200 }}>
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} barSize={40} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(59,140,255,0.08)" vertical={false} />
-            <XAxis
-              dataKey="milestone"
-              tick={{ fontFamily: 'Manrope, sans-serif', fontSize: 11, fill: '#7a8fb0' }}
-              axisLine={false} tickLine={false}
-            />
-            <YAxis
-              tickFormatter={(v) => `₹${(v / 1000).toFixed(0)}k`}
-              tick={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, fill: '#7a8fb0' }}
-              axisLine={false} tickLine={false}
-            />
-            <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(59,140,255,0.05)' }} />
-            <Bar dataKey="amount" radius={[6, 6, 0, 0]}>
-              {data.map((entry, i) => (
-                <Cell
-                  key={i}
-                  fill={tampered && i === 1 ? '#ef4444' : entry.color}
-                  fillOpacity={0.85}
-                />
-              ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-
-      {tampered && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          style={{
-            marginTop: 12, padding: '8px 12px', borderRadius: 8,
-            background: 'rgba(239,68,68,0.07)', border: '1px solid rgba(239,68,68,0.2)',
-            fontFamily: 'Manrope, sans-serif', fontSize: '0.76rem', color: '#f87171',
-          }}
-        >
-          📊 Chart shows NBFC's tampered local value. Consensus value (from Fintech Company + Institution nodes): ₹24,000
-        </motion.div>
-      )}
     </div>
   )
 }
@@ -639,192 +584,97 @@ function DisbursementChart({ tampered }) {
 ═══════════════════════════════════════════════════════════════════════════ */
 
 export default function Dashboard() {
-  const [tampered, setTampered] = useState(false)
-  const [activeRole, setActiveRole] = useState('nbfc')
+  const isMobile = useIsMobile();
+  const { demoBlocks: CLEAN_CHAIN } = useGlobalChain()
+  const [selectedBlock, setSelectedBlock] = useState(null)
+  
+  // 0: Not started (NBFC must click approve)
+  // 1: NBFC approved, propagating (Institute must click acknowledge)
+  // 2: Finalized
+  const [transactionStep, setTransactionStep] = useState(0)
+
+  const pendingBlock = {
+    index: 4,
+    from: 'NBFC 3',
+    to: 'Partner Institute',
+    amount: '₹24,000',
+    milestone: 'Semester 3 Start',
+    timestamp: '2025-08-10 10:00',
+    prevHash: CLEAN_CHAIN[2]?.hash || '',
+    status: 'pending',
+    hash: ''
+  }
 
   return (
-    <div style={{ minHeight: '100vh', padding: '28px 20px 60px' }}>
-      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+    <div style={{ minHeight: '100vh', padding: isMobile ? '16px 12px 60px' : '28px 20px 60px' }}>
+      <div style={{ maxWidth: 1600, margin: '0 auto' }}>
 
-        {/* Page header */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          style={{ marginBottom: 28 }}
-        >
-          <span className="badge badge-teal" style={{ marginBottom: 14, display: 'inline-flex' }}>
-            🌐 Multi-Node Ledger View
-          </span>
-          <h1 style={{
-            fontFamily: 'Manrope, sans-serif', fontWeight: 800,
-            fontSize: 'clamp(1.7rem, 4vw, 2.8rem)', letterSpacing: '-0.03em',
-            color: '#d4e0ef', margin: '0 0 10px',
-          }}>
-            Three Nodes · One Truth
-          </h1>
-          <p style={{
-            fontFamily: 'Manrope, sans-serif', fontSize: '0.9rem',
-            color: '#7a8fb0', margin: 0, maxWidth: 560, lineHeight: 1.65,
-          }}>
-            NBFC, Fintech Company, and Institution each hold an independent, identical copy of the ledger.
-            No single party controls the record — this is the village council principle.
-          </p>
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} style={{ marginBottom: 28, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <div>
+            <span className="badge badge-teal" style={{ marginBottom: 14, display: 'inline-flex' }}>
+              <Globe size={16} /> Multi-Node Ledger View
+            </span>
+            <h1 style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: 'clamp(1.7rem, 4vw, 2.8rem)', letterSpacing: '-0.03em', color: '#d4e0ef', margin: '0 0 10px' }}>
+              Three Nodes · One Truth
+            </h1>
+            <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.9rem', color: '#7a8fb0', margin: 0, maxWidth: 560, lineHeight: 1.65 }}>
+              NBFC, Fintech Company, and Institution each hold an independent, identical copy of the ledger. Show a live transaction propagating across the network.
+            </p>
+          </div>
+          <div>
+            <button onClick={() => setTransactionStep(0)} style={{
+              padding: '10px 20px', borderRadius: 8, background: 'rgba(255,255,255,0.05)', color: '#fff',
+              border: '1px solid rgba(255,255,255,0.1)', fontFamily: 'Manrope, sans-serif', fontWeight: 600, cursor: 'pointer',
+            }}>
+              RESET DASHBOARD
+            </button>
+          </div>
         </motion.div>
 
-        {/* Controls */}
-        <div style={{ display: 'flex', gap: 12, marginBottom: 20, flexWrap: 'wrap', alignItems: 'center' }}>
-          <AnimatePresence>
-            {activeRole === 'nbfc' && (
-              <motion.button
-                initial={{ opacity: 0, width: 0 }}
-                animate={{ opacity: 1, width: 'auto' }}
-                exit={{ opacity: 0, width: 0 }}
-                whileHover={{ scale: tampered ? 1 : 1.03, y: tampered ? 0 : -1 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => setTampered(t => !t)}
-                style={{
-                  display: 'flex', alignItems: 'center', gap: 9,
-                  padding: '12px 24px', borderRadius: 11, border: 'none',
-                  background: tampered
-                    ? 'rgba(59,140,255,0.12)'
-                    : 'linear-gradient(135deg, #ef4444, #dc2626)',
-                  color: tampered ? '#6aaeff' : '#fff',
-                  borderColor: tampered ? 'rgba(59,140,255,0.3)' : 'transparent',
-                  borderWidth: tampered ? 1 : 0, borderStyle: 'solid',
-                  fontFamily: 'Manrope, sans-serif', fontWeight: 700,
-                  fontSize: '0.9rem', cursor: 'pointer',
-                  boxShadow: tampered ? 'none' : '0 6px 24px rgba(239,68,68,0.3)',
-                  transition: 'all 0.3s',
-                }}
-              >
-                {tampered ? (
-                  <><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> Restore Consensus</>
-                ) : (
-                  <><span style={{ fontSize: '1.1rem' }}>🔨</span> Simulate Tamper at NBFC Node</>
-                )}
-              </motion.button>
-            )}
-          </AnimatePresence>
+        {/* SIDE-BY-SIDE VIEW */}
+        <div style={{
+          display: 'flex', gap: 16, alignItems: 'flex-start',
+          overflowX: 'auto', paddingBottom: 8, marginBottom: 28,
+        }}>
+          {/* NBFC Portal */}
+          <div style={{ flex: 1, minWidth: isMobile ? '100%' : 320, display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div style={{ textAlign: 'center' }}>
+              <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem', color: '#3b8cff', textTransform: 'uppercase', letterSpacing: '0.08em' }}>💻 NBFC Node</span>
+            </div>
+            <BrowserFrame url="nbfc.tranchechain.fi/console" accentColor="#3b8cff">
+              <NBFCContent chain={CLEAN_CHAIN} onBlockClick={setSelectedBlock} step={transactionStep} setStep={setTransactionStep} pendingBlock={pendingBlock} />
+            </BrowserFrame>
+          </div>
 
-          {tampered && (
-            <motion.div
-              initial={{ opacity: 0, x: -8 }}
-              animate={{ opacity: 1, x: 0 }}
-              style={{
-                display: 'flex', alignItems: 'center', gap: 8,
-                padding: '8px 14px', borderRadius: 9,
-                background: 'rgba(245,158,11,0.08)',
-                border: '1px solid rgba(245,158,11,0.25)',
-              }}
-            >
-              <motion.div
-                animate={{ scale: [1, 1.2, 1], opacity: [1, 0.5, 1] }}
-                transition={{ duration: 1, repeat: Infinity }}
-                style={{ width: 8, height: 8, borderRadius: '50%', background: '#f59e0b', flexShrink: 0 }}
-              />
-              <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.78rem', color: '#fbbf24' }}>
-                NBFC node diverged — consensus active
-              </span>
-            </motion.div>
-          )}
+          {/* Fintech App */}
+          <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+             <div style={{ textAlign: 'center' }}>
+              <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem', color: '#f59e0b', textTransform: 'uppercase', letterSpacing: '0.08em' }}>📱 Fintech Node</span>
+            </div>
+            <PhoneFrame accentColor="#f59e0b">
+              <FintechCompanyContent chain={CLEAN_CHAIN} onBlockClick={setSelectedBlock} step={transactionStep} pendingBlock={pendingBlock} />
+            </PhoneFrame>
+          </div>
+
+          {/* Institution Portal */}
+          <div style={{ flex: 1, minWidth: isMobile ? '100%' : 320, display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div style={{ textAlign: 'center' }}>
+              <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem', color: '#a78bfa', textTransform: 'uppercase', letterSpacing: '0.08em' }}>💻 Institution Node</span>
+            </div>
+            <BrowserFrame url="narayana.tranchechain.fi/finance" accentColor="#a78bfa">
+              <InstitutionContent chain={CLEAN_CHAIN} onBlockClick={setSelectedBlock} step={transactionStep} setStep={setTransactionStep} pendingBlock={pendingBlock} />
+            </BrowserFrame>
+          </div>
         </div>
 
-        {/* Consensus rejection banner */}
-        <ConsensusPanel tampered={tampered} />
-
-        {/* ROLE SELECTOR */}
-        <div style={{
-          display: 'flex', gap: 12, marginBottom: 32, flexWrap: 'wrap',
-          background: 'rgba(255,255,255,0.02)', padding: 8, borderRadius: 16,
-          border: '1px solid rgba(255,255,255,0.05)'
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} style={{
+          marginTop: 24, padding: '18px 22px', borderRadius: 12, background: 'rgba(59,140,255,0.04)', border: '1px solid rgba(59,140,255,0.12)',
+          display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 16,
         }}>
           {[
-            { id: 'nbfc', label: 'NBFC Node', icon: '💻', color: '#3b8cff' },
-            { id: 'fintech', label: 'Fintech Node', icon: '📱', color: '#f59e0b' },
-            { id: 'institution', label: 'Institution Node', icon: '🏫', color: '#a78bfa' },
-          ].map(role => {
-            const isActive = activeRole === role.id;
-            return (
-              <button
-                key={role.id}
-                onClick={() => setActiveRole(role.id)}
-                style={{
-                  flex: 1, padding: '12px 16px', borderRadius: 12, border: '1px solid',
-                  background: isActive ? `${role.color}15` : 'transparent',
-                  borderColor: isActive ? `${role.color}40` : 'transparent',
-                  color: isActive ? role.color : '#7a8fb0',
-                  fontFamily: 'Manrope, sans-serif', fontWeight: 600, fontSize: '0.9rem',
-                  cursor: 'pointer', transition: 'all 0.2s',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8
-                }}
-              >
-                <span>{role.icon}</span> {role.label}
-              </button>
-            )
-          })}
-        </div>
-
-        {/* ACTIVE ROLE VIEW */}
-        <div style={{ marginBottom: 32, display: 'flex', justifyContent: 'center' }}>
-          <AnimatePresence mode="wait">
-            {activeRole === 'nbfc' && (
-              <motion.div key="nbfc" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.3 }} style={{ width: '100%', maxWidth: 500, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                <BrowserFrame url="nbfc.tranchechain.fi/console" accentColor="#3b8cff" isConsensus={!tampered}>
-                  <NBFCContent chain={tampered ? NBFC_TAMPERED_CHAIN : CLEAN_CHAIN} tampered={tampered} />
-                </BrowserFrame>
-              </motion.div>
-            )}
-            {activeRole === 'fintech' && (
-              <motion.div key="fintech" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.3 }} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-                <PhoneFrame accentColor="#f59e0b" isConsensus={tampered}>
-                  <FintechCompanyContent chain={CLEAN_CHAIN} />
-                </PhoneFrame>
-                {tampered && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    style={{
-                      padding: '5px 12px', borderRadius: 999,
-                      background: 'rgba(16,185,129,0.12)',
-                      border: '1px solid rgba(16,185,129,0.3)',
-                      fontFamily: 'Manrope, sans-serif', fontWeight: 700,
-                      fontSize: '0.65rem', color: '#34d399',
-                    }}
-                  >✓ Voting: REJECT NBFC VERSION</motion.div>
-                )}
-              </motion.div>
-            )}
-            {activeRole === 'institution' && (
-              <motion.div key="institution" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.3 }} style={{ width: '100%', maxWidth: 500, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                <BrowserFrame url="narayana.tranchechain.fi/finance" accentColor="#a78bfa" isConsensus={tampered}>
-                  <InstitutionContent chain={CLEAN_CHAIN} />
-                </BrowserFrame>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* RECHARTS — Disbursement bar chart */}
-        <DisbursementChart tampered={tampered} />
-
-        {/* Course link callout */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-          style={{
-            marginTop: 24, padding: '18px 22px', borderRadius: 12,
-            background: 'rgba(59,140,255,0.04)',
-            border: '1px solid rgba(59,140,255,0.12)',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-            gap: 16,
-          }}
-        >
-          {[
-            { icon: '🏛',  title: 'Village Council',  text: 'No single node has the authority to alter the ledger. The majority decides what is true — exactly like a village council.' },
-            { icon: '📖', title: 'Wikipedia Analogy', text: 'Anyone can read the ledger. You trust the cryptographic proof, not the institution presenting it.' },
-            { icon: '⚙',  title: 'Node vs Transactor', text: 'NBFC, Fintech Company, and Institution are nodes — they hold full ledger copies. The student is a transactor — they only need a wallet address.' },
+            { icon: <Landmark size={18} color="#9badc8" />,  title: 'Village Council',  text: 'No single node has the authority to alter the ledger. The majority decides what is true — exactly like a village council.' },
+            { icon: <BookOpen size={18} color="#9badc8" />, title: 'Wikipedia Analogy', text: 'Anyone can read the ledger. You trust the cryptographic proof, not the institution presenting it.' },
+            { icon: <Settings size={18} color="#9badc8" />,  title: 'Node vs Transactor', text: 'NBFC, Fintech Company, and Institution are nodes — they hold full ledger copies. The student is a transactor — they only need a wallet address.' },
           ].map(item => (
             <div key={item.title} style={{ display: 'flex', gap: 12 }}>
               <span style={{ fontSize: '1.2rem', flexShrink: 0 }}>{item.icon}</span>
@@ -836,6 +686,9 @@ export default function Dashboard() {
           ))}
         </motion.div>
 
+        <AnimatePresence>
+          {selectedBlock && <BlockModal block={selectedBlock} onClose={() => setSelectedBlock(null)} />}
+        </AnimatePresence>
       </div>
     </div>
   )

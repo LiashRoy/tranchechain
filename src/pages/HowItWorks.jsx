@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
+import { Key, FileText, ShieldCheck, Unlock, BookOpen } from 'lucide-react'
 import CryptoJS from 'crypto-js'
+import { useIsMobile } from '../hooks/useIsMobile'
 
 /* ═══════════════════════════════════════════════════════════════════════════════
    UTILITIES
@@ -59,13 +61,14 @@ const STATIC_CHAIN = buildStaticChain()
 ═══════════════════════════════════════════════════════════════════════════════ */
 
 function SectionShell({ id, children, minH = '100vh' }) {
+  const isMobile = useIsMobile();
   return (
     <section
       id={id}
       style={{
         minHeight: minH,
-        padding: '100px 24px 80px',
-        maxWidth: 1000,
+        padding: isMobile ? '60px 16px 40px' : '100px 24px 80px',
+        maxWidth: 1400,
         margin: '0 auto',
         display: 'flex',
         flexDirection: 'column',
@@ -991,6 +994,7 @@ function Section4() {
 ═══════════════════════════════════════════════════════════════════════════════ */
 
 function Section5() {
+  const isMobile = useIsMobile();
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-100px' })
   const [step, setStep] = useState(0)
@@ -1022,7 +1026,7 @@ function Section5() {
         </SectionSub>
 
         {/* Signing flow */}
-        <div className="glass-card" style={{ padding: '32px 28px', marginBottom: '20px' }}>
+        <div className="glass-card" style={{ padding: isMobile ? '24px 20px' : '32px 28px', marginBottom: '20px' }}>
           <div style={{
             fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.85rem',
             color: '#7a8fb0', marginBottom: '24px',
@@ -1043,7 +1047,7 @@ function Section5() {
                 textAlign: 'center', minWidth: '160px',
               }}
             >
-              <div style={{ fontSize: '1.5rem', marginBottom: '6px' }}>🔑</div>
+              <div style={{ marginBottom: '6px' }}><Key size={26} color="#a78bfa" /></div>
               <div style={{
                 fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem',
                 color: '#a78bfa', marginBottom: '4px',
@@ -1071,7 +1075,7 @@ function Section5() {
                 minWidth: '200px',
               }}
             >
-              <div style={{ fontSize: '1.5rem', marginBottom: '6px' }}>📋</div>
+              <div style={{ marginBottom: '6px' }}><FileText size={26} color="#6aaeff" /></div>
               <div style={{
                 fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem',
                 color: '#6aaeff', marginBottom: '8px',
@@ -1106,7 +1110,7 @@ function Section5() {
                 textAlign: 'center', minWidth: '160px',
               }}
             >
-              <div style={{ fontSize: '1.5rem', marginBottom: '6px' }}>🪬</div>
+              <div style={{ marginBottom: '6px' }}><ShieldCheck size={26} color="#34d399" /></div>
               <div style={{
                 fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem',
                 color: '#34d399', marginBottom: '4px',
@@ -1125,19 +1129,19 @@ function Section5() {
             color: '#7a8fb0', marginBottom: '20px',
           }}>Verification (anyone can do this — only NBFC 2 could have created it):</div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', rowGap: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', flexWrap: 'wrap', rowGap: '16px' }}>
             {[
-              { label: 'Public Key', sub: '(Published by NBFC 2)', icon: '🔓', color: '#a78bfa' },
+              { label: 'Public Key', sub: '(Published by NBFC 2)', icon: <Unlock size={22} color="#a78bfa" />, color: '#a78bfa' },
               { label: '+', sub: '', icon: null, color: '#7a8fb0' },
-              { label: 'Signature', sub: '(from the block)', icon: '🪬', color: '#10b981' },
+              { label: 'Signature', sub: '(from the block)', icon: <ShieldCheck size={22} color="#10b981" />, color: '#10b981' },
               { label: '+', sub: '', icon: null, color: '#7a8fb0' },
-              { label: 'Message', sub: '(exact tranche data)', icon: '📋', color: '#3b8cff' },
+              { label: 'Message', sub: '(exact tranche data)', icon: <FileText size={22} color="#3b8cff" />, color: '#3b8cff' },
               { label: '→', sub: '', icon: null, color: '#7a8fb0' },
               { label: '✓ Authentic', sub: 'Only NBFC 2\'s key\ncould produce this seal', icon: null, color: '#10b981' },
             ].map((item, i) => (
               item.icon !== null || item.label === '→' || item.label === '+' ? (
                 <div key={i} style={{
-                  display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3px',
+                  display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3px', flex: item.label !== '→' && item.label !== '+' ? 1 : 'unset',
                   fontFamily: item.label === '→' || item.label === '+' ? 'inherit' : 'Manrope, sans-serif',
                   color: item.color, fontSize: item.label === '→' || item.label === '+' ? '1.2rem' : '0.75rem',
                   fontWeight: item.label === '✓ Authentic' ? 700 : 500,
@@ -1163,7 +1167,7 @@ function Section5() {
             border: '1px solid rgba(239,68,68,0.15)',
             fontFamily: 'Manrope, sans-serif', fontSize: '0.8rem', color: '#7a8fb0',
           }}>
-            🪬 Change even one rupee in the amount after signing — the wax seal breaks. This is
+            <ShieldCheck size={16} style={{ display: 'inline', verticalAlign: '-3px', marginRight: '4px' }} /> Change even one rupee in the amount after signing — the wax seal breaks. This is
             why the signature field in every block is bound to the <em>exact</em> message content.
           </div>
         </div>
@@ -1357,48 +1361,7 @@ function FloatingCTA() {
     return () => observer.disconnect()
   }, [])
 
-  return (
-    <AnimatePresence>
-      {show && (
-        <motion.div
-          initial={{ opacity: 0, y: 20, scale: 0.9 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ duration: 0.35 }}
-          style={{
-            position: 'fixed', bottom: '28px', right: '28px',
-            zIndex: 50,
-          }}
-        >
-          <Link
-            to="/demo"
-            style={{
-              display: 'flex', alignItems: 'center', gap: '9px',
-              padding: '12px 22px', borderRadius: '12px',
-              background: 'linear-gradient(135deg, #3b8cff, #14b8a6)',
-              color: '#fff', fontFamily: 'Manrope, sans-serif',
-              fontWeight: 700, fontSize: '0.85rem', textDecoration: 'none',
-              boxShadow: '0 8px 28px rgba(59,140,255,0.35)',
-              transition: 'transform 0.15s ease, box-shadow 0.15s ease',
-            }}
-            onMouseEnter={e => {
-              e.currentTarget.style.transform = 'translateY(-2px)'
-              e.currentTarget.style.boxShadow = '0 12px 36px rgba(59,140,255,0.45)'
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.transform = 'translateY(0)'
-              e.currentTarget.style.boxShadow = '0 8px 28px rgba(59,140,255,0.35)'
-            }}
-          >
-            📒 Try the Full Demo
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
-          </Link>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  )
+  return null
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
@@ -1419,11 +1382,12 @@ function Divider({ color = 'rgba(59,140,255,0.1)' }) {
 ═══════════════════════════════════════════════════════════════════════════════ */
 
 export default function HowItWorks() {
+  const isMobile = useIsMobile();
   return (
     <div>
       {/* Page hero */}
       <div style={{
-        padding: '72px 24px 0', maxWidth: 1000, margin: '0 auto', textAlign: 'center',
+        padding: isMobile ? '40px 16px 0' : '72px 24px 0', maxWidth: 1400, margin: '0 auto', textAlign: 'center',
       }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -1465,8 +1429,8 @@ export default function HowItWorks() {
 
       {/* Bottom CTA */}
       <div style={{ padding: '32px 24px 80px', textAlign: 'center' }}>
-        <Link to="/demo" className="btn-primary" style={{ fontSize: '1rem', padding: '14px 32px' }}>
-          📒 Enter the Full Ledger Demo →
+        <Link to="/demo" className="btn-primary" style={{ fontSize: '1rem', padding: '14px 32px', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+          <BookOpen size={18} /> Enter the Full Ledger Demo →
         </Link>
       </div>
 

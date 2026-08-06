@@ -8,3 +8,9 @@ createRoot(document.getElementById('root')).render(
     <App />
   </StrictMode>,
 )
+
+console.log("Cache bust version: 1786032027832");
+
+console.log("Cache bust version: 1786032034661");
+
+console.log("Cache bust version: 1786032744587");

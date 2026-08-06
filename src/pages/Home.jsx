@@ -1,121 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useIsMobile } from '../hooks/useIsMobile'
 import { motion, useInView, useAnimation, animate } from 'framer-motion'
 import PhoneFrame from '../components/PhoneFrame'
+import { FolderSync, ShieldAlert, Clock, Landmark, Link as LinkIcon, Building2, User, BookOpen, GraduationCap, CheckCircle2, ShieldCheck, Database, AlertTriangle, FileText } from 'lucide-react'
 
-/* ─── Utility: generate a pseudo-random short hash string ──────────────────── */
-const CHARS = '0123456789abcdef'
-const randHash = (len = 8) =>
-  Array.from({ length: len }, () => CHARS[Math.floor(Math.random() * 16)]).join('')
 
-/* ─── 1. FLOATING BLOCKCHAIN BLOCKS (decorative hero BG) ───────────────────── */
-const INITIAL_BLOCKS = [
-  { id: 0, x: '5%',  y: '18%', delay: 0    },
-  { id: 1, x: '23%', y: '62%', delay: 0.6  },
-  { id: 2, x: '52%', y: '22%', delay: 1.1  },
-  { id: 3, x: '74%', y: '58%', delay: 1.7  },
-  { id: 4, x: '88%', y: '24%', delay: 0.3  },
-]
-
-function FloatingBlock({ block }) {
-  const [hash, setHash] = useState(randHash(8))
-
-  useEffect(() => {
-    const iv = setInterval(() => setHash(randHash(8)), 1800 + block.id * 400)
-    return () => clearInterval(iv)
-  }, [block.id])
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={{
-        opacity: [0, 0.45, 0.45, 0],
-        scale:   [0.85, 1, 1, 0.85],
-        y:       [0, -14, 0, 14, 0],
-      }}
-      transition={{
-        duration: 9,
-        delay: block.delay,
-        repeat: Infinity,
-        repeatDelay: 1.5,
-        ease: 'easeInOut',
-      }}
-      style={{
-        position: 'absolute',
-        left: block.x,
-        top: block.y,
-        pointerEvents: 'none',
-        zIndex: 0,
-      }}
-    >
-      <div style={{
-        width: 110,
-        height: 72,
-        borderRadius: '10px',
-        background: 'rgba(15,26,46,0.5)',
-        border: '1px solid rgba(59,140,255,0.15)',
-        backdropFilter: 'blur(10px)',
-        padding: '10px 12px',
-        boxShadow: '0 4px 24px rgba(59,140,255,0.05)',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '5px',
-      }}>
-        <div style={{
-          fontFamily: 'JetBrains Mono, monospace',
-          fontSize: '0.58rem',
-          color: 'rgba(59,140,255,0.5)',
-          letterSpacing: '0.04em',
-          textTransform: 'uppercase',
-        }}>
-          Block #{block.id + 1}
-        </div>
-        <motion.div
-          key={hash}
-          initial={{ opacity: 0.3 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.35 }}
-          style={{
-            fontFamily: 'JetBrains Mono, monospace',
-            fontSize: '0.62rem',
-            color: 'rgba(20,184,166,0.7)',
-            letterSpacing: '0.02em',
-          }}
-        >
-          {hash}…
-        </motion.div>
-        <div style={{
-          height: '1px',
-          background: 'rgba(59,140,255,0.12)',
-          marginTop: '2px',
-        }} />
-        <div style={{
-          fontFamily: 'JetBrains Mono, monospace',
-          fontSize: '0.55rem',
-          color: 'rgba(100,130,180,0.4)',
-        }}>
-          prev: a3f9…
-        </div>
-      </div>
-
-      {/* Connector line to next block (except last) */}
-      {block.id < 4 && (
-        <motion.div
-          animate={{ opacity: [0.1, 0.25, 0.1] }}
-          transition={{ duration: 3, repeat: Infinity, delay: block.delay }}
-          style={{
-            position: 'absolute',
-            top: '36px',
-            left: '112px',
-            width: '32px',
-            height: '1px',
-            background: 'linear-gradient(90deg, rgba(59,140,255,0.4), rgba(20,184,166,0.2))',
-          }}
-        />
-      )}
-    </motion.div>
-  )
-}
 
 /* ─── MINI PREVIEW BLOCKS FOR PHONE ──────────────────────────────────────────── */
 function MiniPreviewBlock({ amount, from, milestone }) {
@@ -127,7 +17,7 @@ function MiniPreviewBlock({ amount, from, milestone }) {
     }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
         <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.55rem', color: '#14b8a6', fontWeight: 600 }}>{milestone}</span>
-        <span style={{ color: '#10b981', fontSize: '0.55rem' }}>✓</span>
+        <CheckCircle2 size={12} color="#10b981" />
       </div>
       <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.8rem', color: '#10b981', fontWeight: 800 }}>{amount}</div>
       <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.5rem', color: '#7a8fb0' }}>{from} → PI</div>
@@ -138,22 +28,22 @@ function MiniPreviewBlock({ amount, from, milestone }) {
 /* ─── 2. PROBLEM CARDS ──────────────────────────────────────────────────────── */
 const PROBLEMS = [
   {
-    icon: '📂',
-    color: '#3b8cff',
+    icon: <FolderSync size={24} color="#3b82f6" />,
+    color: '#3b82f6',
     title: 'The Trust Gap',
     desc: 'NBFC, Fintech Company-style platform, and institution each maintain separate records of the same tranche. No single source of truth — reconciliation happens by email.',
     tag: 'Siloed Ledgers',
   },
   {
-    icon: '💸',
-    color: '#f59e0b',
+    icon: <ShieldAlert size={24} color="#3b82f6" />,
+    color: '#3b82f6',
     title: 'The Double-Disbursement Risk',
     desc: 'Without a tamper-evident ledger, the same tranche can be marked "paid" twice — once by the NBFC system, once by the platform — before anyone notices.',
     tag: 'Integrity Risk',
   },
   {
-    icon: '🕐',
-    color: '#ef4444',
+    icon: <Clock size={24} color="#3b82f6" />,
+    color: '#3b82f6',
     title: 'The Backdating Risk',
     desc: 'Records stored in mutable databases can be silently altered after the fact. No hash chain = no proof that a tranche was disbursed on a specific date.',
     tag: 'Audit Trail Gap',
@@ -167,12 +57,12 @@ function ProblemCard({ card, i }) {
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 32 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.45, delay: i * 0.12, ease: 'easeOut' }}
+      transition={{ duration: 0.4, delay: i * 0.1, ease: 'easeOut' }}
       whileHover={{ scale: 1.02, translateY: -4 }}
       className="glass-card"
-      style={{ padding: '28px 24px', display: 'flex', flexDirection: 'column', gap: '14px', cursor: 'default' }}
+      style={{ padding: '28px 24px', display: 'flex', flexDirection: 'column', gap: '14px', cursor: 'default', willChange: 'opacity, transform' }}
     >
       <div style={{
         width: 52,
@@ -226,13 +116,83 @@ function ProblemCard({ card, i }) {
 
 /* ─── 3. FLOW DIAGRAM ───────────────────────────────────────────────────────── */
 const FLOW_NODES = [
-  { id: 'nbfc',     label: 'NBFC',              sub: 'NBFC 1 · NBFC 2',   icon: '🏦', color: '#3b8cff' },
-  { id: 'platform', label: 'Fintech Company', sub: 'Education Finance Node',      icon: '🔗', color: '#14b8a6' },
-  { id: 'inst',     label: 'Institution',        sub: 'Full Ledger Copy',            icon: '🏫', color: '#a78bfa' },
-  { id: 'student',  label: 'Student / Parent',   sub: 'Wallet — no node required',  icon: '👤', color: '#9badc8' },
+  { id: 'nbfc',     label: 'NBFC',              sub: 'NBFC 1 · NBFC 2',   icon: <Landmark size={28} color="#3b82f6" />, color: '#3b82f6' },
+  { id: 'platform', label: 'Fintech Company', sub: 'Education Finance Node',      icon: <LinkIcon size={28} color="#3b82f6" />, color: '#3b82f6' },
+  { id: 'inst',     label: 'Institution',        sub: 'Full Ledger Copy',            icon: <Building2 size={28} color="#3b82f6" />, color: '#3b82f6' },
+  { id: 'student',  label: 'Student / Parent',   sub: 'Wallet — no node required',  icon: <User size={28} color="#94a3b8" />, color: '#94a3b8' },
 ]
 
+
+const TRAD_NODES = [
+  { id: 'nbfc', label: 'NBFC', sub: 'Siloed Database', icon: <Database size={28} color="#ef4444" />, color: '#ef4444' },
+  { id: 'platform', label: 'Fintech Company', sub: 'Spreadsheet / DB', icon: <FileText size={28} color="#f59e0b" />, color: '#f59e0b' },
+  { id: 'inst', label: 'Institution', sub: 'Manual Entry', icon: <Building2 size={28} color="#ef4444" />, color: '#ef4444' },
+]
+
+function TraditionalFlowDiagram() {
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-60px' })
+
+  return (
+    <div ref={ref} style={{ overflowX: 'auto', paddingBottom: '8px', opacity: 0.85, marginBottom: '24px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 0, minWidth: '640px', position: 'relative' }}>
+        {TRAD_NODES.map((node, i) => (
+          <div key={node.id} style={{ display: 'flex', alignItems: 'center', flex: 1, minWidth: 0 }}>
+            {/* Node box */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.85 }}
+              animate={inView ? { opacity: 1, scale: 1 } : {}}
+              transition={{ delay: i * 0.18, duration: 0.4 }}
+              style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}
+            >
+              <div style={{
+                width: 64, height: 64, borderRadius: '16px', background: `${node.color}14`,
+                border: `1.5px dashed ${node.color}50`, display: 'flex', alignItems: 'center',
+                justifyContent: 'center', fontSize: '1.7rem',
+              }}>
+                {node.icon}
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.85rem', color: '#9badc8', marginBottom: '3px' }}>{node.label}</div>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem', color: node.color, opacity: 0.75 }}>{node.sub}</div>
+              </div>
+            </motion.div>
+
+            {/* Arrow connector */}
+            {i < TRAD_NODES.length - 1 && (
+              <div style={{ position: 'relative', width: '56px', flexShrink: 0, height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {/* Static line */}
+                <div style={{ position: 'absolute', top: '50%', left: 0, right: 0, height: '1.5px', borderBottom: '1.5px dashed rgba(239,68,68,0.3)', transform: 'translateY(-50%)' }} />
+                
+                {/* Label */}
+                <div style={{ position: 'absolute', top: -20, fontFamily: 'JetBrains Mono, monospace', fontSize: '0.55rem', color: '#ef4444', opacity: 0.8, whiteSpace: 'nowrap' }}>
+                  {i === 0 ? 'Email/API' : 'Manual Sync'}
+                </div>
+                
+                {/* Error Pulse */}
+                {inView && (
+                  <motion.div
+                    animate={{ opacity: [0.2, 0.8, 0.2] }}
+                    transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut', delay: i * 0.4 }}
+                    style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', color: '#ef4444' }}
+                  >
+                    <AlertTriangle size={14} />
+                  </motion.div>
+                )}
+                <svg style={{ position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)' }} width="8" height="8" viewBox="0 0 8 8" fill="none">
+                  <path d="M1 1l6 3-6 3" stroke="rgba(239,68,68,0.4)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 function FlowDiagram() {
+
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-60px' })
 
@@ -479,9 +439,10 @@ function ScrollSection({ children, delay = 0 }) {
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 28 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5, delay, ease: 'easeOut' }}
+      transition={{ duration: 0.4, delay, ease: 'easeOut' }}
+      style={{ willChange: 'opacity, transform' }}
     >
       {children}
     </motion.div>
@@ -571,6 +532,7 @@ function AnimatedHeadline() {
 
 /* ─── MAIN PAGE ─────────────────────────────────────────────────────────────── */
 export default function Home() {
+  const isMobile = useIsMobile();
   return (
     <div>
 
@@ -587,26 +549,7 @@ export default function Home() {
         padding: '80px 24px',
         background: 'linear-gradient(180deg, rgba(11,18,32,1) 0%, rgba(4,8,15,1) 100%)',
       }}>
-        {/* Animated Gradient Background */}
-        <motion.div
-          animate={{
-            backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'],
-          }}
-          transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-          style={{
-            position: 'absolute',
-            inset: 0,
-            opacity: 0.03,
-            backgroundSize: '200% 200%',
-            backgroundImage: 'linear-gradient(45deg, #3b8cff 25%, transparent 25%, transparent 50%, #14b8a6 50%, #14b8a6 75%, transparent 75%, transparent)',
-            pointerEvents: 'none',
-          }}
-        />
 
-        {/* Floating block decoration */}
-        <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
-          {INITIAL_BLOCKS.map(b => <FloatingBlock key={b.id} block={b} />)}
-        </div>
 
         {/* Radial spotlight behind text */}
         <div style={{
@@ -628,7 +571,7 @@ export default function Home() {
           display: 'flex',
           alignItems: 'center',
           gap: '60px',
-          maxWidth: '1200px',
+          maxWidth: '1500px',
           width: '100%',
           flexWrap: 'wrap',
           justifyContent: 'center',
@@ -678,11 +621,11 @@ export default function Home() {
                 flexWrap: 'wrap',
               }}
             >
-              <Link to="/demo" className="btn-primary" style={{ fontSize: '0.95rem', padding: '13px 28px' }}>
-                <span>📒</span> Enter the Ledger
+              <Link to="/demo" className="btn-primary" style={{ fontSize: '0.95rem', padding: '13px 28px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <BookOpen size={18} /> Enter the Ledger
               </Link>
-              <Link to="/how-it-works" className="btn-ghost" style={{ fontSize: '0.95rem', padding: '13px 28px' }}>
-                <span>🎓</span> How It Works
+              <Link to="/how-it-works" className="btn-ghost" style={{ fontSize: '0.95rem', padding: '13px 28px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <GraduationCap size={18} /> How It Works
               </Link>
             </motion.div>
 
@@ -795,7 +738,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════════════════════════════
           SECTION 2 — THE PROBLEM
       ══════════════════════════════════════════════════════════════════════ */}
-      <section style={{ padding: '96px 24px', maxWidth: 1100, margin: '0 auto' }}>
+      <section style={{ padding: '96px 24px', maxWidth: 1400, margin: '0 auto' }}>
         <ScrollSection>
           <SectionHeading
             eyebrow="// the problem"
@@ -827,7 +770,7 @@ export default function Home() {
             gap: '16px',
             flexWrap: 'wrap',
           }}>
-            <span style={{ fontSize: '1.4rem', flexShrink: 0 }}>🛡️</span>
+            <ShieldCheck size={28} color="#3b82f6" style={{ flexShrink: 0 }} />
             <div>
               <div style={{
                 fontFamily: 'Manrope, sans-serif',
@@ -865,18 +808,42 @@ export default function Home() {
       {/* ══════════════════════════════════════════════════════════════════════
           SECTION 3 — THE FLOW
       ══════════════════════════════════════════════════════════════════════ */}
-      <section style={{ padding: '96px 24px', maxWidth: 1100, margin: '0 auto' }}>
+      <section style={{ padding: '96px 24px', maxWidth: 1400, margin: '0 auto' }}>
         <ScrollSection>
           <SectionHeading
             eyebrow="// the flow"
-            title="How a Tranche Travels"
-            sub="From NBFC approval to institution receipt — every hop is signed, hashed, and broadcast to all nodes."
+            title="Traditional vs TrancheChain Flow"
+            sub="Compare the fragmented legacy process with our shared ledger architecture powered by digital signatures and hash-chaining."
           />
         </ScrollSection>
 
+        
         <ScrollSection delay={0.15}>
           <div className="glass-card" style={{ padding: '44px 32px' }}>
+            {/* The Broken Traditional Flow */}
+            <div style={{ marginBottom: '32px', paddingBottom: '32px', borderBottom: '1px solid rgba(239,68,68,0.1)' }}>
+              <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+                <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.7rem', color: '#ef4444', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                  The Problem: Traditional Flow
+                </span>
+                <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.85rem', color: '#7a8fb0', margin: '8px 0 0' }}>
+                  Data is fragmented. Trust relies on manual emails and reconciliation.
+                </p>
+              </div>
+              <TraditionalFlowDiagram />
+            </div>
+
+            {/* The TrancheChain Consensus Flow */}
+            <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+              <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.7rem', color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                The Solution: TrancheChain Flow
+              </span>
+              <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.85rem', color: '#7a8fb0', margin: '8px 0 0' }}>
+                All nodes are synchronized. Digital signatures and hash-chaining guarantee data integrity.
+              </p>
+            </div>
             <FlowDiagram />
+
 
             {/* Step descriptions */}
             <div style={{
@@ -890,7 +857,7 @@ export default function Home() {
               {[
                 { step: '01', color: '#3b8cff', title: 'NBFC signs tranche',     desc: 'Private key creates wax seal over the tranche record.' },
                 { step: '02', color: '#14b8a6', title: 'Platform validates',      desc: 'Verifies signature, computes SHA-256, proposes new block.' },
-                { step: '03', color: '#a78bfa', title: 'Nodes reach consensus',   desc: 'All ledger-holding nodes accept the block via PoW / PoS.' },
+                { step: '03', color: '#a78bfa', title: 'Network Consensus',   desc: 'All ledger-holding nodes accept the block via PoW / PoS.' },
                 { step: '04', color: '#9badc8', title: 'Institution confirms',    desc: 'Reads its own ledger copy — no need to trust any single party.' },
               ].map(s => (
                 <div key={s.step} style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
@@ -927,108 +894,9 @@ export default function Home() {
         margin: '0 48px',
       }} />
 
-      {/* ══════════════════════════════════════════════════════════════════════
-          SECTION 4 — STATS STRIP
-      ══════════════════════════════════════════════════════════════════════ */}
-      <section style={{ padding: '80px 24px', maxWidth: 1100, margin: '0 auto' }}>
-        <ScrollSection>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-            gap: '20px',
-          }}>
-            {STATS.map((stat, i) => (
-              <StatCard key={stat.label} stat={stat} i={i} />
-            ))}
-          </div>
-        </ScrollSection>
 
-        {/* Illustrative disclaimer */}
-        <ScrollSection delay={0.2}>
-          <p style={{
-            fontFamily: 'JetBrains Mono, monospace',
-            fontSize: '0.68rem',
-            color: '#243352',
-            textAlign: 'center',
-            marginTop: '16px',
-          }}>
-            * Illustrative figures — for demo purposes only
-          </p>
-        </ScrollSection>
-      </section>
 
-      {/* ══════════════════════════════════════════════════════════════════════
-          SECTION 5 — FOOTER CTA
-      ══════════════════════════════════════════════════════════════════════ */}
-      <section style={{ padding: '72px 24px 96px', maxWidth: 760, margin: '0 auto', textAlign: 'center' }}>
-        <ScrollSection>
-          <div className="glass-card" style={{
-            padding: '52px 40px',
-            borderColor: 'rgba(245,158,11,0.2)',
-            background: 'rgba(245,158,11,0.03)',
-          }}>
-            <motion.div
-              animate={{ rotate: [0, -4, 4, 0] }}
-              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut', repeatDelay: 3 }}
-              style={{ fontSize: '2.8rem', marginBottom: '16px', display: 'inline-block' }}
-            >
-              🔨
-            </motion.div>
-            <h2 style={{
-              fontFamily: 'Manrope, sans-serif',
-              fontWeight: 800,
-              fontSize: 'clamp(1.4rem, 3vw, 2rem)',
-              letterSpacing: '-0.025em',
-              color: '#d4e0ef',
-              margin: '0 0 12px',
-            }}>
-              See it break in real time
-            </h2>
-            <p style={{
-              fontFamily: 'Manrope, sans-serif',
-              fontSize: '0.92rem',
-              color: '#7a8fb0',
-              lineHeight: 1.65,
-              maxWidth: '420px',
-              margin: '0 auto 28px',
-            }}>
-              Edit any tranche amount mid-chain. Watch the hash fingerprint change — and 
-              every block after it turn red. The public ledger doesn't lie.
-            </p>
-            <Link
-              to="/tamper-test"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '9px',
-                padding: '13px 28px',
-                borderRadius: '10px',
-                background: 'linear-gradient(135deg, rgba(245,158,11,0.15), rgba(245,158,11,0.08))',
-                border: '1px solid rgba(245,158,11,0.3)',
-                color: '#fbbf24',
-                fontFamily: 'Manrope, sans-serif',
-                fontWeight: 700,
-                fontSize: '0.92rem',
-                textDecoration: 'none',
-                transition: 'all 0.2s ease',
-              }}
-              onMouseEnter={e => {
-                e.currentTarget.style.background = 'linear-gradient(135deg, rgba(245,158,11,0.22), rgba(245,158,11,0.12))'
-                e.currentTarget.style.boxShadow = '0 6px 24px rgba(245,158,11,0.2)'
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.background = 'linear-gradient(135deg, rgba(245,158,11,0.15), rgba(245,158,11,0.08))'
-                e.currentTarget.style.boxShadow = 'none'
-              }}
-            >
-              🔨 Open Tamper Test
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
-              </svg>
-            </Link>
-          </div>
-        </ScrollSection>
-      </section>
+
 
     </div>
   )

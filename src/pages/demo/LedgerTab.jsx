@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import CryptoJS from 'crypto-js'
+import { useIsMobile } from '../../hooks/useIsMobile'
 
 /* ═══════════════════════════════════════════════════════════════════════════
    CRYPTO & DATA UTILITIES
@@ -41,8 +42,8 @@ const ENTITIES = {
 }
 
 const FROM_OPTIONS = ['NBFC 1', 'NBFC 2', 'NBFC 3']
-const TO_OPTIONS   = ['Fintech Company', 'Partner Institute', 'BITS Pilani', 'IIM Bangalore']
-const MILESTONES   = ['Admission Confirmed', 'Semester 1 Start', 'Semester 2 Start', 'Final Disbursement']
+const TO_OPTIONS   = ['Fintech Company', 'Partner Institute']
+const MILESTONES   = ['Admission Confirmed', 'Semester 1 Start', 'Semester 2 Start', 'Semester 3 Start', 'Semester 4 Start', 'Semester 5 Start', 'Final Disbursement']
 
 /* ═══════════════════════════════════════════════════════════════════════════
    INITIAL CHAIN (real hashes, computed at module load)
@@ -82,11 +83,30 @@ const INITIAL_CHAIN = buildInitialChain()
 ═══════════════════════════════════════════════════════════════════════════ */
 
 function validateChain(blocks) {
+  let isBroken = false;
   return blocks.map((block, i) => {
-    if (block.wasTampered) return { ...block, status: 'tampered' }
+    // If this specific block was directly tampered with
+    if (block.wasTampered) {
+      isBroken = true;
+      return { ...block, status: 'tampered' }
+    }
+    
+    // If a previous block in the chain was broken, this is orphaned/invalid
+    if (isBroken) {
+      return { ...block, status: 'invalid' }
+    }
+    
+    // Genesis block is inherently valid if not tampered
     if (i === 0) return { ...block, status: 'valid' }
+    
+    // Check against predecessor's hash
     const prev = blocks[i - 1]
-    if (block.prevHash !== prev.hash) return { ...block, status: 'invalid' }
+    if (block.prevHash !== prev.hash) {
+      isBroken = true; // The chain breaks here
+      return { ...block, status: 'invalid' }
+    }
+    
+    // Default valid state
     return { ...block, status: 'valid' }
   })
 }
@@ -174,89 +194,91 @@ function HashField({ label, value, color = '#14b8a6' }) {
 ═══════════════════════════════════════════════════════════════════════════ */
 
 function ChainConnector({ broken, pulsing, isMobile }) {
+  const color = broken ? '#ef4444' : '#14b8a6'
+  const glow = broken ? 'rgba(239,68,68,0.4)' : 'rgba(20,184,166,0.4)'
   return (
-    <div style={{
-      width: isMobile ? '100%' : 48,
-      height: isMobile ? 48 : 'auto',
-      flexShrink: 0,
-      display: 'flex', flexDirection: isMobile ? 'row' : 'column',
-      alignItems: 'center', justifyContent: 'center',
-      gap: 4, paddingTop: isMobile ? 0 : 60,
-      position: 'relative',
-    }}>
+    <motion.div
+      layout
+      initial={{ opacity: 0, scale: 0.8, [isMobile ? 'height' : 'width']: 0 }}
+      animate={{ opacity: 1, scale: 1, [isMobile ? 'height' : 'width']: 48 }}
+      exit={{ opacity: 0, scale: 0.8, [isMobile ? 'height' : 'width']: 0 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+      style={{
+        width: isMobile ? '100%' : 48,
+        height: isMobile ? 48 : 'auto',
+        flexShrink: 0,
+        display: 'flex', flexDirection: isMobile ? 'column' : 'row',
+        alignItems: 'center', justifyContent: 'center',
+        paddingTop: isMobile ? 0 : 70,
+      }}
+    >
       <motion.div
         animate={broken ? {
-          [isMobile ? 'x' : 'y']: [0, -3, 3, -2, 2, 0],
-          transition: { duration: 0.4, delay: 0.1 },
+          x: isMobile ? 0 : [0, -4, 4, -2, 2, 0],
+          y: isMobile ? [0, -4, 4, -2, 2, 0] : 0,
+          transition: { duration: 0.4 }
         } : {}}
-        style={{ 
-          width: isMobile ? 2 : '100%', 
-          height: isMobile ? '100%' : 2, 
-          display: 'flex', 
-          flexDirection: isMobile ? 'row' : 'column', 
-          alignItems: 'center', 
-          gap: 3 
+        style={{
+          display: 'flex',
+          alignItems: 'center', justifyContent: 'center',
+          width: isMobile ? 4 : '100%',
+          height: isMobile ? '100%' : 4,
+          position: 'relative'
         }}
       >
-        {/* Line */}
+        {/* The Track */}
         <div style={{
-          width: isMobile ? 2 : '100%', 
-          height: isMobile ? '100%' : 2, 
-          borderRadius: 1,
-          background: broken
-            ? 'rgba(239,68,68,0.5)'
-            : `linear-gradient(${isMobile ? '180deg' : '90deg'}, rgba(20,184,166,0.5), rgba(59,140,255,0.5))`,
-          transition: 'background 0.4s ease',
-          position: 'relative', overflow: 'hidden',
+          width: '100%', height: '100%',
+          background: broken ? 'rgba(239,68,68,0.2)' : 'rgba(20,184,166,0.2)',
+          borderRadius: 2,
+          position: 'relative', overflow: 'hidden'
         }}>
-          {/* Travelling pulse when not broken */}
+          {/* Animated pulse */}
           {!broken && (
             <motion.div
-              animate={isMobile ? { y: ['-100%', '200%'] } : { x: ['-100%', '200%'] }}
-              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+              initial={{ [isMobile ? 'y' : 'x']: '-100%' }}
+              animate={{ [isMobile ? 'y' : 'x']: ['-100%', '300%'] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
               style={{
                 position: 'absolute', top: 0, left: 0,
-                width: isMobile ? '100%' : '40%', 
-                height: isMobile ? '40%' : '100%',
-                background: `linear-gradient(${isMobile ? '180deg' : '90deg'}, transparent, rgba(255,255,255,0.6), transparent)`,
+                width: isMobile ? '100%' : '50%',
+                height: isMobile ? '50%' : '100%',
+                background: `linear-gradient(${isMobile ? '180deg' : '90deg'}, transparent, ${color}, transparent)`,
+                boxShadow: `0 0 12px ${glow}`,
+                transform: 'translateZ(0)',
+                willChange: 'transform'
               }}
             />
           )}
         </div>
 
-        {/* Arrow head */}
-        <svg 
-          width={isMobile ? 10 : 8} 
-          height={isMobile ? 8 : 10} 
-          viewBox={isMobile ? "0 0 10 8" : "0 0 8 10"} 
-          style={{ 
-            [isMobile ? 'marginTop' : 'marginLeft']: isMobile ? '30px' : '30px', 
-            [isMobile ? 'marginLeft' : 'marginTop']: isMobile ? '-6px' : '-6px' 
+        {/* The Arrow Head */}
+        <svg
+          width={isMobile ? 16 : 14}
+          height={isMobile ? 14 : 16}
+          viewBox={isMobile ? "0 0 16 14" : "0 0 14 16"}
+          style={{
+            position: 'absolute',
+            [isMobile ? 'bottom' : 'right']: -4,
+            filter: `drop-shadow(0 0 6px ${glow})`
           }}
         >
           {isMobile ? (
-            <path d="M0 0L5 8L10 0" fill="none"
-              stroke={broken ? 'rgba(239,68,68,0.5)' : 'rgba(20,184,166,0.5)'}
-              strokeWidth="1.5" strokeLinecap="round"
-            />
+            <path d="M0 0L8 14L16 0" fill={color} />
           ) : (
-            <path d="M0 0L8 5L0 10" fill="none"
-              stroke={broken ? 'rgba(239,68,68,0.5)' : 'rgba(20,184,166,0.5)'}
-              strokeWidth="1.5" strokeLinecap="round"
-            />
+            <path d="M0 0L14 8L0 16" fill={color} />
           )}
         </svg>
 
-        {/* Crack icon when broken */}
         {broken && (
           <motion.div
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
-            style={{ fontSize: '0.9rem', lineHeight: 1, marginTop: 2, marginLeft: isMobile ? 8 : 0 }}
+            style={{ position: 'absolute', fontSize: '1.4rem', zIndex: 10 }}
           >💥</motion.div>
         )}
       </motion.div>
-    </div>
+    </motion.div>
   )
 }
 
@@ -411,6 +433,7 @@ function BlockCard({ block, isNew, visiblyInvalid, onTamper }) {
 ═══════════════════════════════════════════════════════════════════════════ */
 
 function TamperModal({ block, onSave, onClose }) {
+  const isMobile = useIsMobile();
   const [amount, setAmount] = useState(block.amount.replace('₹', '').replace(/,/g, ''))
 
   const handleSave = () => {
@@ -469,7 +492,7 @@ function TamperModal({ block, onSave, onClose }) {
         </div>
 
         {/* Modal body */}
-        <div style={{ padding: '24px' }}>
+        <div style={{ padding: isMobile ? '16px' : '24px' }}>
           <div style={{
             fontFamily: 'Manrope, sans-serif', fontSize: '0.84rem',
             color: '#7a8fb0', lineHeight: 1.6, marginBottom: 20,
@@ -881,7 +904,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
    STATS BAR
 ═══════════════════════════════════════════════════════════════════════════ */
 
-function StatsBar({ blocks, onReset }) {
+function StatsBar({ blocks, onReset, onRemoveTamper }) {
   const valid   = blocks.filter(b => b.status === 'valid').length
   const broken  = blocks.filter(b => b.status === 'invalid' || b.status === 'tampered').length
   const isClean = broken === 0
@@ -910,8 +933,8 @@ function StatsBar({ blocks, onReset }) {
       {[
         { label: 'Chain Length', value: `${blocks.length}` },
         { label: 'Valid Blocks', value: `${valid}`, color: '#10b981' },
-        { label: 'Status', value: isClean ? '✓ Verified' : '⚠ Compromised',
-          color: isClean ? '#10b981' : '#ef4444' },
+        { label: 'Status', value: isClean ? '✓ Verified' : '⚠ Compromised', color: isClean ? '#10b981' : '#ef4444' },
+        { label: 'Verification Time', value: '<12ms', color: '#a78bfa' },
       ].map(s => (
         <div key={s.label} style={{ display: 'flex', gap: 6, alignItems: 'baseline' }}>
           <span style={{
@@ -929,7 +952,32 @@ function StatsBar({ blocks, onReset }) {
         </div>
       ))}
 
-      <div style={{ marginLeft: 'auto' }}>
+      <div style={{ marginLeft: 'auto', display: 'flex', gap: 12 }}>
+        {!isClean && (
+          <button
+            onClick={onRemoveTamper}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 6,
+              padding: '6px 14px', borderRadius: 8,
+              background: 'rgba(16,185,129,0.1)',
+              border: '1px solid rgba(16,185,129,0.25)',
+              color: '#34d399', fontFamily: 'Manrope, sans-serif',
+              fontWeight: 600, fontSize: '0.75rem', cursor: 'pointer',
+              transition: 'all 0.15s',
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = 'rgba(16,185,129,0.18)'
+              e.currentTarget.style.borderColor = 'rgba(16,185,129,0.5)'
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = 'rgba(16,185,129,0.1)'
+              e.currentTarget.style.borderColor = 'rgba(16,185,129,0.25)'
+            }}
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+            Remove Tamper
+          </button>
+        )}
         <button
           onClick={onReset}
           style={{
@@ -1019,15 +1067,15 @@ export default function LedgerTab({ blocks, setBlocks }) {
   const [addPhase, setAddPhase] = useState('idle')
   const [bannerInfo, setBannerInfo] = useState(null)
   const [newestId, setNewestId] = useState(null)
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
+  const isMobile = useIsMobile();
   const chainRef = useRef(null)
   const addTimers = useRef([])
 
   // Window resize listener
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768)
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
+    
+    
+    
   }, [])
 
   // Auto-scroll chain to end when new block added
@@ -1110,6 +1158,21 @@ export default function LedgerTab({ blocks, setBlocks }) {
   }, [])
 
   /* ── RESET ─────────────────────────────────────────────────────── */
+  const handleRemoveTamper = useCallback(() => {
+    setBlocks(prev => {
+      const restored = prev.map(b => 
+        b.wasTampered ? { ...b, amount: b.originalAmount, wasTampered: false } : { ...b }
+      );
+      for (let i = 0; i < restored.length; i++) {
+        if (i > 0) restored[i].prevHash = restored[i - 1].hash;
+        restored[i].hash = computeHash(restored[i]);
+      }
+      return validateChain(restored);
+    });
+    setVisibleInvalid(new Set());
+    setBannerInfo(null);
+  }, []);
+
   const handleReset = useCallback(() => {
     setBlocks(buildInitialChain())
     setVisibleInvalid(new Set())
@@ -1137,7 +1200,7 @@ export default function LedgerTab({ blocks, setBlocks }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <StatsBar blocks={blocks} onReset={handleReset} />
+          <StatsBar blocks={blocks} onReset={handleReset} onRemoveTamper={handleRemoveTamper} />
         </motion.div>
 
         {/* Tamper banner */}
@@ -1179,7 +1242,7 @@ export default function LedgerTab({ blocks, setBlocks }) {
                 paddingBottom: 4,
               }}
             >
-              <AnimatePresence initial={false}>
+              <AnimatePresence>
                 {blocks.map((block, i) => (
                   <div key={block.id} style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'center' : 'flex-start' }}>
                     <BlockCard

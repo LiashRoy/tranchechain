@@ -1,6 +1,7 @@
 import { Outlet, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import Navbar from './Navbar'
+import AnimatedBackground from './AnimatedBackground'
 
 const pageVariants = {
   initial: { opacity: 0, y: 12 },
@@ -21,6 +22,7 @@ export default function Layout() {
       }}
     >
       {/* Ambient background glows */}
+      <AnimatedBackground />
       <div style={{
         position: 'fixed',
         top: '-20vh',

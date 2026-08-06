@@ -100,6 +100,9 @@ body {
   border: 1px solid rgba(59, 140, 255, 0.12);
   border-radius: 14px;
   transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  transform: translateZ(0);
+  will-change: transform, backdrop-filter;
+  backface-visibility: hidden;
 }
 
 .glass-card:hover {
@@ -232,4 +235,10 @@ body {
   background: rgba(167, 139, 250, 0.12);
   color: #c4b5fd;
   border: 1px solid rgba(167, 139, 250, 0.25);
+}
+
+/* Fix dropdown options visibility */
+option {
+  background-color: #0f172a;
+  color: #d4e0ef;
 }

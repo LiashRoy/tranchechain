@@ -1,3 +1,4 @@
+import { Globe, Smartphone, Monitor, Building2, Link as LinkIcon, Radio, CheckCircle2, AlertTriangle, XCircle, Settings, PenTool, Flame, Hammer, ShieldAlert, ShieldCheck, Clapperboard, ClipboardList, Key, Lock, Unlock, Fingerprint, Search, GraduationCap, Zap, Pencil, Landmark, BookOpen } from "lucide-react"
 import { useState, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -146,7 +147,7 @@ function TrancheMsgCard({ tranche, editable = false, editAmount, onEditAmount })
         display: 'flex', alignItems: 'center', gap: 8,
         background: 'rgba(59,140,255,0.06)',
       }}>
-        <span style={{ fontSize: '0.9rem' }}>📋</span>
+        <span style={{ fontSize: '0.9rem' }}><ClipboardList size={16} /></span>
         <span style={{
           fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem',
           color: '#6aaeff', textTransform: 'uppercase', letterSpacing: '0.08em',
@@ -317,7 +318,7 @@ function Step1({ onComplete }) {
             marginBottom: 28,
           }}
         >
-          <span style={{ fontSize: '1.1rem' }}>🔑</span>
+          <span style={{ fontSize: '1.1rem' }}><Key size={16} /></span>
           Generate NBFC Key Pair (ECDSA P-256)
         </motion.button>
       )}
@@ -334,7 +335,7 @@ function Step1({ onComplete }) {
             animate={{ rotate: 360 }}
             transition={{ duration: 0.9, repeat: Infinity, ease: 'linear' }}
             style={{ display: 'inline-block', fontSize: '1.1rem' }}
-          >⚙</motion.span>
+          ><Settings size={16} /></motion.span>
           <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.88rem', color: '#6aaeff' }}>
             Generating P-256 key pair via Web Crypto API…
           </span>
@@ -365,7 +366,7 @@ function Step1({ onComplete }) {
                 <HexCard
                   label="Private Key — NBFC 2 ONLY"
                   value={keys.privHex}
-                  icon="🔒"
+                  icon=<Lock size={16} />
                   color="#ef4444"
                   note="NEVER shared. Used only to sign. Without this, no one can forge NBFC 2's signature."
                   glow
@@ -399,7 +400,7 @@ function Step1({ onComplete }) {
                 <HexCard
                   label="Public Key — Shared openly"
                   value={keys.pubHex}
-                  icon="🔓"
+                  icon=<Unlock size={16} />
                   color="#10b981"
                   note="Published by NBFC 2. Anyone can use it to verify signatures — cannot be used to sign."
                   glow
@@ -420,7 +421,7 @@ function Step1({ onComplete }) {
                 color: '#7a8fb0', lineHeight: 1.6,
               }}
             >
-              🔑 These are <strong style={{ color: '#6aaeff' }}>real ECDSA P-256 keys</strong> freshly generated
+              <Key size={16} /> These are <strong style={{ color: '#6aaeff' }}>real ECDSA P-256 keys</strong> freshly generated
               by your browser's Web Crypto API. The private key is a 256-bit secret. From it, the public key
               is derived as a point on the elliptic curve — but you cannot go backwards.
             </motion.div>
@@ -530,7 +531,7 @@ function Step2({ keys, tranche, onComplete }) {
                 maxWidth: 140, textAlign: 'center',
               }}
             >
-              🔒 Private Key
+              <Lock size={16} /> Private Key
             </motion.div>
 
             {/* Plus */}
@@ -547,7 +548,7 @@ function Step2({ keys, tranche, onComplete }) {
                 maxWidth: 140, textAlign: 'center',
               }}
             >
-              📋 Tranche Message
+              <ClipboardList size={16} /> Tranche Message
             </motion.div>
 
             <span style={{ color: '#7a8fb0', fontSize: '1.3rem' }}>→</span>
@@ -563,7 +564,7 @@ function Step2({ keys, tranche, onComplete }) {
                 maxWidth: 140, textAlign: 'center',
               }}
             >
-              🪬 ECDSA(SHA-256)…
+              <Fingerprint size={16} /> ECDSA(SHA-256)…
             </motion.div>
           </motion.div>
         )}
@@ -585,7 +586,7 @@ function Step2({ keys, tranche, onComplete }) {
             marginBottom: 24,
           }}
         >
-          <span style={{ fontSize: '1.1rem' }}>🔏</span>
+          <span style={{ fontSize: '1.1rem' }}><PenTool size={16} /></span>
           Sign with Private Key (ECDSA P-256 · SHA-256)
         </motion.button>
       )}
@@ -602,7 +603,7 @@ function Step2({ keys, tranche, onComplete }) {
             <HexCard
               label="Digital Signature (ECDSA P-256)"
               value={sig.sigHex}
-              icon="🪬"
+              icon=<Fingerprint size={16} />
               color="#10b981"
               note="This signature is uniquely bound to NBFC 2's private key AND the exact tranche message above. Change even one character in the message → signature becomes invalid."
               glow
@@ -615,7 +616,7 @@ function Step2({ keys, tranche, onComplete }) {
               fontFamily: 'Manrope, sans-serif', fontSize: '0.82rem',
               color: '#7a8fb0', lineHeight: 1.6,
             }}>
-              🪬 The wax seal is applied. Anyone with NBFC 2's <strong style={{ color: '#34d399' }}>public key</strong> can
+              <Fingerprint size={16} /> The wax seal is applied. Anyone with NBFC 2's <strong style={{ color: '#34d399' }}>public key</strong> can
               verify this — but only NBFC 2 (holder of the private key) could have <em>created</em> it.
             </div>
 
@@ -689,9 +690,9 @@ function Step3({ keys, tranche, sig, onComplete }) {
         display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
         gap: 12, marginBottom: 20,
       }}>
-        <HexCard label="Public Key (NBFC 2)" value={keys.pubHex} icon="🔓" color="#10b981" />
+        <HexCard label="Public Key (NBFC 2)" value={keys.pubHex} icon=<Unlock size={16} /> color="#10b981" />
         <TrancheMsgCard tranche={tranche} />
-        <HexCard label="Signature (from block)" value={sig.sigHex} icon="🪬" color="#14b8a6" />
+        <HexCard label="Signature (from block)" value={sig.sigHex} icon=<Fingerprint size={16} /> color="#14b8a6" />
       </div>
 
       {/* Verify button */}
@@ -710,7 +711,7 @@ function Step3({ keys, tranche, sig, onComplete }) {
                 marginBottom: 20,
               }}
             >
-              <span>🔍</span> Verify Signature (Public Key Only)
+              <span><Search size={20} /></span> Verify Signature (Public Key Only)
             </button>
           </motion.div>
         )}
@@ -729,7 +730,7 @@ function Step3({ keys, tranche, sig, onComplete }) {
               animate={{ rotate: 360 }}
               transition={{ duration: 0.9, repeat: Infinity, ease: 'linear' }}
               style={{ display: 'inline-block', fontSize: '1.1rem' }}
-            >⚙</motion.span>
+            ><Settings size={16} /></motion.span>
             <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.88rem', color: '#34d399' }}>
               Running ECDSA verification…
             </span>
@@ -771,7 +772,7 @@ function Step3({ keys, tranche, sig, onComplete }) {
               <div style={{
                 fontFamily: 'Manrope, sans-serif', fontWeight: 800,
                 fontSize: '1.3rem', color: '#10b981', marginBottom: 4,
-              }}>✓ Signature Valid</div>
+              }}><CheckCircle2 size={16} /> Signature Valid</div>
               <div style={{
                 fontFamily: 'Manrope, sans-serif', fontSize: '0.88rem',
                 color: '#34d39990',
@@ -800,7 +801,7 @@ function Step3({ keys, tranche, sig, onComplete }) {
               boxShadow: '0 4px 18px rgba(245,158,11,0.3)',
             }}
           >
-            <span>🔨</span> Next: Try to Tamper
+            <span><Hammer size={24} /></span> Next: Try to Tamper
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </motion.button>
         )}
@@ -891,7 +892,7 @@ function Step4({ keys, tranche, sig }) {
               fontFamily: 'Manrope, sans-serif', fontSize: '0.78rem',
               color: '#fbbf24',
             }}>
-              ⚠ Amount has been tampered: <strong>{tranche.amount}</strong> → <strong>{editAmount}</strong>.
+              <AlertTriangle size={16} /> Amount has been tampered: <strong>{tranche.amount}</strong> → <strong>{editAmount}</strong>.
               The attacker is still presenting the original signature.
             </div>
           </motion.div>
@@ -903,7 +904,7 @@ function Step4({ keys, tranche, sig }) {
         <HexCard
           label="Original Signature (attacker re-uses it)"
           value={sig.sigHex}
-          icon="🪬"
+          icon=<Fingerprint size={16} />
           color="#f59e0b"
           note="This signature was created for the original amount. The attacker cannot generate a new valid signature without NBFC 2's private key."
         />
@@ -934,9 +935,9 @@ function Step4({ keys, tranche, sig }) {
           }}
         >
           {phase === 'verifying' ? (
-            <><motion.span animate={{ rotate: 360 }} transition={{ duration: 0.9, repeat: Infinity, ease: 'linear' }} style={{ display: 'inline-block' }}>⚙</motion.span> Verifying…</>
+            <><motion.span animate={{ rotate: 360 }} transition={{ duration: 0.9, repeat: Infinity, ease: 'linear' }} style={{ display: 'inline-block' }}><Settings size={16} /></motion.span> Verifying…</>
           ) : (
-            <><span>🔍</span> Verify (Tampered Message + Original Signature)</>
+            <><span><Search size={20} /></span> Verify (Tampered Message + Original Signature)</>
           )}
         </motion.button>
 
@@ -992,7 +993,7 @@ function Step4({ keys, tranche, sig }) {
                 <div style={{
                   fontFamily: 'Manrope, sans-serif', fontWeight: 800,
                   fontSize: '1.3rem', color: '#ef4444', marginBottom: 4,
-                }}>✗ Signature Invalid</div>
+                }}><XCircle size={16} /> Signature Invalid</div>
                 <div style={{
                   fontFamily: 'Manrope, sans-serif', fontSize: '0.88rem',
                   color: '#ef444490',
@@ -1047,7 +1048,7 @@ function Step4({ keys, tranche, sig }) {
               color: '#34d399',
             }}
           >
-            ✓ Signature valid — you didn't change the amount (or changed it back to the original).
+            <CheckCircle2 size={16} /> Signature valid — you didn't change the amount (or changed it back to the original).
           </motion.div>
         )}
       </AnimatePresence>
@@ -1067,7 +1068,7 @@ function Step4({ keys, tranche, sig }) {
               color: '#7a8fb0', lineHeight: 1.65,
             }}
           >
-            🎓 <strong style={{ color: '#6aaeff' }}>Course link:</strong> This is <strong style={{ color: '#b8c9df' }}>Layer 1 protection</strong> —
+            <GraduationCap size={16} /> <strong style={{ color: '#6aaeff' }}>Course link:</strong> This is <strong style={{ color: '#b8c9df' }}>Layer 1 protection</strong> —
             the digital wax seal. Even before we check the hash chain (Layer 2), the signature
             already catches the fraud. In TrancheChain, every disbursement block carries
             both layers simultaneously.
@@ -1091,7 +1092,7 @@ export default function SignaturesTab({ latestBlock }) {
 
   return (
     <div style={{ minHeight: '100vh', padding: '28px 24px 60px' }}>
-      <div style={{ maxWidth: 960, margin: '0 auto' }}>
+      <div style={{ maxWidth: 1400, margin: '0 auto' }}>
 
         {/* Page header */}
         
