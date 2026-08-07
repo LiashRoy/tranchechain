@@ -1034,7 +1034,7 @@ function Section5() {
 
           <div style={{
             display: 'flex', alignItems: 'center', gap: '0',
-            flexWrap: 'wrap', rowGap: '16px',
+            flexWrap: 'wrap', rowGap: '16px', justifyContent: 'center',
           }}>
             {/* Private key */}
             <motion.div
@@ -1070,7 +1070,7 @@ function Section5() {
               animate={step >= 2 ? { opacity: 1, scale: 1 } : {}}
               transition={{ duration: 0.35 }}
               style={{
-                padding: '16px 18px', borderRadius: '12px', flex: 1,
+                padding: '16px 18px', borderRadius: '12px',
                 background: 'var(--glass-border)', border: '1px solid rgba(59,140,255,0.25)',
                 minWidth: '200px',
               }}
@@ -1129,13 +1129,13 @@ function Section5() {
             color: 'var(--text-secondary)', marginBottom: '20px',
           }}>Verification (anyone can do this — only NBFC 2 could have created it):</div>
 
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', flexWrap: 'wrap', rowGap: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', flexWrap: 'wrap', rowGap: '16px' }}>
             {[
               { label: 'Public Key', sub: '(Published by NBFC 2)', icon: <Unlock size={22} color="#a78bfa" />, color: '#a78bfa' },
               { label: '+', sub: '', icon: null, color: 'var(--text-secondary)' },
-              { label: 'Signature', sub: '(from the block)', icon: <ShieldCheck size={22} color="var(--color-green)" />, color: 'var(--color-green)' },
+              { label: 'Signature', sub: '(from the block)', icon: <ShieldCheck size={22} color="#10b981" />, color: '#10b981' },
               { label: '+', sub: '', icon: null, color: 'var(--text-secondary)' },
-              { label: 'Message', sub: '(exact tranche data)', icon: <FileText size={22} color="var(--color-electric-blue)" />, color: 'var(--color-electric-blue)' },
+              { label: 'Message', sub: '(exact tranche data)', icon: <FileText size={22} color="#6aaeff" />, color: '#6aaeff' },
               { label: '→', sub: '', icon: null, color: 'var(--text-secondary)' },
               { label: '✓ Authentic', sub: 'Only NBFC 2\'s key\ncould produce this seal', icon: null, color: 'var(--color-green)' },
             ].map((item, i) => (
@@ -1181,8 +1181,8 @@ function Section5() {
 ═══════════════════════════════════════════════════════════════════════════════ */
 
 const NODES = [
-  { id: 'nbfc',     icon: '🏦', label: 'NBFC Node',              sub: 'NBFC 2 · NBFC 1',      color: 'var(--color-electric-blue)' },
-  { id: 'platform', icon: '🔗', label: 'Fintech Company Node', sub: 'Education Finance Intermediary', color: 'var(--color-teal)' },
+  { id: 'nbfc',     icon: '🏦', label: 'NBFC Node',              sub: 'NBFC 2 · NBFC 1',      color: '#6aaeff' },
+  { id: 'platform', icon: '🔗', label: 'Fintech Company Node', sub: 'Education Finance Intermediary', color: '#14b8a6' },
   { id: 'inst',     icon: '🏫', label: 'Institution Node',        sub: 'Partner Institute',                color: '#a78bfa' },
 ]
 
