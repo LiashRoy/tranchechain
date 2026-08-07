@@ -80,7 +80,7 @@ function SectionShell({ id, children, minH = '100vh' }) {
   )
 }
 
-function SectionLabel({ num, label, color = '#3b8cff' }) {
+function SectionLabel({ num, label, color = 'var(--color-electric-blue)' }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
       <div style={{
@@ -103,7 +103,7 @@ function SectionTitle({ children }) {
     <h2 style={{
       fontFamily: 'Manrope, sans-serif', fontWeight: 800,
       fontSize: 'clamp(1.7rem, 3.5vw, 2.6rem)', letterSpacing: '-0.025em',
-      color: '#d4e0ef', margin: '0 0 14px', lineHeight: 1.15,
+      color: 'var(--text-primary)', margin: '0 0 14px', lineHeight: 1.15,
     }}>{children}</h2>
   )
 }
@@ -112,12 +112,12 @@ function SectionSub({ children }) {
   return (
     <p style={{
       fontFamily: 'Manrope, sans-serif', fontSize: '1rem',
-      color: '#7a8fb0', lineHeight: 1.7, margin: '0 0 40px', maxWidth: '620px',
+      color: 'var(--text-secondary)', lineHeight: 1.7, margin: '0 0 40px', maxWidth: '620px',
     }}>{children}</p>
   )
 }
 
-function HashDisplay({ hash, color = '#14b8a6', label, fontSize = '0.82rem' }) {
+function HashDisplay({ hash, color = 'var(--color-teal)', label, fontSize = '0.82rem' }) {
   const [flash, setFlash] = useState(false)
   const prevHash = useRef(hash)
 
@@ -135,7 +135,7 @@ function HashDisplay({ hash, color = '#14b8a6', label, fontSize = '0.82rem' }) {
       {label && (
         <div style={{
           fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem',
-          color: '#7a8fb0', letterSpacing: '0.08em', textTransform: 'uppercase',
+          color: 'var(--text-secondary)', letterSpacing: '0.08em', textTransform: 'uppercase',
           marginBottom: '4px',
         }}>{label}</div>
       )}
@@ -170,10 +170,10 @@ function DiffHash({ hashA, hashB }) {
         return (
           <motion.span
             key={i}
-            animate={changed ? { color: ['#f59e0b', '#fbbf24'] } : { color: '#14b8a6' }}
+            animate={changed ? { color: ['var(--color-gold)', '#fbbf24'] } : { color: 'var(--color-teal)' }}
             transition={{ duration: 0.3 }}
             style={{
-              color: changed ? '#f59e0b' : '#14b8a6',
+              color: changed ? 'var(--color-gold)' : 'var(--color-teal)',
               fontWeight: changed ? 700 : 400,
             }}
           >
@@ -209,7 +209,7 @@ function Section1() {
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.55 }}
       >
-        <SectionLabel num="01" label="What is a Hash?" color="#14b8a6" />
+        <SectionLabel num="01" label="What is a Hash?" color="var(--color-teal)" />
         <SectionTitle>A Fingerprint of Data</SectionTitle>
         <SectionSub>
           Feed any tranche record into SHA-256 and you get a fixed 64-character fingerprint.
@@ -222,7 +222,7 @@ function Section1() {
           <div className="glass-card" style={{ padding: '24px' }}>
             <div style={{
               fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem',
-              color: '#7a8fb0', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '8px',
+              color: 'var(--text-secondary)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '8px',
             }}>
               Tranche record — type anything
             </div>
@@ -234,7 +234,7 @@ function Section1() {
                 width: '100%', boxSizing: 'border-box',
                 fontFamily: 'JetBrains Mono, monospace', fontSize: '0.88rem',
                 background: 'rgba(59,140,255,0.06)', border: '1px solid rgba(59,140,255,0.2)',
-                borderRadius: '8px', padding: '12px', color: '#d4e0ef',
+                borderRadius: '8px', padding: '12px', color: 'var(--text-primary)',
                 resize: 'vertical', outline: 'none', lineHeight: 1.5,
               }}
               onFocus={e => { e.target.style.borderColor = 'rgba(59,140,255,0.5)' }}
@@ -259,11 +259,11 @@ function Section1() {
               <div>
                 <div style={{
                   fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem',
-                  color: '#14b8a6', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '6px',
+                  color: 'var(--color-teal)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '6px',
                 }}>Original input</div>
                 <div style={{
                   fontFamily: 'JetBrains Mono, monospace', fontSize: '0.74rem',
-                  color: '#7a8fb0', background: 'rgba(20,184,166,0.06)',
+                  color: 'var(--text-secondary)', background: 'rgba(20,184,166,0.06)',
                   border: '1px solid rgba(20,184,166,0.15)', borderRadius: '8px',
                   padding: '10px 12px', wordBreak: 'break-all', lineHeight: 1.5, marginBottom: '10px',
                 }}>
@@ -271,11 +271,11 @@ function Section1() {
                 </div>
                 <div style={{
                   fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem',
-                  color: '#14b8a6', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '6px',
+                  color: 'var(--color-teal)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '6px',
                 }}>SHA-256</div>
                 <div style={{
                   fontFamily: 'JetBrains Mono, monospace', fontSize: '0.72rem',
-                  color: '#14b8a6', lineHeight: 1.6, wordBreak: 'break-all',
+                  color: 'var(--color-teal)', lineHeight: 1.6, wordBreak: 'break-all',
                 }}>{currentHash}</div>
               </div>
 
@@ -283,11 +283,11 @@ function Section1() {
               <div>
                 <div style={{
                   fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem',
-                  color: '#f59e0b', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '6px',
+                  color: 'var(--color-gold)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '6px',
                 }}>Last char changed</div>
                 <div style={{
                   fontFamily: 'JetBrains Mono, monospace', fontSize: '0.74rem',
-                  color: '#7a8fb0', background: 'rgba(245,158,11,0.06)',
+                  color: 'var(--text-secondary)', background: 'rgba(245,158,11,0.06)',
                   border: '1px solid rgba(245,158,11,0.2)', borderRadius: '8px',
                   padding: '10px 12px', wordBreak: 'break-all', lineHeight: 1.5, marginBottom: '10px',
                 }}>
@@ -295,7 +295,7 @@ function Section1() {
                 </div>
                 <div style={{
                   fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem',
-                  color: '#f59e0b', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '6px',
+                  color: 'var(--color-gold)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '6px',
                 }}>SHA-256 (gold = differs)</div>
                 <DiffHash hashA={currentHash} hashB={mutatedHash} />
               </div>
@@ -305,7 +305,7 @@ function Section1() {
               marginTop: '14px', padding: '10px 14px',
               background: 'rgba(245,158,11,0.07)', borderRadius: '8px',
               border: '1px solid rgba(245,158,11,0.15)',
-              fontFamily: 'Manrope, sans-serif', fontSize: '0.8rem', color: '#7a8fb0',
+              fontFamily: 'Manrope, sans-serif', fontSize: '0.8rem', color: 'var(--text-secondary)',
             }}>
               🟡 Highlighted characters are ones that changed. One tiny edit → completely different fingerprint.
               This is the <strong style={{ color: '#fbbf24' }}>avalanche effect</strong>.
@@ -322,15 +322,15 @@ function Section1() {
 ═══════════════════════════════════════════════════════════════════════════════ */
 
 const BLOCK_FIELDS = [
-  { key: 'loan_id',    label: 'loan_id',     value: 'EDU-2024-001',                color: '#3b8cff', desc: 'Unique loan reference' },
-  { key: 'from',       label: 'from_entity', value: 'NBFC 2',                 color: '#3b8cff', desc: 'Disbursing NBFC node' },
-  { key: 'to',         label: 'to_entity',   value: 'Partner Institute',             color: '#3b8cff', desc: 'Receiving institution node' },
-  { key: 'amount',     label: 'amount',      value: '₹18,000',                     color: '#10b981', desc: 'Tranche disbursement amount' },
-  { key: 'milestone',  label: 'milestone',   value: 'Tranche 2 · Mid-Year Fee',    color: '#10b981', desc: 'Disbursement condition met' },
+  { key: 'loan_id',    label: 'loan_id',     value: 'EDU-2024-001',                color: 'var(--color-electric-blue)', desc: 'Unique loan reference' },
+  { key: 'from',       label: 'from_entity', value: 'NBFC 2',                 color: 'var(--color-electric-blue)', desc: 'Disbursing NBFC node' },
+  { key: 'to',         label: 'to_entity',   value: 'Partner Institute',             color: 'var(--color-electric-blue)', desc: 'Receiving institution node' },
+  { key: 'amount',     label: 'amount',      value: '₹18,000',                     color: 'var(--color-green)', desc: 'Tranche disbursement amount' },
+  { key: 'milestone',  label: 'milestone',   value: 'Tranche 2 · Mid-Year Fee',    color: 'var(--color-green)', desc: 'Disbursement condition met' },
   { key: 'timestamp',  label: 'timestamp',   value: '2024-10-01T11:22:00Z',        color: '#a78bfa', desc: 'Block creation time (immutable)' },
-  { key: 'prev_hash',  label: 'prev_hash',   value: 'a3f9c2…',                     color: '#f59e0b', desc: 'Fingerprint of the previous block — links the chain' },
-  { key: 'this_hash',  label: 'this_hash',   value: 'e7b42d…',                     color: '#14b8a6', desc: 'Fingerprint of THIS block\'s contents' },
-  { key: 'signature',  label: 'signature',   value: '3045…(ECDSA)',                color: '#ef4444', desc: 'NBFC 2\'s wax seal — Layer 1 tamper protection' },
+  { key: 'prev_hash',  label: 'prev_hash',   value: 'a3f9c2…',                     color: 'var(--color-gold)', desc: 'Fingerprint of the previous block — links the chain' },
+  { key: 'this_hash',  label: 'this_hash',   value: 'e7b42d…',                     color: 'var(--color-teal)', desc: 'Fingerprint of THIS block\'s contents' },
+  { key: 'signature',  label: 'signature',   value: '3045…(ECDSA)',                color: 'var(--color-red)', desc: 'NBFC 2\'s wax seal — Layer 1 tamper protection' },
 ]
 
 function Section2() {
@@ -357,7 +357,7 @@ function Section2() {
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.55 }}
       >
-        <SectionLabel num="02" label="What is a Block?" color="#3b8cff" />
+        <SectionLabel num="02" label="What is a Block?" color="var(--color-electric-blue)" />
         <SectionTitle>One Page in the Ledger Book</SectionTitle>
         <SectionSub>
           Each block is a page in the public ledger. It records the tranche details, links to the previous
@@ -372,11 +372,11 @@ function Section2() {
               display: 'flex', alignItems: 'center', gap: '10px',
             }}>
               <div style={{
-                width: 8, height: 8, borderRadius: '50%', background: '#10b981',
+                width: 8, height: 8, borderRadius: '50%', background: 'var(--color-green)',
                 boxShadow: '0 0 6px #10b981',
               }} />
               <span style={{
-                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem', color: '#7a8fb0',
+                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem', color: 'var(--text-secondary)',
               }}>Block #2 — Tranche Record</span>
             </div>
             <div style={{ padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
@@ -412,7 +412,7 @@ function Section2() {
                   animate={{ opacity: [1, 0] }}
                   transition={{ duration: 0.5, repeat: Infinity }}
                   style={{
-                    width: 8, height: 14, background: '#3b8cff', borderRadius: '2px',
+                    width: 8, height: 14, background: 'var(--color-electric-blue)', borderRadius: '2px',
                   }}
                 />
               )}
@@ -423,7 +423,7 @@ function Section2() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             <div style={{
               fontFamily: 'Manrope, sans-serif', fontWeight: 600, fontSize: '0.82rem',
-              color: '#7a8fb0', marginBottom: '4px',
+              color: 'var(--text-secondary)', marginBottom: '4px',
             }}>What each field means:</div>
             {BLOCK_FIELDS.map((field, i) => (
               <motion.div
@@ -439,7 +439,7 @@ function Section2() {
                 }}>{field.label}</span>
                 <span style={{
                   fontFamily: 'Manrope, sans-serif', fontSize: '0.8rem',
-                  color: '#7a8fb0', lineHeight: 1.5,
+                  color: 'var(--text-secondary)', lineHeight: 1.5,
                 }}>{field.desc}</span>
               </motion.div>
             ))}
@@ -472,10 +472,10 @@ function ChainBlock({ block, index, totalBlocks, inView, animDelay }) {
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         }}>
           <span style={{
-            fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: '#3b8cff',
+            fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: 'var(--color-electric-blue)',
           }}>Block #{block.index}</span>
           <div style={{
-            width: 7, height: 7, borderRadius: '50%', background: '#10b981',
+            width: 7, height: 7, borderRadius: '50%', background: 'var(--color-green)',
             boxShadow: '0 0 5px #10b98180',
           }} />
         </div>
@@ -483,9 +483,9 @@ function ChainBlock({ block, index, totalBlocks, inView, animDelay }) {
         {/* Fields */}
         <div style={{ padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: '7px' }}>
           {[
-            { k: 'from', v: block.from, c: '#9badc8' },
-            { k: 'to', v: block.to, c: '#9badc8' },
-            { k: 'amount', v: block.amount, c: '#10b981' },
+            { k: 'from', v: block.from, c: 'var(--text-secondary)' },
+            { k: 'to', v: block.to, c: 'var(--text-secondary)' },
+            { k: 'amount', v: block.amount, c: 'var(--color-green)' },
             { k: 'milestone', v: block.milestone, c: '#a78bfa' },
           ].map(({ k, v, c }) => (
             <div key={k} style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
@@ -503,12 +503,12 @@ function ChainBlock({ block, index, totalBlocks, inView, animDelay }) {
             {/* prev_hash */}
             <div>
               <span style={{
-                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.58rem', color: '#f59e0b',
+                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.58rem', color: 'var(--color-gold)',
                 textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: '2px',
               }}>prev_hash</span>
               <span style={{
                 fontFamily: 'JetBrains Mono, monospace', fontSize: '0.7rem',
-                color: isFirst ? '#243352' : '#f59e0b',
+                color: isFirst ? '#243352' : 'var(--color-gold)',
                 background: isFirst ? 'transparent' : 'rgba(245,158,11,0.08)',
                 borderRadius: '4px', padding: isFirst ? '0' : '2px 6px',
               }}>{prevHashDisplay}</span>
@@ -517,11 +517,11 @@ function ChainBlock({ block, index, totalBlocks, inView, animDelay }) {
             {/* this_hash */}
             <div>
               <span style={{
-                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.58rem', color: '#14b8a6',
+                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.58rem', color: 'var(--color-teal)',
                 textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: '2px',
               }}>this_hash</span>
               <span style={{
-                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.7rem', color: '#14b8a6',
+                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.7rem', color: 'var(--color-teal)',
                 background: 'rgba(20,184,166,0.08)', borderRadius: '4px', padding: '2px 6px',
               }}>{trunc(block.hash, 8)}</span>
             </div>
@@ -578,7 +578,7 @@ function ChainConnector({ fromHash, toBlock, inView, delay }) {
         transition={{ delay: delay + 0.5 }}
         style={{
           fontFamily: 'JetBrains Mono, monospace', fontSize: '0.52rem',
-          color: '#f59e0b', textAlign: 'center', opacity: 0.7,
+          color: 'var(--color-gold)', textAlign: 'center', opacity: 0.7,
           lineHeight: 1.3,
         }}
       >
@@ -600,10 +600,10 @@ function Section3() {
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.55 }}
       >
-        <SectionLabel num="03" label="Chaining Tranches Together" color="#f59e0b" />
+        <SectionLabel num="03" label="Chaining Tranches Together" color="var(--color-gold)" />
         <SectionTitle>Pages Linked by Fingerprints</SectionTitle>
         <SectionSub>
-          Each block's <span style={{ color: '#f59e0b', fontFamily: 'JetBrains Mono, monospace' }}>prev_hash</span> is
+          Each block's <span style={{ color: 'var(--color-gold)', fontFamily: 'JetBrains Mono, monospace' }}>prev_hash</span> is
           the fingerprint of the previous block. Change any block and its fingerprint changes — which means every
           block after it contains the wrong prev_hash. The chain exposes the fraud automatically.
         </SectionSub>
@@ -647,7 +647,7 @@ function Section3() {
             marginTop: '28px', padding: '16px 20px',
             background: 'rgba(245,158,11,0.05)', borderRadius: '12px',
             border: '1px solid rgba(245,158,11,0.15)',
-            fontFamily: 'Manrope, sans-serif', fontSize: '0.85rem', color: '#7a8fb0',
+            fontFamily: 'Manrope, sans-serif', fontSize: '0.85rem', color: 'var(--text-secondary)',
           }}
         >
           🔗 The <span style={{ color: '#fbbf24', fontFamily: 'JetBrains Mono, monospace' }}>prev_hash</span> in
@@ -674,10 +674,10 @@ function TamperBlock({ block, status, isEditing, editAmount, onEditAmount, onEdi
     : status === 'tampered' ? 'rgba(245,158,11,0.08)'
     : 'rgba(59,140,255,0.06)'
 
-  const dotColor = status === 'valid' ? '#10b981'
-    : status === 'invalid' ? '#ef4444'
-    : status === 'tampered' ? '#f59e0b'
-    : '#3b8cff'
+  const dotColor = status === 'valid' ? 'var(--color-green)'
+    : status === 'invalid' ? 'var(--color-red)'
+    : status === 'tampered' ? 'var(--color-gold)'
+    : 'var(--color-electric-blue)'
 
   const statusLabel = status === 'valid' ? '✓ Valid'
     : status === 'invalid' ? '✗ Invalid — hash mismatch'
@@ -696,7 +696,7 @@ function TamperBlock({ block, status, isEditing, editAmount, onEditAmount, onEdi
         borderRadius: '12px', overflow: 'hidden',
         border: `1.5px solid ${borderColor}`,
         transition: 'border-color 0.4s ease',
-        background: 'rgba(15,26,46,0.6)',
+        background: 'var(--glass-bg)',
         backdropFilter: 'blur(12px)',
       }}>
         {/* Header */}
@@ -707,7 +707,7 @@ function TamperBlock({ block, status, isEditing, editAmount, onEditAmount, onEdi
           flexWrap: 'wrap', gap: '6px',
         }}>
           <span style={{
-            fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: '#9badc8',
+            fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: 'var(--text-secondary)',
           }}>Block #{block.index}</span>
           <span style={{
             fontFamily: 'Manrope, sans-serif', fontWeight: 600, fontSize: '0.65rem',
@@ -719,7 +719,7 @@ function TamperBlock({ block, status, isEditing, editAmount, onEditAmount, onEdi
         <div style={{ padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: '7px' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
             <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.58rem', color: '#243352', textTransform: 'uppercase' }}>from</span>
-            <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.7rem', color: '#9badc8' }}>{block.from}</span>
+            <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.7rem', color: 'var(--text-secondary)' }}>{block.from}</span>
           </div>
 
           {/* Editable amount */}
@@ -739,7 +739,7 @@ function TamperBlock({ block, status, isEditing, editAmount, onEditAmount, onEdi
             ) : (
               <span style={{
                 fontFamily: 'JetBrains Mono, monospace', fontSize: '0.82rem',
-                color: status === 'tampered' ? '#fbbf24' : '#10b981',
+                color: status === 'tampered' ? '#fbbf24' : 'var(--color-green)',
                 fontWeight: 700,
               }}>{block.amount}</span>
             )}
@@ -751,7 +751,7 @@ function TamperBlock({ block, status, isEditing, editAmount, onEditAmount, onEdi
           </div>
 
           <div style={{ borderTop: '1px solid rgba(59,140,255,0.08)', paddingTop: '8px' }}>
-            <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.58rem', color: status === 'invalid' ? '#ef4444' : '#f59e0b', textTransform: 'uppercase', display: 'block', marginBottom: '2px' }}>prev_hash</span>
+            <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.58rem', color: status === 'invalid' ? 'var(--color-red)' : 'var(--color-gold)', textTransform: 'uppercase', display: 'block', marginBottom: '2px' }}>prev_hash</span>
             <span style={{
               fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem',
               color: status === 'invalid' ? '#ef444488' : '#f59e0b88',
@@ -760,7 +760,7 @@ function TamperBlock({ block, status, isEditing, editAmount, onEditAmount, onEdi
           </div>
 
           <div>
-            <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.58rem', color: '#14b8a6', textTransform: 'uppercase', display: 'block', marginBottom: '2px' }}>this_hash</span>
+            <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.58rem', color: 'var(--color-teal)', textTransform: 'uppercase', display: 'block', marginBottom: '2px' }}>this_hash</span>
             <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: '#14b8a688' }}>{trunc(block.hash, 8)}</span>
           </div>
         </div>
@@ -798,7 +798,7 @@ function TamperBlock({ block, status, isEditing, editAmount, onEditAmount, onEdi
                   style={{
                     padding: '7px 10px', borderRadius: '7px',
                     background: 'transparent', border: '1px solid rgba(59,140,255,0.2)',
-                    color: '#7a8fb0', fontFamily: 'Manrope, sans-serif', fontWeight: 500,
+                    color: 'var(--text-secondary)', fontFamily: 'Manrope, sans-serif', fontWeight: 500,
                     fontSize: '0.75rem', cursor: 'pointer',
                   }}
                 >
@@ -906,7 +906,7 @@ function Section4() {
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.55 }}
       >
-        <SectionLabel num="04" label="Why You Can't Rewrite History" color="#ef4444" />
+        <SectionLabel num="04" label="Why You Can't Rewrite History" color="var(--color-red)" />
         <SectionTitle>Edit One Block. Break the Chain.</SectionTitle>
         <SectionSub>
           Click "Edit Amount" on Block #1, change the tranche value, then hit "Tamper!" — watch
@@ -948,7 +948,7 @@ function Section4() {
                 marginTop: '20px', padding: '14px 18px',
                 background: 'rgba(16,185,129,0.06)', borderRadius: '10px',
                 border: '1px solid rgba(16,185,129,0.18)',
-                fontFamily: 'Manrope, sans-serif', fontSize: '0.82rem', color: '#7a8fb0',
+                fontFamily: 'Manrope, sans-serif', fontSize: '0.82rem', color: 'var(--text-secondary)',
               }}
             >
               ✅ All 3 blocks valid — prev_hash chains are intact.
@@ -964,7 +964,7 @@ function Section4() {
                 marginTop: '20px', padding: '14px 18px',
                 background: 'rgba(239,68,68,0.07)', borderRadius: '10px',
                 border: '1px solid rgba(239,68,68,0.25)',
-                fontFamily: 'Manrope, sans-serif', fontSize: '0.82rem', color: '#7a8fb0',
+                fontFamily: 'Manrope, sans-serif', fontSize: '0.82rem', color: 'var(--text-secondary)',
               }}
             >
               🔴 Block #1's fingerprint changed when you altered the amount.
@@ -1029,7 +1029,7 @@ function Section5() {
         <div className="glass-card" style={{ padding: isMobile ? '24px 20px' : '32px 28px', marginBottom: '20px' }}>
           <div style={{
             fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.85rem',
-            color: '#7a8fb0', marginBottom: '24px',
+            color: 'var(--text-secondary)', marginBottom: '24px',
           }}>Signing a tranche (Layer 1 protection):</div>
 
           <div style={{
@@ -1052,7 +1052,7 @@ function Section5() {
                 fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem',
                 color: '#a78bfa', marginBottom: '4px',
               }}>Private Key</div>
-              <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.76rem', color: '#9badc8' }}>
+              <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.76rem', color: 'var(--text-secondary)' }}>
                 NBFC 2 only
               </div>
             </motion.div>
@@ -1061,7 +1061,7 @@ function Section5() {
             <motion.span
               initial={{ opacity: 0 }}
               animate={step >= 1 ? { opacity: 1 } : {}}
-              style={{ padding: '0 14px', color: '#7a8fb0', fontSize: '1.2rem', fontWeight: 300 }}
+              style={{ padding: '0 14px', color: 'var(--text-secondary)', fontSize: '1.2rem', fontWeight: 300 }}
             >+</motion.span>
 
             {/* Message */}
@@ -1071,7 +1071,7 @@ function Section5() {
               transition={{ duration: 0.35 }}
               style={{
                 padding: '16px 18px', borderRadius: '12px', flex: 1,
-                background: 'rgba(59,140,255,0.08)', border: '1px solid rgba(59,140,255,0.25)',
+                background: 'var(--glass-border)', border: '1px solid rgba(59,140,255,0.25)',
                 minWidth: '200px',
               }}
             >
@@ -1087,7 +1087,7 @@ function Section5() {
                 'milestone: Tranche 2',
               ].map(line => (
                 <div key={line} style={{
-                  fontFamily: 'JetBrains Mono, monospace', fontSize: '0.68rem', color: '#7a8fb0',
+                  fontFamily: 'JetBrains Mono, monospace', fontSize: '0.68rem', color: 'var(--text-secondary)',
                 }}>{line}</div>
               ))}
             </motion.div>
@@ -1096,7 +1096,7 @@ function Section5() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={step >= 2 ? { opacity: 1 } : {}}
-              style={{ padding: '0 14px', color: '#7a8fb0', fontSize: '1.4rem' }}
+              style={{ padding: '0 14px', color: 'var(--text-secondary)', fontSize: '1.4rem' }}
             >→</motion.div>
 
             {/* Signature output */}
@@ -1116,7 +1116,7 @@ function Section5() {
                 color: '#34d399', marginBottom: '4px',
               }}>Digital Signature</div>
               <div style={{
-                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem', color: '#7a8fb0',
+                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem', color: 'var(--text-secondary)',
               }}>3045 0221 00a3…</div>
             </motion.div>
           </div>
@@ -1126,18 +1126,18 @@ function Section5() {
         <div className="glass-card" style={{ padding: '24px 28px' }}>
           <div style={{
             fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.85rem',
-            color: '#7a8fb0', marginBottom: '20px',
+            color: 'var(--text-secondary)', marginBottom: '20px',
           }}>Verification (anyone can do this — only NBFC 2 could have created it):</div>
 
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', flexWrap: 'wrap', rowGap: '16px' }}>
             {[
               { label: 'Public Key', sub: '(Published by NBFC 2)', icon: <Unlock size={22} color="#a78bfa" />, color: '#a78bfa' },
-              { label: '+', sub: '', icon: null, color: '#7a8fb0' },
-              { label: 'Signature', sub: '(from the block)', icon: <ShieldCheck size={22} color="#10b981" />, color: '#10b981' },
-              { label: '+', sub: '', icon: null, color: '#7a8fb0' },
-              { label: 'Message', sub: '(exact tranche data)', icon: <FileText size={22} color="#3b8cff" />, color: '#3b8cff' },
-              { label: '→', sub: '', icon: null, color: '#7a8fb0' },
-              { label: '✓ Authentic', sub: 'Only NBFC 2\'s key\ncould produce this seal', icon: null, color: '#10b981' },
+              { label: '+', sub: '', icon: null, color: 'var(--text-secondary)' },
+              { label: 'Signature', sub: '(from the block)', icon: <ShieldCheck size={22} color="var(--color-green)" />, color: 'var(--color-green)' },
+              { label: '+', sub: '', icon: null, color: 'var(--text-secondary)' },
+              { label: 'Message', sub: '(exact tranche data)', icon: <FileText size={22} color="var(--color-electric-blue)" />, color: 'var(--color-electric-blue)' },
+              { label: '→', sub: '', icon: null, color: 'var(--text-secondary)' },
+              { label: '✓ Authentic', sub: 'Only NBFC 2\'s key\ncould produce this seal', icon: null, color: 'var(--color-green)' },
             ].map((item, i) => (
               item.icon !== null || item.label === '→' || item.label === '+' ? (
                 <div key={i} style={{
@@ -1153,7 +1153,7 @@ function Section5() {
                 }}>
                   {item.icon && <span style={{ fontSize: '1.2rem' }}>{item.icon}</span>}
                   <span>{item.label}</span>
-                  {item.sub && <span style={{ fontSize: '0.65rem', color: '#7a8fb0', whiteSpace: 'pre' }}>{item.sub}</span>}
+                  {item.sub && <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', whiteSpace: 'pre' }}>{item.sub}</span>}
                 </div>
               ) : (
                 <span key={i} style={{ color: item.color, fontSize: '1.2rem' }}>{item.label}</span>
@@ -1165,7 +1165,7 @@ function Section5() {
             marginTop: '16px', padding: '10px 14px',
             background: 'rgba(239,68,68,0.06)', borderRadius: '8px',
             border: '1px solid rgba(239,68,68,0.15)',
-            fontFamily: 'Manrope, sans-serif', fontSize: '0.8rem', color: '#7a8fb0',
+            fontFamily: 'Manrope, sans-serif', fontSize: '0.8rem', color: 'var(--text-secondary)',
           }}>
             <ShieldCheck size={16} style={{ display: 'inline', verticalAlign: '-3px', marginRight: '4px' }} /> Change even one rupee in the amount after signing — the wax seal breaks. This is
             why the signature field in every block is bound to the <em>exact</em> message content.
@@ -1181,8 +1181,8 @@ function Section5() {
 ═══════════════════════════════════════════════════════════════════════════════ */
 
 const NODES = [
-  { id: 'nbfc',     icon: '🏦', label: 'NBFC Node',              sub: 'NBFC 2 · NBFC 1',      color: '#3b8cff' },
-  { id: 'platform', icon: '🔗', label: 'Fintech Company Node', sub: 'Education Finance Intermediary', color: '#14b8a6' },
+  { id: 'nbfc',     icon: '🏦', label: 'NBFC Node',              sub: 'NBFC 2 · NBFC 1',      color: 'var(--color-electric-blue)' },
+  { id: 'platform', icon: '🔗', label: 'Fintech Company Node', sub: 'Education Finance Intermediary', color: 'var(--color-teal)' },
   { id: 'inst',     icon: '🏫', label: 'Institution Node',        sub: 'Partner Institute',                color: '#a78bfa' },
 ]
 
@@ -1212,7 +1212,7 @@ function Section6() {
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.55 }}
       >
-        <SectionLabel num="06" label="Multiple Stakeholders, One Truth" color="#14b8a6" />
+        <SectionLabel num="06" label="Multiple Stakeholders, One Truth" color="var(--color-teal)" />
         <SectionTitle>The Village Council — No Single Authority</SectionTitle>
         <SectionSub>
           NBFC, Fintech Company-style platform, and institution each hold a full copy of the chain.
@@ -1266,7 +1266,7 @@ function Section6() {
                 }}>
                   {node.label}
                 </div>
-                <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.78rem', color: '#7a8fb0', marginBottom: '16px' }}>
+                <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.78rem', color: 'var(--text-secondary)', marginBottom: '16px' }}>
                   {node.sub}
                 </div>
 
@@ -1289,7 +1289,7 @@ function Section6() {
                   ))}
                   {/* Connector dots */}
                   {Array.from({ length: Math.max(0, blockCount - 1) }).map((_, ci) => null)}
-                  <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem', color: '#7a8fb0', marginLeft: '4px' }}>
+                  <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem', color: 'var(--text-secondary)', marginLeft: '4px' }}>
                     {blockCount} blocks
                   </div>
                 </div>
@@ -1309,7 +1309,7 @@ function Section6() {
                 ? 'rgba(20,184,166,0.08)'
                 : 'linear-gradient(135deg, rgba(20,184,166,0.18), rgba(59,140,255,0.12))',
               border: `1px solid ${syncing ? 'rgba(20,184,166,0.4)' : 'rgba(20,184,166,0.3)'}`,
-              color: syncing ? '#14b8a6' : '#2dd4bf',
+              color: syncing ? 'var(--color-teal)' : '#2dd4bf',
               fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.9rem',
               cursor: syncing ? 'wait' : 'pointer',
               transition: 'all 0.2s',
@@ -1400,12 +1400,12 @@ export default function HowItWorks() {
           <h1 style={{
             fontFamily: 'Manrope, sans-serif', fontWeight: 800,
             fontSize: 'clamp(2rem, 5vw, 3.4rem)', letterSpacing: '-0.03em',
-            color: '#d4e0ef', margin: '0 0 14px',
+            color: 'var(--text-primary)', margin: '0 0 14px',
           }}>
             How TrancheChain Works
           </h1>
           <p style={{
-            fontFamily: 'Manrope, sans-serif', fontSize: '1rem', color: '#7a8fb0',
+            fontFamily: 'Manrope, sans-serif', fontSize: '1rem', color: 'var(--text-secondary)',
             maxWidth: '560px', margin: '0 auto 0', lineHeight: 1.65,
           }}>
             Six concepts. One running example: NBFC 2 disbursing education loan

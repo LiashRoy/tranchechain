@@ -112,7 +112,7 @@ function HexCard({ label, value, icon, color, note, glow = false }) {
             onClick={() => setExpanded(e => !e)}
             style={{
               padding: '3px 8px', borderRadius: 5, border: 'none',
-              background: 'rgba(255,255,255,0.05)', color: '#7a8fb0',
+              background: 'rgba(255,255,255,0.05)', color: 'var(--text-secondary)',
               fontFamily: 'Manrope, sans-serif', fontSize: '0.62rem',
               cursor: 'pointer',
             }}
@@ -127,7 +127,7 @@ function HexCard({ label, value, icon, color, note, glow = false }) {
         {note && (
           <div style={{
             marginTop: 8, fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem',
-            color: '#7a8fb0', fontStyle: 'italic',
+            color: 'var(--text-secondary)', fontStyle: 'italic',
           }}>{note}</div>
         )}
       </div>
@@ -155,9 +155,9 @@ function TrancheMsgCard({ tranche, editable = false, editAmount, onEditAmount })
       </div>
       <div style={{ padding: '14px', display: 'flex', flexDirection: 'column', gap: 7 }}>
         {[
-          { k: 'LOAN',      v: 'EDU-2024-001',    c: '#7a8fb0' },
-          { k: 'FROM',      v: tranche.from,       c: '#14b8a6' },
-          { k: 'TO',        v: tranche.to,         c: '#14b8a6' },
+          { k: 'LOAN',      v: 'EDU-2024-001',    c: 'var(--text-secondary)' },
+          { k: 'FROM',      v: tranche.from,       c: 'var(--color-teal)' },
+          { k: 'TO',        v: tranche.to,         c: 'var(--color-teal)' },
           { k: 'MILESTONE', v: tranche.milestone,  c: '#a78bfa' },
         ].map(({ k, v, c }) => (
           <div key={k} style={{ display: 'grid', gridTemplateColumns: '90px 1fr', gap: 6, alignItems: 'center' }}>
@@ -183,7 +183,7 @@ function TrancheMsgCard({ tranche, editable = false, editAmount, onEditAmount })
               onBlur={e => { e.target.style.borderColor = 'rgba(245,158,11,0.4)' }}
             />
           ) : (
-            <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.9rem', fontWeight: 700, color: '#10b981' }}>{tranche.amount}</span>
+            <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.9rem', fontWeight: 700, color: 'var(--color-green)' }}>{tranche.amount}</span>
           )}
         </div>
       </div>
@@ -215,8 +215,8 @@ function ProgressBar({ activeStep }) {
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
               <motion.div
                 animate={{
-                  background: done ? '#10b981' : current ? '#3b8cff' : 'rgba(255,255,255,0.05)',
-                  borderColor: done ? '#10b981' : current ? '#3b8cff' : 'rgba(255,255,255,0.12)',
+                  background: done ? 'var(--color-green)' : current ? 'var(--color-electric-blue)' : 'rgba(255,255,255,0.05)',
+                  borderColor: done ? 'var(--color-green)' : current ? 'var(--color-electric-blue)' : 'rgba(255,255,255,0.12)',
                   boxShadow: current ? '0 0 18px rgba(59,140,255,0.45)' : 'none',
                 }}
                 transition={{ duration: 0.35 }}
@@ -241,7 +241,7 @@ function ProgressBar({ activeStep }) {
               </motion.div>
               <span style={{
                 fontFamily: 'Manrope, sans-serif', fontSize: '0.68rem',
-                color: done ? '#10b981' : current ? '#6aaeff' : '#243352',
+                color: done ? 'var(--color-green)' : current ? '#6aaeff' : '#243352',
                 fontWeight: current ? 700 : 500,
                 whiteSpace: 'nowrap', transition: 'color 0.3s',
               }}>{s.label}</span>
@@ -286,16 +286,16 @@ function Step1({ onComplete }) {
       <div style={{ marginBottom: 24 }}>
         <div style={{
           fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem',
-          color: '#3b8cff', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8,
+          color: 'var(--color-electric-blue)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8,
         }}>Step 1 of 4</div>
         <h2 style={{
           fontFamily: 'Manrope, sans-serif', fontWeight: 800,
-          fontSize: 'clamp(1.4rem, 3vw, 2rem)', color: '#d4e0ef',
+          fontSize: 'clamp(1.4rem, 3vw, 2rem)', color: 'var(--text-primary)',
           margin: '0 0 8px', letterSpacing: '-0.02em',
         }}>Generate NBFC Key Pair</h2>
         <p style={{
           fontFamily: 'Manrope, sans-serif', fontSize: '0.9rem',
-          color: '#7a8fb0', margin: 0, lineHeight: 1.6, maxWidth: 600,
+          color: 'var(--text-secondary)', margin: 0, lineHeight: 1.6, maxWidth: 600,
         }}>
           NBFC 2 generates an ECDSA P-256 key pair. The private key is a trapdoor — easy to
           derive the public key from it, computationally infeasible to reverse.
@@ -367,7 +367,7 @@ function Step1({ onComplete }) {
                   label="Private Key — NBFC 2 ONLY"
                   value={keys.privHex}
                   icon=<Lock size={16} />
-                  color="#ef4444"
+                  color="var(--color-red)"
                   note="NEVER shared. Used only to sign. Without this, no one can forge NBFC 2's signature."
                   glow
                 />
@@ -385,10 +385,10 @@ function Step1({ onComplete }) {
               >
                 <div style={{
                   fontFamily: 'Manrope, sans-serif', fontSize: '0.62rem',
-                  color: '#7a8fb0', textAlign: 'center', lineHeight: 1.4,
+                  color: 'var(--text-secondary)', textAlign: 'center', lineHeight: 1.4,
                   maxWidth: 80,
                 }}>Trapdoor<br />function<br />(one-way)</div>
-                <div style={{ fontSize: '1.4rem', color: '#3b8cff' }}>→</div>
+                <div style={{ fontSize: '1.4rem', color: 'var(--color-electric-blue)' }}>→</div>
               </motion.div>
 
               {/* Public key block */}
@@ -401,7 +401,7 @@ function Step1({ onComplete }) {
                   label="Public Key — Shared openly"
                   value={keys.pubHex}
                   icon=<Unlock size={16} />
-                  color="#10b981"
+                  color="var(--color-green)"
                   note="Published by NBFC 2. Anyone can use it to verify signatures — cannot be used to sign."
                   glow
                 />
@@ -418,7 +418,7 @@ function Step1({ onComplete }) {
                 background: 'rgba(59,140,255,0.06)',
                 border: '1px solid rgba(59,140,255,0.15)',
                 fontFamily: 'Manrope, sans-serif', fontSize: '0.82rem',
-                color: '#7a8fb0', lineHeight: 1.6,
+                color: 'var(--text-secondary)', lineHeight: 1.6,
               }}
             >
               <Key size={16} /> These are <strong style={{ color: '#6aaeff' }}>real ECDSA P-256 keys</strong> freshly generated
@@ -482,16 +482,16 @@ function Step2({ keys, tranche, onComplete }) {
       <div style={{ marginBottom: 24 }}>
         <div style={{
           fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem',
-          color: '#14b8a6', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8,
+          color: 'var(--color-teal)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8,
         }}>Step 2 of 4</div>
         <h2 style={{
           fontFamily: 'Manrope, sans-serif', fontWeight: 800,
-          fontSize: 'clamp(1.4rem, 3vw, 2rem)', color: '#d4e0ef',
+          fontSize: 'clamp(1.4rem, 3vw, 2rem)', color: 'var(--text-primary)',
           margin: '0 0 8px', letterSpacing: '-0.02em',
         }}>Sign a Tranche</h2>
         <p style={{
           fontFamily: 'Manrope, sans-serif', fontSize: '0.9rem',
-          color: '#7a8fb0', margin: 0, lineHeight: 1.6, maxWidth: 600,
+          color: 'var(--text-secondary)', margin: 0, lineHeight: 1.6, maxWidth: 600,
         }}>
           NBFC 2 applies their private key to the exact tranche message to produce a
           digital signature — their wax seal. The signature is mathematically bound to both
@@ -526,7 +526,7 @@ function Step2({ keys, tranche, onComplete }) {
               transition={{ duration: 0.8, ease: 'easeInOut', repeat: Infinity, repeatType: 'reverse' }}
               style={{
                 padding: '10px 16px', borderRadius: 9,
-                background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)',
+                background: 'var(--badge-red-border)', border: '1px solid rgba(239,68,68,0.3)',
                 fontFamily: 'JetBrains Mono, monospace', fontSize: '0.72rem', color: '#f87171',
                 maxWidth: 140, textAlign: 'center',
               }}
@@ -535,7 +535,7 @@ function Step2({ keys, tranche, onComplete }) {
             </motion.div>
 
             {/* Plus */}
-            <span style={{ color: '#7a8fb0', fontSize: '1.3rem', fontWeight: 300 }}>+</span>
+            <span style={{ color: 'var(--text-secondary)', fontSize: '1.3rem', fontWeight: 300 }}>+</span>
 
             {/* Message */}
             <motion.div
@@ -551,7 +551,7 @@ function Step2({ keys, tranche, onComplete }) {
               <ClipboardList size={16} /> Tranche Message
             </motion.div>
 
-            <span style={{ color: '#7a8fb0', fontSize: '1.3rem' }}>→</span>
+            <span style={{ color: 'var(--text-secondary)', fontSize: '1.3rem' }}>→</span>
 
             {/* ECDSA output */}
             <motion.div
@@ -559,7 +559,7 @@ function Step2({ keys, tranche, onComplete }) {
               transition={{ duration: 0.6, repeat: Infinity }}
               style={{
                 padding: '10px 16px', borderRadius: 9,
-                background: 'rgba(16,185,129,0.1)', border: '1px dashed rgba(16,185,129,0.4)',
+                background: 'var(--badge-teal-border)', border: '1px dashed rgba(16,185,129,0.4)',
                 fontFamily: 'JetBrains Mono, monospace', fontSize: '0.72rem', color: '#34d399',
                 maxWidth: 140, textAlign: 'center',
               }}
@@ -604,7 +604,7 @@ function Step2({ keys, tranche, onComplete }) {
               label="Digital Signature (ECDSA P-256)"
               value={sig.sigHex}
               icon=<Fingerprint size={16} />
-              color="#10b981"
+              color="var(--color-green)"
               note="This signature is uniquely bound to NBFC 2's private key AND the exact tranche message above. Change even one character in the message → signature becomes invalid."
               glow
             />
@@ -614,7 +614,7 @@ function Step2({ keys, tranche, onComplete }) {
               background: 'rgba(16,185,129,0.06)',
               border: '1px solid rgba(16,185,129,0.15)',
               fontFamily: 'Manrope, sans-serif', fontSize: '0.82rem',
-              color: '#7a8fb0', lineHeight: 1.6,
+              color: 'var(--text-secondary)', lineHeight: 1.6,
             }}>
               <Fingerprint size={16} /> The wax seal is applied. Anyone with NBFC 2's <strong style={{ color: '#34d399' }}>public key</strong> can
               verify this — but only NBFC 2 (holder of the private key) could have <em>created</em> it.
@@ -668,16 +668,16 @@ function Step3({ keys, tranche, sig, onComplete }) {
       <div style={{ marginBottom: 24 }}>
         <div style={{
           fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem',
-          color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8,
+          color: 'var(--color-green)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8,
         }}>Step 3 of 4</div>
         <h2 style={{
           fontFamily: 'Manrope, sans-serif', fontWeight: 800,
-          fontSize: 'clamp(1.4rem, 3vw, 2rem)', color: '#d4e0ef',
+          fontSize: 'clamp(1.4rem, 3vw, 2rem)', color: 'var(--text-primary)',
           margin: '0 0 8px', letterSpacing: '-0.02em',
         }}>Verify the Signature</h2>
         <p style={{
           fontFamily: 'Manrope, sans-serif', fontSize: '0.9rem',
-          color: '#7a8fb0', margin: 0, lineHeight: 1.6, maxWidth: 600,
+          color: 'var(--text-secondary)', margin: 0, lineHeight: 1.6, maxWidth: 600,
         }}>
           Anyone — the institution, the regulator, the auditor — can verify this signature
           using <strong style={{ color: '#34d399' }}>only the public key, the message, and the signature</strong>.
@@ -690,9 +690,9 @@ function Step3({ keys, tranche, sig, onComplete }) {
         display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
         gap: 12, marginBottom: 20,
       }}>
-        <HexCard label="Public Key (NBFC 2)" value={keys.pubHex} icon=<Unlock size={16} /> color="#10b981" />
+        <HexCard label="Public Key (NBFC 2)" value={keys.pubHex} icon=<Unlock size={16} /> color="var(--color-green)" />
         <TrancheMsgCard tranche={tranche} />
-        <HexCard label="Signature (from block)" value={sig.sigHex} icon=<Fingerprint size={16} /> color="#14b8a6" />
+        <HexCard label="Signature (from block)" value={sig.sigHex} icon=<Fingerprint size={16} /> color="var(--color-teal)" />
       </div>
 
       {/* Verify button */}
@@ -745,7 +745,7 @@ function Step3({ keys, tranche, sig, onComplete }) {
             transition={{ type: 'spring', stiffness: 300, damping: 22 }}
             style={{
               padding: '28px 32px', borderRadius: 14, marginBottom: 24,
-              background: 'rgba(16,185,129,0.1)',
+              background: 'var(--badge-teal-border)',
               border: '2px solid rgba(16,185,129,0.4)',
               boxShadow: '0 0 48px rgba(16,185,129,0.15)',
               display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap',
@@ -764,14 +764,14 @@ function Step3({ keys, tranche, sig, onComplete }) {
                 boxShadow: '0 0 24px rgba(16,185,129,0.4)',
               }}
             >
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--color-green)" strokeWidth="2.5" strokeLinecap="round">
                 <path d="M20 6L9 17l-5-5"/>
               </svg>
             </motion.div>
             <div>
               <div style={{
                 fontFamily: 'Manrope, sans-serif', fontWeight: 800,
-                fontSize: '1.3rem', color: '#10b981', marginBottom: 4,
+                fontSize: '1.3rem', color: 'var(--color-green)', marginBottom: 4,
               }}><CheckCircle2 size={16} /> Signature Valid</div>
               <div style={{
                 fontFamily: 'Manrope, sans-serif', fontSize: '0.88rem',
@@ -849,16 +849,16 @@ function Step4({ keys, tranche, sig }) {
       <div style={{ marginBottom: 24 }}>
         <div style={{
           fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem',
-          color: '#f59e0b', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8,
+          color: 'var(--color-gold)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8,
         }}>Step 4 of 4</div>
         <h2 style={{
           fontFamily: 'Manrope, sans-serif', fontWeight: 800,
-          fontSize: 'clamp(1.4rem, 3vw, 2rem)', color: '#d4e0ef',
+          fontSize: 'clamp(1.4rem, 3vw, 2rem)', color: 'var(--text-primary)',
           margin: '0 0 8px', letterSpacing: '-0.02em',
         }}>Try to Tamper</h2>
         <p style={{
           fontFamily: 'Manrope, sans-serif', fontSize: '0.9rem',
-          color: '#7a8fb0', margin: 0, lineHeight: 1.6, maxWidth: 600,
+          color: 'var(--text-secondary)', margin: 0, lineHeight: 1.6, maxWidth: 600,
         }}>
           An attacker intercepts the tranche and changes the amount. They use the same
           signature — but the original signature was created over a <em>different</em> message.
@@ -905,7 +905,7 @@ function Step4({ keys, tranche, sig }) {
           label="Original Signature (attacker re-uses it)"
           value={sig.sigHex}
           icon=<Fingerprint size={16} />
-          color="#f59e0b"
+          color="var(--color-gold)"
           note="This signature was created for the original amount. The attacker cannot generate a new valid signature without NBFC 2's private key."
         />
       </div>
@@ -948,7 +948,7 @@ function Step4({ keys, tranche, sig }) {
               padding: '13px 18px', borderRadius: 11,
               background: 'transparent',
               border: '1px solid rgba(59,140,255,0.2)',
-              color: '#7a8fb0', fontFamily: 'Manrope, sans-serif',
+              color: 'var(--text-secondary)', fontFamily: 'Manrope, sans-serif',
               fontWeight: 500, fontSize: '0.88rem', cursor: 'pointer',
             }}
           >Reset amount</button>
@@ -985,14 +985,14 @@ function Step4({ keys, tranche, sig }) {
                   boxShadow: '0 0 24px rgba(239,68,68,0.35)',
                 }}
               >
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--color-red)" strokeWidth="2.5" strokeLinecap="round">
                   <path d="M18 6L6 18M6 6l12 12"/>
                 </svg>
               </motion.div>
               <div>
                 <div style={{
                   fontFamily: 'Manrope, sans-serif', fontWeight: 800,
-                  fontSize: '1.3rem', color: '#ef4444', marginBottom: 4,
+                  fontSize: '1.3rem', color: 'var(--color-red)', marginBottom: 4,
                 }}><XCircle size={16} /> Signature Invalid</div>
                 <div style={{
                   fontFamily: 'Manrope, sans-serif', fontSize: '0.88rem',
@@ -1024,10 +1024,10 @@ function Step4({ keys, tranche, sig }) {
                   transition={{ delay: 0.2 + i * 0.1 }}
                   style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}
                 >
-                  <span style={{ color: '#ef4444', fontWeight: 700, flexShrink: 0 }}>→</span>
+                  <span style={{ color: 'var(--color-red)', fontWeight: 700, flexShrink: 0 }}>→</span>
                   <span style={{
                     fontFamily: 'Manrope, sans-serif', fontSize: '0.8rem',
-                    color: '#9badc8', lineHeight: 1.55,
+                    color: 'var(--text-secondary)', lineHeight: 1.55,
                   }}>{point}</span>
                 </motion.div>
               ))}
@@ -1065,7 +1065,7 @@ function Step4({ keys, tranche, sig }) {
               background: 'rgba(59,140,255,0.05)',
               border: '1px solid rgba(59,140,255,0.15)',
               fontFamily: 'Manrope, sans-serif', fontSize: '0.82rem',
-              color: '#7a8fb0', lineHeight: 1.65,
+              color: 'var(--text-secondary)', lineHeight: 1.65,
             }}
           >
             <GraduationCap size={16} /> <strong style={{ color: '#6aaeff' }}>Course link:</strong> This is <strong style={{ color: '#b8c9df' }}>Layer 1 protection</strong> —
@@ -1140,7 +1140,7 @@ export default function SignaturesTab({ latestBlock }) {
                 padding: '8px 16px', borderRadius: 8,
                 background: 'transparent',
                 border: '1px solid rgba(59,140,255,0.25)',
-                color: '#7a8fb0', fontFamily: 'Manrope, sans-serif',
+                color: 'var(--text-secondary)', fontFamily: 'Manrope, sans-serif',
                 fontWeight: 600, fontSize: '0.8rem', cursor: 'pointer',
                 transition: 'all 0.2s',
               }}
@@ -1152,7 +1152,7 @@ export default function SignaturesTab({ latestBlock }) {
             <motion.button
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              whileHover={{ scale: 1.02, backgroundColor: 'rgba(239,68,68,0.1)' }}
+              whileHover={{ scale: 1.02, backgroundColor: 'var(--badge-red-border)' }}
               whileTap={{ scale: 0.98 }}
               onClick={() => {
                 setKeys(null);
@@ -1164,7 +1164,7 @@ export default function SignaturesTab({ latestBlock }) {
                 padding: '8px 16px', borderRadius: 8,
                 background: 'transparent',
                 border: '1px solid rgba(239,68,68,0.25)',
-                color: '#ef4444', fontFamily: 'Manrope, sans-serif',
+                color: 'var(--color-red)', fontFamily: 'Manrope, sans-serif',
                 fontWeight: 600, fontSize: '0.8rem', cursor: 'pointer',
                 transition: 'all 0.2s',
               }}

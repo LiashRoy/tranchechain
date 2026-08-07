@@ -40,15 +40,15 @@ const PHASE_LABELS = [
 ═══════════════════════════════════════════════════════════════════════════ */
 
 const ENTITY_META = {
-  'NBFC 1':        { color: '#3b8cff', initials: 'N1' },
-  'NBFC 2':        { color: '#14b8a6', initials: 'N2' },
+  'NBFC 1':        { color: 'var(--color-electric-blue)', initials: 'N1' },
+  'NBFC 2':        { color: 'var(--color-teal)', initials: 'N2' },
   'NBFC 3':     { color: '#a78bfa', initials: 'N3' },
-  'Fintech Company': { color: '#f59e0b', initials: 'GQ' },
-  'Partner Institute':    { color: '#10b981', initials: 'PI' },
+  'Fintech Company': { color: 'var(--color-gold)', initials: 'GQ' },
+  'Partner Institute':    { color: 'var(--color-green)', initials: 'PI' },
 }
 
 function EntityPill({ name }) {
-  const m = ENTITY_META[name] || { color: '#7a8fb0', initials: '??' }
+  const m = ENTITY_META[name] || { color: 'var(--text-secondary)', initials: '??' }
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
       <div style={{
@@ -100,7 +100,7 @@ function HashLine({ label, value, color, strikethrough = false, typingValue = nu
               animate={{ opacity: 1 }}
               style={{
                 fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem',
-                color: '#ef4444', wordBreak: 'break-all', lineHeight: 1.4,
+                color: 'var(--color-red)', wordBreak: 'break-all', lineHeight: 1.4,
                 marginTop: 4,
                 background: 'rgba(239,68,68,0.08)',
                 borderRadius: 4, padding: '2px 6px',
@@ -162,9 +162,9 @@ function DemoBlock({
     '✓'
 
   const statusColor =
-    status === 'invalid'  ? '#ef4444' :
-    status === 'tampered' ? '#f59e0b' :
-    '#10b981'
+    status === 'invalid'  ? 'var(--color-red)' :
+    status === 'tampered' ? 'var(--color-gold)' :
+    'var(--color-green)'
 
   return (
     <motion.div
@@ -229,7 +229,7 @@ function DemoBlock({
               />
               <span style={{
                 fontFamily: 'JetBrains Mono, monospace', fontWeight: 700,
-                fontSize: '0.78rem', color: '#9badc8',
+                fontSize: '0.78rem', color: 'var(--text-secondary)',
               }}>Block #{block.index}</span>
             </div>
             <motion.span
@@ -282,9 +282,9 @@ function DemoBlock({
                   letterSpacing: '-0.02em',
                   lineHeight: 1,
                   color:
-                    displayAmount === tamperedAmount ? '#ef4444' :
-                    displayAmount !== originalAmount ? '#f59e0b' :
-                    '#10b981',
+                    displayAmount === tamperedAmount ? 'var(--color-red)' :
+                    displayAmount !== originalAmount ? 'var(--color-gold)' :
+                    'var(--color-green)',
                   transition: 'color 0.3s',
                 }}
               >
@@ -305,12 +305,12 @@ function DemoBlock({
               <HashLine
                 label="prev_hash"
                 value={block.prevHash}
-                color="#f59e0b"
+                color="var(--color-gold)"
               />
               <HashLine
                 label="this_hash"
                 value={block.hash}
-                color={status === 'tampered' || hashStruck ? '#14b8a6' : '#14b8a6'}
+                color={status === 'tampered' || hashStruck ? 'var(--color-teal)' : 'var(--color-teal)'}
                 strikethrough={hashStruck}
                 typingValue={typingHash}
                 tamperedHash={tamperedHash}
@@ -433,7 +433,7 @@ function PhaseIndicator({ currentPhase }) {
               <span style={{
                 fontFamily: 'Manrope, sans-serif', fontSize: '0.72rem',
                 fontWeight: isActive ? 700 : 400,
-                color: isActive ? '#6aaeff' : isDone ? '#34d399' : '#7a8fb0',
+                color: isActive ? '#6aaeff' : isDone ? '#34d399' : 'var(--text-secondary)',
               }}>
                 {isDone ? '✓' : p.num} {p.label}
               </span>
@@ -541,14 +541,14 @@ function SecurityNote() {
         {[
           {
             layer: 'Layer 1',
-            color: '#14b8a6',
+            color: 'var(--color-teal)',
             icon: '🔏',
             title: 'Digital Signature (Wax Seal)',
             text: 'The attacker would also need to forge NBFC 2\'s ECDSA private key to produce a valid signature over the manipulated amount. Without the private key, this is computationally infeasible — the trapdoor function cannot be reversed.',
           },
           {
             layer: 'Layer 2',
-            color: '#3b8cff',
+            color: 'var(--color-electric-blue)',
             icon: '⛓',
             title: 'Hash Chain (Fingerprint of Fingerprints)',
             text: 'Even with a forged signature, the attacker must recompute proof-of-work for every subsequent block faster than the entire honest network — a race they cannot win as long as honest nodes hold >50% of hash power.',
@@ -579,7 +579,7 @@ function SecurityNote() {
               </div>
               <p style={{
                 fontFamily: 'Manrope, sans-serif', fontSize: '0.8rem',
-                color: '#7a8fb0', lineHeight: 1.6, margin: 0,
+                color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0,
               }}>{item.text}</p>
             </div>
           </div>
@@ -859,7 +859,7 @@ export default function TamperTab({ blocks, setBlocks }) {
                   transition={{ duration: 0.8, repeat: Infinity }}
                   style={{
                     width: 10, height: 10, borderRadius: '50%',
-                    background: '#ef4444',
+                    background: 'var(--color-red)',
                     boxShadow: '0 0 10px rgba(239,68,68,0.7)',
                   }}
                 />
@@ -892,10 +892,10 @@ export default function TamperTab({ blocks, setBlocks }) {
                 border: '1px solid rgba(59,140,255,0.1)',
                 borderRadius: 12,
                 fontFamily: 'Manrope, sans-serif', fontSize: '0.85rem',
-                color: '#7a8fb0', lineHeight: 1.65, textAlign: 'center',
+                color: 'var(--text-secondary)', lineHeight: 1.65, textAlign: 'center',
               }}
             >
-              🎬 <strong style={{ color: '#9badc8' }}>Presentation mode:</strong> press the button above to run the full animated tamper sequence automatically.
+              🎬 <strong style={{ color: 'var(--text-secondary)' }}>Presentation mode:</strong> press the button above to run the full animated tamper sequence automatically.
               No manual input needed — designed to be demonstrated live on a projected screen.
               The sequence takes ~5 seconds and ends in a fully broken chain state.
             </motion.div>

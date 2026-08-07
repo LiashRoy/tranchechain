@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
+import { useTheme } from '../context/ThemeContext'
+import { Sun, Moon } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { GraduationCap } from 'lucide-react'
 
@@ -12,6 +14,7 @@ const NAV_LINKS = [
 ]
 
 export default function Navbar() {
+  const { theme, toggleTheme } = useTheme();
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const location = useLocation()
@@ -42,17 +45,13 @@ export default function Navbar() {
           display: 'flex',
           alignItems: 'center',
           padding: '0 24px',
-          background: scrolled
-            ? 'rgba(15,23,42,0.65)'
-            : 'rgba(15,23,42,0.2)',
+          background: scrolled ? 'var(--nav-bg)' : 'transparent',
           backdropFilter: 'blur(16px)',
           WebkitBackdropFilter: 'blur(16px)',
           transform: 'translateZ(0)',
           willChange: 'transform, backdrop-filter',
           backfaceVisibility: 'hidden',
-          borderBottom: scrolled
-            ? '1px solid rgba(37,99,235,0.15)'
-            : '1px solid rgba(37,99,235,0.06)',
+          borderBottom: scrolled ? '1px solid var(--nav-border)' : '1px solid transparent',
           transition: 'background 0.3s ease, border-color 0.3s ease',
         }}
       >
@@ -72,7 +71,7 @@ export default function Navbar() {
             width: 32,
             height: 32,
             borderRadius: '8px',
-            background: 'linear-gradient(135deg, #1e40af, #3b82f6)', // Professional blues
+            background: 'var(--color-electric-blue)', // Professional blues
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -93,7 +92,7 @@ export default function Navbar() {
             fontWeight: 800,
             fontSize: '1.15rem',
             letterSpacing: '-0.02em',
-            background: 'linear-gradient(135deg, #f8fafc 30%, #94a3b8)', // Slate
+            background: 'var(--text-primary)', // Slate
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             backgroundClip: 'text',
@@ -124,15 +123,15 @@ export default function Navbar() {
                 fontFamily: 'Manrope, sans-serif',
                 fontWeight: 500,
                 fontSize: '0.85rem',
-                color: isActive ? '#f8fafc' : '#94a3b8',
-                background: isActive ? 'rgba(37,99,235,0.12)' : 'transparent',
-                border: isActive ? '1px solid rgba(37,99,235,0.22)' : '1px solid transparent',
+                color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
+                background: isActive ? 'var(--badge-blue-bg)' : 'transparent',
+                border: isActive ? '1px solid var(--badge-blue-border)' : '1px solid transparent',
                 transition: 'all 0.18s ease',
                 whiteSpace: 'nowrap',
               })}
               onMouseEnter={e => {
                 if (!e.currentTarget.style.background.includes('0.12')) {
-                  e.currentTarget.style.color = '#cbd5e1'
+                  e.currentTarget.style.color = 'var(--text-primary)'
                   e.currentTarget.style.background = 'rgba(37,99,235,0.06)'
                 }
               }}
@@ -152,6 +151,29 @@ export default function Navbar() {
         {/* ── Right side: badge + mobile toggle ── */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginLeft: 'auto', flexShrink: 0 }}>
 
+          
+          {/* Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            aria-label="Toggle theme"
+            style={{
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              color: 'var(--text-secondary)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '6px',
+              borderRadius: '50%',
+              transition: 'color 0.2s ease, background 0.2s ease',
+            }}
+            onMouseEnter={e => e.currentTarget.style.color = 'var(--text-primary)'}
+            onMouseLeave={e => e.currentTarget.style.color = 'var(--text-secondary)'}
+          >
+            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
+
           {/* Mobile hamburger */}
           <button
             onClick={() => setMobileOpen(o => !o)}
@@ -159,7 +181,7 @@ export default function Navbar() {
             aria-label="Toggle menu"
             style={{
               display: 'none',
-              background: 'rgba(59,140,255,0.08)',
+              background: 'var(--glass-border)',
               border: '1px solid rgba(59,140,255,0.2)',
               borderRadius: '8px',
               width: 38,
@@ -167,7 +189,7 @@ export default function Navbar() {
               alignItems: 'center',
               justifyContent: 'center',
               cursor: 'pointer',
-              color: '#9badc8',
+              color: 'var(--text-secondary)',
               padding: 0,
             }}
           >
@@ -199,7 +221,7 @@ export default function Navbar() {
               left: 0,
               right: 0,
               zIndex: 99,
-              background: 'rgba(11,18,32,0.97)',
+              background: 'var(--nav-bg)',
               backdropFilter: 'blur(20px)',
               borderBottom: '1px solid rgba(59,140,255,0.14)',
               padding: '12px 16px 20px',
@@ -220,8 +242,8 @@ export default function Navbar() {
                   fontFamily: 'Manrope, sans-serif',
                   fontWeight: 500,
                   fontSize: '0.95rem',
-                  color: isActive ? '#d4e0ef' : '#7a8fb0',
-                  background: isActive ? 'rgba(59,140,255,0.12)' : 'transparent',
+                  color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
+                  background: isActive ? 'var(--badge-blue-bg)' : 'transparent',
                   display: 'block',
                 })}
               >

@@ -39,7 +39,7 @@ export default function Demo() {
                   position: 'relative',
                   padding: '10px 24px', border: 'none', background: 'transparent',
                   fontFamily: 'Manrope, sans-serif', fontWeight: 600, fontSize: '0.9rem',
-                  color: isActive ? '#fff' : '#7a8fb0', cursor: 'pointer',
+                  color: isActive ? '#fff' : 'var(--text-secondary)', cursor: 'pointer',
                   transition: 'color 0.2s', zIndex: 1
                 }}
               >
@@ -48,7 +48,7 @@ export default function Demo() {
                     layoutId="demo-tab-indicator"
                     style={{
                       position: 'absolute', inset: 0, 
-                      background: 'rgba(59,140,255,0.15)',
+                      background: 'var(--nav-border)',
                       borderRadius: 8, zIndex: -1,
                       border: '1px solid rgba(59,140,255,0.3)'
                     }}

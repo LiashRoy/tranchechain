@@ -16,11 +16,11 @@ function MiniPreviewBlock({ amount, from, milestone }) {
       border: '1px solid rgba(20,184,166,0.2)',
     }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-        <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.55rem', color: '#14b8a6', fontWeight: 600 }}>{milestone}</span>
-        <CheckCircle2 size={12} color="#10b981" />
+        <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.55rem', color: 'var(--color-teal)', fontWeight: 600 }}>{milestone}</span>
+        <CheckCircle2 size={12} color="var(--color-green)" />
       </div>
-      <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.8rem', color: '#10b981', fontWeight: 800 }}>{amount}</div>
-      <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.5rem', color: '#7a8fb0' }}>{from} → PI</div>
+      <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.8rem', color: 'var(--color-green)', fontWeight: 800 }}>{amount}</div>
+      <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.5rem', color: 'var(--text-secondary)' }}>{from} → PI</div>
     </div>
   )
 }
@@ -28,22 +28,22 @@ function MiniPreviewBlock({ amount, from, milestone }) {
 /* ─── 2. PROBLEM CARDS ──────────────────────────────────────────────────────── */
 const PROBLEMS = [
   {
-    icon: <FolderSync size={24} color="#3b82f6" />,
-    color: '#3b82f6',
+    icon: <FolderSync size={24} color="var(--color-electric-blue)" />,
+    color: 'var(--color-electric-blue)',
     title: 'The Trust Gap',
     desc: 'NBFC, Fintech Company-style platform, and institution each maintain separate records of the same tranche. No single source of truth — reconciliation happens by email.',
     tag: 'Siloed Ledgers',
   },
   {
-    icon: <ShieldAlert size={24} color="#3b82f6" />,
-    color: '#3b82f6',
+    icon: <ShieldAlert size={24} color="var(--color-electric-blue)" />,
+    color: 'var(--color-electric-blue)',
     title: 'The Double-Disbursement Risk',
     desc: 'Without a tamper-evident ledger, the same tranche can be marked "paid" twice — once by the NBFC system, once by the platform — before anyone notices.',
     tag: 'Integrity Risk',
   },
   {
-    icon: <Clock size={24} color="#3b82f6" />,
-    color: '#3b82f6',
+    icon: <Clock size={24} color="var(--color-electric-blue)" />,
+    color: 'var(--color-electric-blue)',
     title: 'The Backdating Risk',
     desc: 'Records stored in mutable databases can be silently altered after the fact. No hash chain = no proof that a tranche was disbursed on a specific date.',
     tag: 'Audit Trail Gap',
@@ -89,7 +89,7 @@ function ProblemCard({ card, i }) {
             fontFamily: 'Manrope, sans-serif',
             fontWeight: 700,
             fontSize: '1rem',
-            color: '#d4e0ef',
+            color: 'var(--text-primary)',
             margin: 0,
           }}>{card.title}</h3>
           <span style={{
@@ -105,7 +105,7 @@ function ProblemCard({ card, i }) {
         <p style={{
           fontFamily: 'Manrope, sans-serif',
           fontSize: '0.87rem',
-          color: '#7a8fb0',
+          color: 'var(--text-secondary)',
           lineHeight: 1.65,
           margin: 0,
         }}>{card.desc}</p>
@@ -116,17 +116,17 @@ function ProblemCard({ card, i }) {
 
 /* ─── 3. FLOW DIAGRAM ───────────────────────────────────────────────────────── */
 const FLOW_NODES = [
-  { id: 'nbfc',     label: 'NBFC',              sub: 'NBFC 1 · NBFC 2',   icon: <Landmark size={28} color="#3b82f6" />, color: '#3b82f6' },
-  { id: 'platform', label: 'Fintech Company', sub: 'Education Finance Node',      icon: <LinkIcon size={28} color="#3b82f6" />, color: '#3b82f6' },
-  { id: 'inst',     label: 'Institution',        sub: 'Full Ledger Copy',            icon: <Building2 size={28} color="#3b82f6" />, color: '#3b82f6' },
+  { id: 'nbfc',     label: 'NBFC',              sub: 'NBFC 1 · NBFC 2',   icon: <Landmark size={28} color="var(--color-electric-blue)" />, color: 'var(--color-electric-blue)' },
+  { id: 'platform', label: 'Fintech Company', sub: 'Education Finance Node',      icon: <LinkIcon size={28} color="var(--color-electric-blue)" />, color: 'var(--color-electric-blue)' },
+  { id: 'inst',     label: 'Institution',        sub: 'Full Ledger Copy',            icon: <Building2 size={28} color="var(--color-electric-blue)" />, color: 'var(--color-electric-blue)' },
   { id: 'student',  label: 'Student / Parent',   sub: 'Wallet — no node required',  icon: <User size={28} color="#94a3b8" />, color: '#94a3b8' },
 ]
 
 
 const TRAD_NODES = [
-  { id: 'nbfc', label: 'NBFC', sub: 'Siloed Database', icon: <Database size={28} color="#ef4444" />, color: '#ef4444' },
-  { id: 'platform', label: 'Fintech Company', sub: 'Spreadsheet / DB', icon: <FileText size={28} color="#f59e0b" />, color: '#f59e0b' },
-  { id: 'inst', label: 'Institution', sub: 'Manual Entry', icon: <Building2 size={28} color="#ef4444" />, color: '#ef4444' },
+  { id: 'nbfc', label: 'NBFC', sub: 'Siloed Database', icon: <Database size={28} color="var(--color-red)" />, color: 'var(--color-red)' },
+  { id: 'platform', label: 'Fintech Company', sub: 'Spreadsheet / DB', icon: <FileText size={28} color="var(--color-gold)" />, color: 'var(--color-gold)' },
+  { id: 'inst', label: 'Institution', sub: 'Manual Entry', icon: <Building2 size={28} color="var(--color-red)" />, color: 'var(--color-red)' },
   { id: 'student', label: 'Student / Parent', sub: 'Manual App Check', icon: <User size={28} color="#94a3b8" />, color: '#94a3b8' },
 ]
 
@@ -154,7 +154,7 @@ function TraditionalFlowDiagram() {
                 {node.icon}
               </div>
               <div style={{ textAlign: 'center' }}>
-                <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.85rem', color: '#9badc8', marginBottom: '3px' }}>{node.label}</div>
+                <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '3px' }}>{node.label}</div>
                 <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem', color: node.color, opacity: 0.75 }}>{node.sub}</div>
               </div>
             </motion.div>
@@ -166,7 +166,7 @@ function TraditionalFlowDiagram() {
                 <div style={{ position: 'absolute', top: '50%', left: 0, right: 0, height: '1.5px', borderBottom: '1.5px dashed rgba(239,68,68,0.3)', transform: 'translateY(-50%)' }} />
                 
                 {/* Label */}
-                <div style={{ position: 'absolute', top: -20, fontFamily: 'JetBrains Mono, monospace', fontSize: '0.55rem', color: '#ef4444', opacity: 0.8, whiteSpace: 'nowrap' }}>
+                <div style={{ position: 'absolute', top: -20, fontFamily: 'JetBrains Mono, monospace', fontSize: '0.55rem', color: 'var(--color-red)', opacity: 0.8, whiteSpace: 'nowrap' }}>
                   {i === 0 ? 'Email/API' : i === 1 ? 'Manual Sync' : 'Wait for Updates'}
                 </div>
                 
@@ -175,12 +175,12 @@ function TraditionalFlowDiagram() {
                   <motion.div
                     animate={{ opacity: [0.2, 1, 0.2], scale: [1, 1.1, 1] }}
                     transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut', delay: i * 0.4 }}
-                    style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', color: '#ef4444', display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 10 }}
+                    style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', color: 'var(--color-red)', display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 10 }}
                   >
                     <div style={{ background: 'rgba(239,68,68,0.15)', padding: '4px', borderRadius: '50%' }}>
                       <AlertTriangle size={16} fill="rgba(239,68,68,0.3)" />
                     </div>
-                    <div style={{ position: 'absolute', top: 26, width: '130px', textAlign: 'center', fontFamily: 'Manrope, sans-serif', fontSize: '0.55rem', color: '#ef4444', fontWeight: 700, lineHeight: 1.2, background: 'rgba(20,20,20,0.95)', padding: '4px 6px', borderRadius: '4px', border: '1px solid rgba(239,68,68,0.4)', boxShadow: '0 4px 12px rgba(239,68,68,0.15)' }}>
+                    <div style={{ position: 'absolute', top: 26, width: '130px', textAlign: 'center', fontFamily: 'Manrope, sans-serif', fontSize: '0.55rem', color: 'var(--color-red)', fontWeight: 700, lineHeight: 1.2, background: 'rgba(20,20,20,0.95)', padding: '4px 6px', borderRadius: '4px', border: '1px solid rgba(239,68,68,0.4)', boxShadow: '0 4px 12px rgba(239,68,68,0.15)' }}>
                       ⚠ Double-Disbursement Risk
                     </div>
                   </motion.div>
@@ -253,7 +253,7 @@ function FlowDiagram() {
                   fontFamily: 'Manrope, sans-serif',
                   fontWeight: 700,
                   fontSize: '0.85rem',
-                  color: '#d4e0ef',
+                  color: 'var(--text-primary)',
                   marginBottom: '3px',
                 }}>{node.label}</div>
                 <div style={{
@@ -338,8 +338,8 @@ function FlowDiagram() {
         }}
       >
         {[
-          { color: '#3b8cff', label: 'Full node — holds complete ledger copy' },
-          { color: '#9badc8', label: 'Transactor — wallet only, no node required' },
+          { color: 'var(--color-electric-blue)', label: 'Full node — holds complete ledger copy' },
+          { color: 'var(--text-secondary)', label: 'Transactor — wallet only, no node required' },
         ].map(item => (
           <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
             <div style={{
@@ -352,7 +352,7 @@ function FlowDiagram() {
             <span style={{
               fontFamily: 'Manrope, sans-serif',
               fontSize: '0.78rem',
-              color: '#7a8fb0',
+              color: 'var(--text-secondary)',
             }}>{item.label}</span>
           </div>
         ))}
@@ -386,9 +386,9 @@ function AnimatedCounter({ to, suffix = '', prefix = '', duration = 1.6 }) {
 }
 
 const STATS = [
-  { label: 'Tranche Blocks Tracked',   value: 4,   suffix: '',   prefix: '',  color: '#3b8cff' },
-  { label: 'Tamper Detection Rate',    value: 100, suffix: '%',  prefix: '',  color: '#14b8a6' },
-  { label: 'Disputes Recorded',        value: 0,   suffix: '',   prefix: '',  color: '#10b981' },
+  { label: 'Tranche Blocks Tracked',   value: 4,   suffix: '',   prefix: '',  color: 'var(--color-electric-blue)' },
+  { label: 'Tamper Detection Rate',    value: 100, suffix: '%',  prefix: '',  color: 'var(--color-teal)' },
+  { label: 'Disputes Recorded',        value: 0,   suffix: '',   prefix: '',  color: 'var(--color-green)' },
   { label: 'Avg. Verification Time',   value: 12,  suffix: 'ms', prefix: '<', color: '#a78bfa' },
 ]
 
@@ -430,7 +430,7 @@ function StatCard({ stat, i }) {
       <div style={{
         fontFamily: 'Manrope, sans-serif',
         fontSize: '0.82rem',
-        color: '#7a8fb0',
+        color: 'var(--text-secondary)',
         fontWeight: 500,
       }}>{stat.label}</div>
     </motion.div>
@@ -465,7 +465,7 @@ function SectionHeading({ eyebrow, title, sub }) {
           fontSize: '0.72rem',
           letterSpacing: '0.12em',
           textTransform: 'uppercase',
-          color: '#3b8cff',
+          color: 'var(--color-electric-blue)',
           opacity: 0.8,
           marginBottom: '12px',
         }}>
@@ -477,14 +477,14 @@ function SectionHeading({ eyebrow, title, sub }) {
         fontWeight: 800,
         fontSize: 'clamp(1.6rem, 3.5vw, 2.4rem)',
         letterSpacing: '-0.025em',
-        color: '#d4e0ef',
+        color: 'var(--text-primary)',
         margin: '0 0 12px',
       }}>{title}</h2>
       {sub && (
         <p style={{
           fontFamily: 'Manrope, sans-serif',
           fontSize: '0.95rem',
-          color: '#7a8fb0',
+          color: 'var(--text-secondary)',
           maxWidth: '500px',
           margin: '0 auto',
           lineHeight: 1.65,
@@ -524,7 +524,7 @@ function AnimatedHeadline() {
                 ? 'linear-gradient(135deg, #3b8cff, #14b8a6)'
                 : 'none',
               WebkitBackgroundClip: isLast ? 'text' : 'none',
-              WebkitTextFillColor: isLast ? 'transparent' : '#d4e0ef',
+              WebkitTextFillColor: isLast ? 'transparent' : 'var(--text-primary)',
               backgroundClip: isLast ? 'text' : 'none',
             }}
           >
@@ -606,7 +606,7 @@ export default function Home() {
               style={{
                 fontFamily: 'Manrope, sans-serif',
                 fontSize: 'clamp(1rem, 2.2vw, 1.2rem)',
-                color: '#7a8fb0',
+                color: 'var(--text-secondary)',
                 maxWidth: '580px',
                 margin: '0 0 38px',
                 lineHeight: 1.65,
@@ -652,7 +652,7 @@ export default function Home() {
                 <span key={i} style={{
                   fontFamily: 'JetBrains Mono, monospace',
                   fontSize: '0.72rem',
-                  color: '#7a8fb0',
+                  color: 'var(--text-secondary)',
                 }}>{t}</span>
               ))}
             </motion.div>
@@ -669,11 +669,11 @@ export default function Home() {
             }}
             style={{ flexShrink: 0, pointerEvents: 'none' }}
           >
-            <PhoneFrame accentColor="#14b8a6" label="" autoScroll={true}>
+            <PhoneFrame accentColor="var(--color-teal)" label="" autoScroll={true}>
               <div style={{ padding: '0 8px' }}>
                 <div style={{ padding: '12px 4px', borderBottom: '1px solid rgba(20,184,166,0.1)', marginBottom: '12px' }}>
                   <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '0.8rem', color: '#2dd4bf' }}>Active Ledger</div>
-                  <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.6rem', color: '#7a8fb0' }}>Live syncing</div>
+                  <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.6rem', color: 'var(--text-secondary)' }}>Live syncing</div>
                 </div>
                 {[1, 2, 3, 4, 5, 6].map((i) => (
                   <MiniPreviewBlock 
@@ -776,13 +776,13 @@ export default function Home() {
             gap: '16px',
             flexWrap: 'wrap',
           }}>
-            <ShieldCheck size={28} color="#3b82f6" style={{ flexShrink: 0 }} />
+            <ShieldCheck size={28} color="var(--color-electric-blue)" style={{ flexShrink: 0 }} />
             <div>
               <div style={{
                 fontFamily: 'Manrope, sans-serif',
                 fontWeight: 700,
                 fontSize: '0.95rem',
-                color: '#d4e0ef',
+                color: 'var(--text-primary)',
                 marginBottom: '6px',
               }}>
                 TrancheChain's answer: Two-layer tamper protection
@@ -790,13 +790,13 @@ export default function Home() {
               <p style={{
                 fontFamily: 'Manrope, sans-serif',
                 fontSize: '0.85rem',
-                color: '#7a8fb0',
+                color: 'var(--text-secondary)',
                 lineHeight: 1.65,
                 margin: 0,
               }}>
-                <strong style={{ color: '#14b8a6' }}>Layer 1 — Digital Signature (wax seal):</strong>{' '}
+                <strong style={{ color: 'var(--color-teal)' }}>Layer 1 — Digital Signature (wax seal):</strong>{' '}
                 catches tampering before a block is written.{' · '}
-                <strong style={{ color: '#3b8cff' }}>Layer 2 — Hash Chain (fingerprint of fingerprints):</strong>{' '}
+                <strong style={{ color: 'var(--color-electric-blue)' }}>Layer 2 — Hash Chain (fingerprint of fingerprints):</strong>{' '}
                 alter any block after the fact and every block after it turns red.
               </p>
             </div>
@@ -829,10 +829,10 @@ export default function Home() {
             {/* The Broken Traditional Flow */}
             <div style={{ marginBottom: '32px', paddingBottom: '32px', borderBottom: '1px solid rgba(239,68,68,0.1)' }}>
               <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-                <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.7rem', color: '#ef4444', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.7rem', color: 'var(--color-red)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                   The Problem: Traditional Flow
                 </span>
-                <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.85rem', color: '#7a8fb0', margin: '8px 0 0' }}>
+                <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.85rem', color: 'var(--text-secondary)', margin: '8px 0 0' }}>
                   Data is fragmented. Trust relies on manual emails and reconciliation.
                 </p>
               </div>
@@ -848,15 +848,15 @@ export default function Home() {
                 borderTop: '1px solid rgba(239,68,68,0.1)',
               }}>
                 {[
-                  { step: '01', color: '#ef4444', title: 'NBFC logs disbursement', desc: "Recorded only in NBFC's internal system" },
-                  { step: '02', color: '#f59e0b', title: 'Sent via email/spreadsheet', desc: "No verification the data wasn't altered in transit" },
-                  { step: '03', color: '#ef4444', title: 'Institution re-enters manually', desc: "Human error, no cross-check against NBFC's original record" },
+                  { step: '01', color: 'var(--color-red)', title: 'NBFC logs disbursement', desc: "Recorded only in NBFC's internal system" },
+                  { step: '02', color: 'var(--color-gold)', title: 'Sent via email/spreadsheet', desc: "No verification the data wasn't altered in transit" },
+                  { step: '03', color: 'var(--color-red)', title: 'Institution re-enters manually', desc: "Human error, no cross-check against NBFC's original record" },
                   { step: '04', color: '#94a3b8', title: 'Reconciliation happens later', desc: "Mismatches surface weeks later, or never" },
                 ].map(s => (
                   <div key={s.step} style={{ background: `rgba(239,68,68,0.02)`, border: `1px solid rgba(239,68,68,0.08)`, padding: '16px', borderRadius: '8px' }}>
                     <div style={{ fontFamily: 'JetBrains Mono', fontSize: '0.65rem', color: s.color, marginBottom: '6px' }}>STEP {s.step}</div>
-                    <div style={{ fontFamily: 'Manrope', fontSize: '0.75rem', fontWeight: 700, color: '#d4e0ef', marginBottom: '6px' }}>{s.title}</div>
-                    <div style={{ fontFamily: 'Manrope', fontSize: '0.7rem', color: '#7a8fb0', lineHeight: 1.5 }}>{s.desc}</div>
+                    <div style={{ fontFamily: 'Manrope', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '6px' }}>{s.title}</div>
+                    <div style={{ fontFamily: 'Manrope', fontSize: '0.7rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>{s.desc}</div>
                   </div>
                 ))}
               </div>
@@ -864,10 +864,10 @@ export default function Home() {
 
             {/* The TrancheChain Consensus Flow */}
             <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-              <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.7rem', color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+              <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.7rem', color: 'var(--color-green)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                 The Solution: TrancheChain Flow
               </span>
-              <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.85rem', color: '#7a8fb0', margin: '8px 0 0' }}>
+              <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.85rem', color: 'var(--text-secondary)', margin: '8px 0 0' }}>
                 All nodes are synchronized. Digital signatures and hash-chaining guarantee data integrity.
               </p>
             </div>
@@ -884,10 +884,10 @@ export default function Home() {
               borderTop: '1px solid rgba(59,140,255,0.08)',
             }}>
               {[
-                { step: '01', color: '#3b8cff', title: 'NBFC signs tranche',     desc: 'Private key creates wax seal over the tranche record.' },
-                { step: '02', color: '#14b8a6', title: 'Platform validates',      desc: 'Verifies signature, computes SHA-256, proposes new block.' },
+                { step: '01', color: 'var(--color-electric-blue)', title: 'NBFC signs tranche',     desc: 'Private key creates wax seal over the tranche record.' },
+                { step: '02', color: 'var(--color-teal)', title: 'Platform validates',      desc: 'Verifies signature, computes SHA-256, proposes new block.' },
                 { step: '03', color: '#a78bfa', title: 'Network Consensus',   desc: 'All ledger-holding nodes accept the block via PoW / PoS.' },
-                { step: '04', color: '#9badc8', title: 'Institution confirms',    desc: 'Reads its own ledger copy — no need to trust any single party.' },
+                { step: '04', color: 'var(--text-secondary)', title: 'Institution confirms',    desc: 'Reads its own ledger copy — no need to trust any single party.' },
               ].map(s => (
                 <div key={s.step} style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                   <div style={{
@@ -906,7 +906,7 @@ export default function Home() {
                   <div style={{
                     fontFamily: 'Manrope, sans-serif',
                     fontSize: '0.78rem',
-                    color: '#7a8fb0',
+                    color: 'var(--text-secondary)',
                     lineHeight: 1.55,
                   }}>{s.desc}</div>
                 </div>

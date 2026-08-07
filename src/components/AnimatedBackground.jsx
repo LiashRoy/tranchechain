@@ -82,7 +82,7 @@ function FloatingBlock({ block }) {
         </motion.div>
         <div style={{
           height: '1px',
-          background: 'rgba(59,140,255,0.08)',
+          background: 'var(--glass-border)',
           marginTop: '2px',
         }} />
         <div style={{

@@ -16,7 +16,7 @@ export default function Layout() {
     <div
       style={{
         minHeight: '100vh',
-        background: '#0B1220',
+        background: 'var(--bg-body)',
         position: 'relative',
         overflow: 'hidden',
       }}
@@ -91,7 +91,7 @@ export default function Layout() {
         <span style={{
           fontFamily: 'Manrope, sans-serif',
           fontSize: '0.78rem',
-          color: '#7a8fb0',
+          color: 'var(--text-secondary)',
         }}>
           TrancheChain — PGDM Fintech Course Prototype · Not a real financial product
         </span>

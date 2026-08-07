@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 
-export default function PhoneFrame({ accentColor = '#f59e0b', isConsensus = false, label = 'Mobile App', autoScroll = true, children }) {
+export default function PhoneFrame({ accentColor = 'var(--color-gold)', isConsensus = false, label = 'Mobile App', autoScroll = true, children }) {
   const scrollRef = useRef(null)
 
   // Subtle auto-scroll to hint at scrollability
@@ -107,19 +107,19 @@ export default function PhoneFrame({ accentColor = '#f59e0b', isConsensus = fals
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             flexShrink: 0,
           }}>
-            <span style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.65rem', color: '#d4e0ef' }}>9:41</span>
+            <span style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.65rem', color: 'var(--text-primary)' }}>9:41</span>
             <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
               {/* Signal */}
               <div style={{ display: 'flex', alignItems: 'flex-end', gap: 1 }}>
                 {[5, 8, 11, 14].map((h, i) => (
-                  <div key={i} style={{ width: 3, height: h, borderRadius: 1, background: i < 3 ? '#d4e0ef' : '#7a8fb0' }} />
+                  <div key={i} style={{ width: 3, height: h, borderRadius: 1, background: i < 3 ? 'var(--text-primary)' : 'var(--text-secondary)' }} />
                 ))}
               </div>
               {/* WiFi */}
               <svg width="14" height="10" viewBox="0 0 24 18" fill="none">
-                <path d="M12 18l2-2a2 2 0 00-4 0l2 2z" fill="#d4e0ef"/>
-                <path d="M6 13a8 8 0 0112 0" stroke="#d4e0ef" strokeWidth="2" strokeLinecap="round" fill="none"/>
-                <path d="M2 9a14 14 0 0120 0" stroke="#7a8fb0" strokeWidth="2" strokeLinecap="round" fill="none"/>
+                <path d="M12 18l2-2a2 2 0 00-4 0l2 2z" fill="var(--text-primary)"/>
+                <path d="M6 13a8 8 0 0112 0" stroke="var(--text-primary)" strokeWidth="2" strokeLinecap="round" fill="none"/>
+                <path d="M2 9a14 14 0 0120 0" stroke="var(--text-secondary)" strokeWidth="2" strokeLinecap="round" fill="none"/>
               </svg>
               {/* Battery */}
               <div style={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -128,9 +128,9 @@ export default function PhoneFrame({ accentColor = '#f59e0b', isConsensus = fals
                   border: '1px solid #7a8fb0',
                   padding: '1.5px',
                 }}>
-                  <div style={{ width: '90%', height: '100%', borderRadius: 1, background: '#10b981' }} />
+                  <div style={{ width: '90%', height: '100%', borderRadius: 1, background: 'var(--color-green)' }} />
                 </div>
-                <div style={{ width: 2, height: 5, borderRadius: '0 1px 1px 0', background: '#7a8fb0' }} />
+                <div style={{ width: 2, height: 5, borderRadius: '0 1px 1px 0', background: 'var(--text-secondary)' }} />
               </div>
             </div>
           </div>

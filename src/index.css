@@ -51,6 +51,97 @@
   --radius-pill: 999px;
 }
 
+
+:root {
+  /* LIGHT MODE (Default unless overridden by .dark) */
+  --bg-body: #f8fafc;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(15, 23, 42, 0.1);
+  --glass-shadow: rgba(0, 0, 0, 0.05);
+
+  --scrollbar-track: #f1f5f9;
+  --scrollbar-thumb: #cbd5e1;
+  --scrollbar-hover: #94a3b8;
+
+  --nav-bg: rgba(255, 255, 255, 0.7);
+  --nav-border: rgba(15, 23, 42, 0.1);
+
+  /* Semantic Colors (Maintained across modes for consistency) */
+  --color-electric-blue: #3b8cff;
+  --color-teal: #14b8a6;
+  --color-red: #ef4444;
+  --color-gold: #f59e0b;
+  --color-green: #10b981;
+
+  --badge-blue-bg: rgba(59, 140, 255, 0.15);
+  --badge-blue-text: #2563eb;
+  --badge-blue-border: rgba(59, 140, 255, 0.3);
+
+  --badge-red-bg: rgba(239, 68, 68, 0.15);
+  --badge-red-text: #dc2626;
+  --badge-red-border: rgba(239, 68, 68, 0.3);
+
+  --badge-teal-bg: rgba(20, 184, 166, 0.15);
+  --badge-teal-text: #0d9488;
+  --badge-teal-border: rgba(20, 184, 166, 0.3);
+
+  --bg-grid-line: rgba(15, 23, 42, 0.06);
+
+  --btn-ghost-text: #475569;
+  --btn-ghost-border: rgba(15, 23, 42, 0.15);
+  --btn-ghost-hover-bg: rgba(15, 23, 42, 0.05);
+  --btn-ghost-hover-text: #0f172a;
+  --btn-ghost-hover-border: rgba(15, 23, 42, 0.25);
+  
+  --dropdown-bg: #ffffff;
+  --dropdown-text: #0f172a;
+}
+
+html.dark {
+  /* DARK MODE */
+  --bg-body: #0B1220;
+  --text-primary: #d4e0ef;
+  --text-secondary: #7a8fb0;
+  
+  --glass-bg: rgba(15, 26, 46, 0.6);
+  --glass-border: rgba(59, 140, 255, 0.12);
+  --glass-shadow: rgba(59, 140, 255, 0.08);
+
+  --scrollbar-track: #0B1220;
+  --scrollbar-thumb: #243352;
+  --scrollbar-hover: #3b8cff;
+
+  --nav-bg: rgba(11, 18, 32, 0.65);
+  --nav-border: rgba(59, 140, 255, 0.15);
+
+  --badge-blue-bg: rgba(59, 140, 255, 0.12);
+  --badge-blue-text: #6aaeff;
+  --badge-blue-border: rgba(59, 140, 255, 0.25);
+
+  --badge-red-bg: rgba(239, 68, 68, 0.12);
+  --badge-red-text: #f87171;
+  --badge-red-border: rgba(239, 68, 68, 0.25);
+
+  --badge-teal-bg: rgba(20, 184, 166, 0.12);
+  --badge-teal-text: #2dd4bf;
+  --badge-teal-border: rgba(20, 184, 166, 0.25);
+
+  --bg-grid-line: rgba(59, 140, 255, 0.04);
+
+  --btn-ghost-text: #9badc8;
+  --btn-ghost-border: rgba(59, 140, 255, 0.2);
+  --btn-ghost-hover-bg: rgba(59, 140, 255, 0.06);
+  --btn-ghost-hover-text: #d4e0ef;
+  --btn-ghost-hover-border: rgba(59, 140, 255, 0.5);
+
+  --dropdown-bg: #0f172a;
+  --dropdown-text: #d4e0ef;
+}
+
+
 /* ─── Base Reset & Global Styles ───────────────────────────────────────────── */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -64,11 +155,12 @@ body {
   margin: 0;
   padding: 0;
   font-family: var(--font-sans);
-  background-color: #0B1220;
-  color: #d4e0ef;
+  background-color: var(--bg-body);
+  color: var(--text-primary);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* ─── Scrollbar ─────────────────────────────────────────────────────────────── */
@@ -77,14 +169,14 @@ body {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0B1220;
+  background: var(--scrollbar-track);
 }
 ::-webkit-scrollbar-thumb {
-  background: #243352;
+  background: var(--scrollbar-thumb);
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #3b8cff;
+  background: var(--scrollbar-hover);
 }
 
 /* ─── Mono font utility ─────────────────────────────────────────────────────── */
@@ -94,20 +186,20 @@ body {
 
 /* ─── Glassmorphism card ─────────────────────────────────────────────────────── */
 .glass-card {
-  background: rgba(15, 26, 46, 0.6);
+  background: var(--glass-bg);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(59, 140, 255, 0.12);
+  border: 1px solid var(--glass-border);
   border-radius: 14px;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   transform: translateZ(0);
   will-change: transform, backdrop-filter;
   backface-visibility: hidden;
 }
 
 .glass-card:hover {
-  border-color: rgba(59, 140, 255, 0.28);
-  box-shadow: 0 0 32px rgba(59, 140, 255, 0.08);
+  border-color: rgba(59, 140, 255, 0.3);
+  box-shadow: 0 0 32px var(--glass-shadow);
 }
 
 /* ─── Glow utilities ─────────────────────────────────────────────────────────── */
@@ -142,8 +234,8 @@ body {
 /* ─── Background grid pattern ────────────────────────────────────────────────── */
 .bg-grid {
   background-image:
-    linear-gradient(rgba(59, 140, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(59, 140, 255, 0.04) 1px, transparent 1px);
+    linear-gradient(var(--bg-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--bg-grid-line) 1px, transparent 1px);
   background-size: 48px 48px;
 }
 
@@ -178,20 +270,20 @@ body {
   gap: 8px;
   padding: 10px 22px;
   background: transparent;
-  color: #9badc8;
+  color: var(--btn-ghost-text);
   font-family: var(--font-sans);
   font-weight: 500;
   font-size: 0.875rem;
-  border: 1px solid rgba(59, 140, 255, 0.2);
+  border: 1px solid var(--btn-ghost-border);
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.15s ease;
   text-decoration: none;
 }
 .btn-ghost:hover {
-  color: #d4e0ef;
-  border-color: rgba(59, 140, 255, 0.5);
-  background: rgba(59, 140, 255, 0.06);
+  color: var(--btn-ghost-hover-text);
+  border-color: var(--btn-ghost-hover-border);
+  background: var(--btn-ghost-hover-bg);
 }
 
 /* ─── Badge ──────────────────────────────────────────────────────────────────── */
@@ -206,26 +298,14 @@ body {
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
-.badge-blue {
-  background: rgba(59, 140, 255, 0.12);
-  color: #6aaeff;
-  border: 1px solid rgba(59, 140, 255, 0.25);
-}
-.badge-teal {
-  background: rgba(20, 184, 166, 0.12);
-  color: #2dd4bf;
-  border: 1px solid rgba(20, 184, 166, 0.25);
-}
+.badge-blue { background: var(--badge-blue-bg); color: var(--badge-blue-text); border: 1px solid var(--badge-blue-border); }
+.badge-teal { background: var(--badge-teal-bg); color: var(--badge-teal-text); border: 1px solid var(--badge-teal-border); }
 .badge-gold {
   background: rgba(245, 158, 11, 0.12);
   color: #fbbf24;
   border: 1px solid rgba(245, 158, 11, 0.25);
 }
-.badge-red {
-  background: rgba(239, 68, 68, 0.12);
-  color: #f87171;
-  border: 1px solid rgba(239, 68, 68, 0.25);
-}
+.badge-red { background: var(--badge-red-bg); color: var(--badge-red-text); border: 1px solid var(--badge-red-border); }
 .badge-green {
   background: rgba(16, 185, 129, 0.12);
   color: #34d399;
@@ -239,6 +319,6 @@ body {
 
 /* Fix dropdown options visibility */
 option {
-  background-color: #0f172a;
-  color: #d4e0ef;
+  background-color: var(--dropdown-bg);
+  color: var(--dropdown-text);
 }

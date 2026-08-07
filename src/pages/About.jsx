@@ -21,7 +21,7 @@ export default function About() {
           fontSize: 'clamp(1.8rem, 4vw, 2.8rem)',
           letterSpacing: '-0.02em',
           margin: '0 0 14px',
-          color: '#d4e0ef',
+          color: 'var(--text-primary)',
         }}>
           About TrancheChain
         </h1>
@@ -38,7 +38,7 @@ export default function About() {
           fontFamily: 'Manrope, sans-serif',
           fontWeight: 700,
           fontSize: '1.1rem',
-          color: '#d4e0ef',
+          color: 'var(--text-primary)',
           margin: '0 0 14px',
         }}>
           Course Context
@@ -46,7 +46,7 @@ export default function About() {
         <p style={{
           fontFamily: 'Manrope, sans-serif',
           fontSize: '0.9rem',
-          color: '#7a8fb0',
+          color: 'var(--text-secondary)',
           lineHeight: 1.7,
           margin: 0,
         }}>
@@ -65,7 +65,7 @@ export default function About() {
           fontFamily: 'Manrope, sans-serif',
           fontWeight: 700,
           fontSize: '1.1rem',
-          color: '#d4e0ef',
+          color: 'var(--text-primary)',
           margin: '0 0 14px',
         }}>
           Team Members
@@ -85,7 +85,7 @@ export default function About() {
               fontFamily: 'Manrope, sans-serif',
               fontWeight: 800,
               fontSize: '0.9rem',
-              color: '#d4e0ef',
+              color: 'var(--text-primary)',
               textTransform: 'uppercase',
               letterSpacing: '0.02em',
             }}>{name}</span>

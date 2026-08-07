@@ -21,14 +21,14 @@ const computeHash = (b) => sha256(bStr(b))
 const trunc = (h = '', n = 10) => `${h.slice(0, n)}…`
 
 const ENTITY_INITIALS = { 'NBFC 1': 'N1', 'NBFC 2': 'N2', 'NBFC 3': 'N3', 'Partner Institute': 'PI' }
-const ENTITY_COLORS = { 'NBFC 1': '#3b8cff', 'NBFC 2': '#14b8a6', 'NBFC 3': '#a78bfa', 'Partner Institute': '#10b981' }
+const ENTITY_COLORS = { 'NBFC 1': 'var(--color-electric-blue)', 'NBFC 2': 'var(--color-teal)', 'NBFC 3': '#a78bfa', 'Partner Institute': 'var(--color-green)' }
 
 /* ═══════════════════════════════════════════════════════════════════════════
    BLOCK EXPLORER MODAL
 ═══════════════════════════════════════════════════════════════════════════ */
-function BlockModal({ block, onClose, accentColor = '#3b8cff' }) {
+function BlockModal({ block, onClose, accentColor = 'var(--color-electric-blue)' }) {
   if (!block) return null;
-  const statusColor = block.status === 'tampered' ? '#f59e0b' : block.status === 'invalid' ? '#ef4444' : '#10b981';
+  const statusColor = block.status === 'tampered' ? 'var(--color-gold)' : block.status === 'invalid' ? 'var(--color-red)' : 'var(--color-green)';
   
   return (
     <div style={{
@@ -50,7 +50,7 @@ function BlockModal({ block, onClose, accentColor = '#3b8cff' }) {
       >
         <button onClick={onClose} style={{
           position: 'absolute', top: 16, right: 16,
-          background: 'transparent', border: 'none', color: '#7a8fb0', cursor: 'pointer',
+          background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer',
           padding: 4, display: 'flex', alignItems: 'center', justifyContent: 'center',
         }}><XCircle size={20} /></button>
         
@@ -64,31 +64,31 @@ function BlockModal({ block, onClose, accentColor = '#3b8cff' }) {
             {block.status === 'valid' ? <CheckCircle2 size={20} /> : block.status === 'tampered' ? <AlertTriangle size={20} /> : <XCircle size={20} />}
           </div>
           <div>
-            <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '1.2rem', color: '#d4e0ef' }}>Block #{block.index}</div>
+            <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '1.2rem', color: 'var(--text-primary)' }}>Block #{block.index}</div>
             <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.8rem', color: statusColor }}>{block.status.toUpperCase()}</div>
           </div>
         </div>
 
         <div style={{ display: 'grid', gap: 12 }}>
           <div style={{ background: '#10192c', padding: '12px', borderRadius: 8, border: '1px solid #1e293b' }}>
-            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: '#7a8fb0', marginBottom: 4 }}>TRANSACTION</div>
-            <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.9rem', color: '#d4e0ef' }}>{block.from} → {block.to}</div>
+            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: 'var(--text-secondary)', marginBottom: 4 }}>TRANSACTION</div>
+            <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.9rem', color: 'var(--text-primary)' }}>{block.from} → {block.to}</div>
           </div>
           <div style={{ background: '#10192c', padding: '12px', borderRadius: 8, border: '1px solid #1e293b' }}>
-            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: '#7a8fb0', marginBottom: 4 }}>AMOUNT</div>
+            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: 'var(--text-secondary)', marginBottom: 4 }}>AMOUNT</div>
             <div style={{ fontFamily: 'JetBrains Mono, monospace', fontWeight: 800, fontSize: '1.1rem', color: statusColor }}>{block.amount}</div>
           </div>
           <div style={{ background: '#10192c', padding: '12px', borderRadius: 8, border: '1px solid #1e293b' }}>
-            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: '#7a8fb0', marginBottom: 4 }}>TIMESTAMP</div>
-            <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.9rem', color: '#d4e0ef' }}>{block.timestamp}</div>
+            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: 'var(--text-secondary)', marginBottom: 4 }}>TIMESTAMP</div>
+            <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.9rem', color: 'var(--text-primary)' }}>{block.timestamp}</div>
           </div>
           <div style={{ background: '#10192c', padding: '12px', borderRadius: 8, border: '1px solid #1e293b', overflow: 'hidden' }}>
-            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: '#7a8fb0', marginBottom: 4 }}>BLOCK HASH (SHA-256)</div>
-            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem', color: '#14b8a6', wordBreak: 'break-all' }}>{block.hash || 'Pending Computation...'}</div>
+            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: 'var(--text-secondary)', marginBottom: 4 }}>BLOCK HASH (SHA-256)</div>
+            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem', color: 'var(--color-teal)', wordBreak: 'break-all' }}>{block.hash || 'Pending Computation...'}</div>
           </div>
           {block.prevHash && (
             <div style={{ background: '#10192c', padding: '12px', borderRadius: 8, border: '1px solid #1e293b', overflow: 'hidden' }}>
-              <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: '#7a8fb0', marginBottom: 4 }}>PREVIOUS HASH</div>
+              <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: 'var(--text-secondary)', marginBottom: 4 }}>PREVIOUS HASH</div>
               <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem', color: '#94a3b8', wordBreak: 'break-all' }}>{block.prevHash}</div>
             </div>
           )}
@@ -103,9 +103,9 @@ function BlockModal({ block, onClose, accentColor = '#3b8cff' }) {
 ═══════════════════════════════════════════════════════════════════════════ */
 function PortalBlock({ block, accentColor, style = {}, onClick }) {
   const statusColor =
-    block.status === 'tampered' ? '#f59e0b' :
-    block.status === 'invalid'  ? '#ef4444' :
-    block.status === 'pending'  ? '#3b8cff' : '#10b981'
+    block.status === 'tampered' ? 'var(--color-gold)' :
+    block.status === 'invalid'  ? 'var(--color-red)' :
+    block.status === 'pending'  ? 'var(--color-electric-blue)' : 'var(--color-green)'
 
   const bg =
     block.status === 'tampered' ? 'rgba(245,158,11,0.07)' :
@@ -148,7 +148,7 @@ function PortalBlock({ block, accentColor, style = {}, onClick }) {
             transition={{ duration: 0.4 }}
             style={{ width: 6, height: 6, borderRadius: '50%', boxShadow: `0 0 5px ${statusColor}80` }}
           />
-          <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.58rem', color: '#7a8fb0' }}>
+          <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.58rem', color: 'var(--text-secondary)' }}>
             #{block.index}
           </span>
         </div>
@@ -188,7 +188,7 @@ function PortalBlock({ block, accentColor, style = {}, onClick }) {
             fontSize: '1.05rem',
             color: block.status === 'tampered' ? '#fbbf24' :
                    block.status === 'invalid'  ? '#f87171' : 
-                   block.status === 'pending'  ? '#6aaeff' : '#10b981',
+                   block.status === 'pending'  ? '#6aaeff' : 'var(--color-green)',
             letterSpacing: '-0.01em',
           }}
         >{block.amount}</motion.div>
@@ -232,7 +232,7 @@ function BrowserFrame({ url, accentColor, isConsensus, children }) {
         display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0,
       }}>
         <div style={{ display: 'flex', gap: 5, flexShrink: 0 }}>
-          {['#ef4444', '#f59e0b', '#10b981'].map((c, i) => (
+          {['var(--color-red)', 'var(--color-gold)', 'var(--color-green)'].map((c, i) => (
             <div key={i} style={{ width: 10, height: 10, borderRadius: '50%', background: c, opacity: 0.85 }} />
           ))}
         </div>
@@ -245,7 +245,7 @@ function BrowserFrame({ url, accentColor, isConsensus, children }) {
             <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
           </svg>
           <span style={{
-            fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem', color: '#7a8fb0',
+            fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem', color: 'var(--text-secondary)',
             overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
           }}>{url}</span>
         </div>
@@ -264,27 +264,27 @@ function BrowserFrame({ url, accentColor, isConsensus, children }) {
    NODE CONTENTS
 ═══════════════════════════════════════════════════════════════════════════ */
 function NBFCContent({ chain, onBlockClick, step, setStep, pendingBlock }) {
-  const accentColor = '#3b8cff'
+  const accentColor = 'var(--color-electric-blue)'
   return (
     <div style={{ padding: '14px', display: 'flex', flexDirection: 'column', gap: 10 }}>
       <div style={{
         padding: '12px 14px', borderRadius: 10,
-        background: 'rgba(59,140,255,0.08)',
+        background: 'var(--glass-border)',
         border: '1px solid rgba(59,140,255,0.18)',
         display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4,
       }}>
         <div style={{
           width: 32, height: 32, borderRadius: 9,
-          background: 'rgba(59,140,255,0.15)', border: '1px solid rgba(59,140,255,0.35)',
+          background: 'var(--nav-border)', border: '1px solid rgba(59,140,255,0.35)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           fontFamily: 'JetBrains Mono, monospace', fontWeight: 700,
           fontSize: '0.7rem', color: accentColor, flexShrink: 0,
         }}>AF</div>
         <div>
-          <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '1.05rem', color: '#d4e0ef' }}>
+          <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '1.05rem', color: 'var(--text-primary)' }}>
             NBFC 3
           </div>
-          <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem', color: '#7a8fb0' }}>
+          <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
             Disbursement Console
           </div>
         </div>
@@ -329,7 +329,7 @@ function NBFCContent({ chain, onBlockClick, step, setStep, pendingBlock }) {
               <button 
                 onClick={() => setStep(1)}
                 style={{
-                  padding: '8px 16px', borderRadius: 8, background: '#3b8cff', color: '#fff',
+                  padding: '8px 16px', borderRadius: 8, background: 'var(--color-electric-blue)', color: '#fff',
                   border: 'none', fontFamily: 'Manrope, sans-serif', fontWeight: 700, cursor: 'pointer',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6
                 }}>
@@ -349,7 +349,7 @@ function NBFCContent({ chain, onBlockClick, step, setStep, pendingBlock }) {
 }
 
 function FintechCompanyContent({ chain, onBlockClick, step, pendingBlock }) {
-  const accentColor = '#f59e0b'
+  const accentColor = 'var(--color-gold)'
   return (
     <div style={{ padding: '0 10px 10px' }}>
       <div style={{
@@ -368,7 +368,7 @@ function FintechCompanyContent({ chain, onBlockClick, step, pendingBlock }) {
           <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '1.05rem', color: '#fbbf24' }}>
             Fintech Company
           </div>
-          <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem', color: '#7a8fb0' }}>
+          <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
             Education Finance
           </div>
         </div>
@@ -389,20 +389,20 @@ function FintechCompanyContent({ chain, onBlockClick, step, pendingBlock }) {
             }}>
               <span style={{
                 fontFamily: 'Manrope, sans-serif', fontSize: '0.6rem',
-                color: '#f59e0b', fontWeight: 600,
+                color: 'var(--color-gold)', fontWeight: 600,
               }}>{block.milestone}</span>
               <span style={{
                 fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.62rem',
-                color: '#10b981',
+                color: 'var(--color-green)',
               }}><CheckCircle2 size={16} /></span>
             </div>
             <div style={{ padding: '8px 10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div>
                 <div style={{
                   fontFamily: 'JetBrains Mono, monospace', fontWeight: 800,
-                  fontSize: '0.92rem', color: '#10b981',
+                  fontSize: '0.92rem', color: 'var(--color-green)',
                 }}>{block.amount}</div>
-                <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.55rem', color: '#7a8fb0' }}>
+                <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.55rem', color: 'var(--text-secondary)' }}>
                   {block.from} → PI
                 </div>
               </div>
@@ -434,20 +434,20 @@ function FintechCompanyContent({ chain, onBlockClick, step, pendingBlock }) {
             }}>
               <span style={{
                 fontFamily: 'Manrope, sans-serif', fontSize: '0.6rem',
-                color: step === 2 ? '#f59e0b' : '#3b8cff', fontWeight: 600,
+                color: step === 2 ? 'var(--color-gold)' : 'var(--color-electric-blue)', fontWeight: 600,
               }}>{pendingBlock.milestone}</span>
               <span style={{
                 fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.62rem',
-                color: step === 2 ? '#10b981' : '#3b8cff',
+                color: step === 2 ? 'var(--color-green)' : 'var(--color-electric-blue)',
               }}>{step === 2 ? <CheckCircle2 size={16} /> : "Awaiting Inst..."}</span>
             </div>
             <div style={{ padding: '8px 10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div>
                 <div style={{
                   fontFamily: 'JetBrains Mono, monospace', fontWeight: 800,
-                  fontSize: '0.92rem', color: step === 2 ? '#10b981' : '#3b8cff',
+                  fontSize: '0.92rem', color: step === 2 ? 'var(--color-green)' : 'var(--color-electric-blue)',
                 }}>{pendingBlock.amount}</div>
-                <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.55rem', color: '#7a8fb0' }}>
+                <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.55rem', color: 'var(--text-secondary)' }}>
                   {pendingBlock.from} → PI
                 </div>
               </div>
@@ -471,7 +471,7 @@ function FintechCompanyContent({ chain, onBlockClick, step, pendingBlock }) {
         border: '1px solid rgba(20,184,166,0.15)',
         display: 'flex', alignItems: 'center', gap: 8,
       }}>
-        <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#10b981', boxShadow: '0 0 6px #10b98180' }} />
+        <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--color-green)', boxShadow: '0 0 6px #10b98180' }} />
         <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.6rem', color: '#34d399' }}>
           All nodes in consensus
         </span>
@@ -497,10 +497,10 @@ function InstitutionContent({ chain, onBlockClick, step, setStep, pendingBlock }
           fontSize: '1rem', flexShrink: 0,
         }}><Building2 size={16} /></div>
         <div>
-          <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '1.05rem', color: '#d4e0ef' }}>
+          <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '1.05rem', color: 'var(--text-primary)' }}>
             Partner Institute
           </div>
-          <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem', color: '#7a8fb0' }}>
+          <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
             Finance Office Portal
           </div>
         </div>
@@ -567,7 +567,7 @@ function InstitutionContent({ chain, onBlockClick, step, setStep, pendingBlock }
         border: '1px solid rgba(167,139,250,0.15)',
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
       }}>
-        <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.72rem', color: '#7a8fb0' }}>
+        <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.72rem', color: 'var(--text-secondary)' }}>
           Total received
         </span>
         <span style={{
@@ -614,10 +614,10 @@ export default function Dashboard() {
             <span className="badge badge-teal" style={{ marginBottom: 14, display: 'inline-flex' }}>
               <Globe size={16} /> Multi-Node Ledger View
             </span>
-            <h1 style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: 'clamp(1.7rem, 4vw, 2.8rem)', letterSpacing: '-0.03em', color: '#d4e0ef', margin: '0 0 10px' }}>
+            <h1 style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: 'clamp(1.7rem, 4vw, 2.8rem)', letterSpacing: '-0.03em', color: 'var(--text-primary)', margin: '0 0 10px' }}>
               Three Nodes · One Truth
             </h1>
-            <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.9rem', color: '#7a8fb0', margin: 0, maxWidth: 560, lineHeight: 1.65 }}>
+            <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.9rem', color: 'var(--text-secondary)', margin: 0, maxWidth: 560, lineHeight: 1.65 }}>
               NBFC, Fintech Company, and Institution each hold an independent, identical copy of the ledger. Show a live transaction propagating across the network.
             </p>
           </div>
@@ -639,9 +639,9 @@ export default function Dashboard() {
           {/* NBFC Portal */}
           <div style={{ flex: 1, minWidth: isMobile ? '100%' : 320, display: 'flex', flexDirection: 'column', gap: 8 }}>
             <div style={{ textAlign: 'center' }}>
-              <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem', color: '#3b8cff', textTransform: 'uppercase', letterSpacing: '0.08em' }}>💻 NBFC Node</span>
+              <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem', color: 'var(--color-electric-blue)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>💻 NBFC Node</span>
             </div>
-            <BrowserFrame url="nbfc.tranchechain.fi/console" accentColor="#3b8cff">
+            <BrowserFrame url="nbfc.tranchechain.fi/console" accentColor="var(--color-electric-blue)">
               <NBFCContent chain={CLEAN_CHAIN} onBlockClick={setSelectedBlock} step={transactionStep} setStep={setTransactionStep} pendingBlock={pendingBlock} />
             </BrowserFrame>
           </div>
@@ -649,9 +649,9 @@ export default function Dashboard() {
           {/* Fintech App */}
           <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
              <div style={{ textAlign: 'center' }}>
-              <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem', color: '#f59e0b', textTransform: 'uppercase', letterSpacing: '0.08em' }}>📱 Fintech Node</span>
+              <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem', color: 'var(--color-gold)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>📱 Fintech Node</span>
             </div>
-            <PhoneFrame accentColor="#f59e0b">
+            <PhoneFrame accentColor="var(--color-gold)">
               <FintechCompanyContent chain={CLEAN_CHAIN} onBlockClick={setSelectedBlock} step={transactionStep} pendingBlock={pendingBlock} />
             </PhoneFrame>
           </div>
@@ -672,15 +672,15 @@ export default function Dashboard() {
           display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 16,
         }}>
           {[
-            { icon: <Landmark size={18} color="#9badc8" />,  title: 'Village Council',  text: 'No single node has the authority to alter the ledger. The majority decides what is true — exactly like a village council.' },
-            { icon: <BookOpen size={18} color="#9badc8" />, title: 'Wikipedia Analogy', text: 'Anyone can read the ledger. You trust the cryptographic proof, not the institution presenting it.' },
-            { icon: <Settings size={18} color="#9badc8" />,  title: 'Node vs Transactor', text: 'NBFC, Fintech Company, and Institution are nodes — they hold full ledger copies. The student is a transactor — they only need a wallet address.' },
+            { icon: <Landmark size={18} color="var(--text-secondary)" />,  title: 'Village Council',  text: 'No single node has the authority to alter the ledger. The majority decides what is true — exactly like a village council.' },
+            { icon: <BookOpen size={18} color="var(--text-secondary)" />, title: 'Wikipedia Analogy', text: 'Anyone can read the ledger. You trust the cryptographic proof, not the institution presenting it.' },
+            { icon: <Settings size={18} color="var(--text-secondary)" />,  title: 'Node vs Transactor', text: 'NBFC, Fintech Company, and Institution are nodes — they hold full ledger copies. The student is a transactor — they only need a wallet address.' },
           ].map(item => (
             <div key={item.title} style={{ display: 'flex', gap: 12 }}>
               <span style={{ fontSize: '1.2rem', flexShrink: 0 }}>{item.icon}</span>
               <div>
                 <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.8rem', color: '#b8c9df', marginBottom: 4 }}>{item.title}</div>
-                <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.78rem', color: '#7a8fb0', lineHeight: 1.55 }}>{item.text}</div>
+                <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.78rem', color: 'var(--text-secondary)', lineHeight: 1.55 }}>{item.text}</div>
               </div>
             </div>
           ))}

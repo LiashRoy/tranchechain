@@ -32,11 +32,11 @@ const uid = () => `block-${++_uid}-${Date.now()}`
 ═══════════════════════════════════════════════════════════════════════════ */
 
 const ENTITIES = {
-  'NBFC 1':          { color: '#3b8cff', bg: 'rgba(59,140,255,0.15)',  initials: 'N1', type: 'nbfc' },
-  'NBFC 2':          { color: '#14b8a6', bg: 'rgba(20,184,166,0.15)',  initials: 'N2', type: 'nbfc' },
+  'NBFC 1':          { color: 'var(--color-electric-blue)', bg: 'var(--nav-border)',  initials: 'N1', type: 'nbfc' },
+  'NBFC 2':          { color: 'var(--color-teal)', bg: 'rgba(20,184,166,0.15)',  initials: 'N2', type: 'nbfc' },
   'NBFC 3':       { color: '#a78bfa', bg: 'rgba(167,139,250,0.15)',initials: 'N3', type: 'nbfc' },
-  'Fintech Company':   { color: '#f59e0b', bg: 'rgba(245,158,11,0.15)', initials: 'GQ', type: 'platform' },
-  'Partner Institute':      { color: '#10b981', bg: 'rgba(16,185,129,0.15)', initials: 'PI', type: 'institution' },
+  'Fintech Company':   { color: 'var(--color-gold)', bg: 'rgba(245,158,11,0.15)', initials: 'GQ', type: 'platform' },
+  'Partner Institute':      { color: 'var(--color-green)', bg: 'rgba(16,185,129,0.15)', initials: 'PI', type: 'institution' },
   'BITS Pilani':          { color: '#f87171', bg: 'rgba(248,113,113,0.15)',initials: 'BP', type: 'institution' },
   'IIM Bangalore':        { color: '#fbbf24', bg: 'rgba(251,191,36,0.15)', initials: 'IB', type: 'institution' },
 }
@@ -116,7 +116,7 @@ function validateChain(blocks) {
 ═══════════════════════════════════════════════════════════════════════════ */
 
 function EntityBadge({ name, size = 28 }) {
-  const meta = ENTITIES[name] || { color: '#7a8fb0', bg: 'rgba(122,143,176,0.15)', initials: '??' }
+  const meta = ENTITIES[name] || { color: 'var(--text-secondary)', bg: 'rgba(122,143,176,0.15)', initials: '??' }
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
       <div style={{
@@ -139,9 +139,9 @@ function EntityBadge({ name, size = 28 }) {
 
 function StatusBadge({ status }) {
   const cfg = {
-    valid:    { label: '✓ Valid',    color: '#10b981', bg: 'rgba(16,185,129,0.12)',  border: 'rgba(16,185,129,0.3)' },
-    tampered: { label: '⚠ Tampered', color: '#f59e0b', bg: 'rgba(245,158,11,0.12)', border: 'rgba(245,158,11,0.35)' },
-    invalid:  { label: '✗ Broken',   color: '#ef4444', bg: 'rgba(239,68,68,0.12)',   border: 'rgba(239,68,68,0.35)' },
+    valid:    { label: '✓ Valid',    color: 'var(--color-green)', bg: 'rgba(16,185,129,0.12)',  border: 'rgba(16,185,129,0.3)' },
+    tampered: { label: '⚠ Tampered', color: 'var(--color-gold)', bg: 'rgba(245,158,11,0.12)', border: 'rgba(245,158,11,0.35)' },
+    invalid:  { label: '✗ Broken',   color: 'var(--color-red)', bg: 'rgba(239,68,68,0.12)',   border: 'rgba(239,68,68,0.35)' },
   }
   const s = cfg[status] || cfg.valid
   return (
@@ -154,7 +154,7 @@ function StatusBadge({ status }) {
   )
 }
 
-function HashField({ label, value, color = '#14b8a6' }) {
+function HashField({ label, value, color = 'var(--color-teal)' }) {
   const [expanded, setExpanded] = useState(false)
   return (
     <div>
@@ -194,7 +194,7 @@ function HashField({ label, value, color = '#14b8a6' }) {
 ═══════════════════════════════════════════════════════════════════════════ */
 
 function ChainConnector({ broken, pulsing, isMobile }) {
-  const color = broken ? '#ef4444' : '#14b8a6'
+  const color = broken ? 'var(--color-red)' : 'var(--color-teal)'
   const glow = broken ? 'rgba(239,68,68,0.4)' : 'rgba(20,184,166,0.4)'
   return (
     <motion.div
@@ -334,15 +334,15 @@ function BlockCard({ block, isNew, visiblyInvalid, onTamper }) {
           <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
             <div style={{
               width: 7, height: 7, borderRadius: '50%',
-              background: effectiveStatus === 'invalid' ? '#ef4444' :
-                          effectiveStatus === 'tampered' ? '#f59e0b' : '#10b981',
+              background: effectiveStatus === 'invalid' ? 'var(--color-red)' :
+                          effectiveStatus === 'tampered' ? 'var(--color-gold)' : 'var(--color-green)',
               boxShadow: `0 0 6px ${effectiveStatus === 'invalid' ? '#ef444480' :
                            effectiveStatus === 'tampered' ? '#f59e0b80' : '#10b98180'}`,
               transition: 'background 0.4s, box-shadow 0.4s',
             }} />
             <span style={{
               fontFamily: 'JetBrains Mono, monospace',
-              fontSize: '0.68rem', color: '#7a8fb0',
+              fontSize: '0.68rem', color: 'var(--text-secondary)',
             }}>Block #{block.index}</span>
           </div>
           <StatusBadge status={effectiveStatus} />
@@ -359,13 +359,13 @@ function BlockCard({ block, isNew, visiblyInvalid, onTamper }) {
           </div>
 
           {/* Divider */}
-          <div style={{ height: 1, background: 'rgba(59,140,255,0.08)' }} />
+          <div style={{ height: 1, background: 'var(--glass-border)' }} />
 
           {/* Amount + Milestone */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             <div style={{
               fontFamily: 'JetBrains Mono, monospace', fontWeight: 700,
-              fontSize: '1.12rem', color: '#10b981', letterSpacing: '-0.01em',
+              fontSize: '1.12rem', color: 'var(--color-green)', letterSpacing: '-0.01em',
             }}>
               {block.amount}
             </div>
@@ -380,12 +380,12 @@ function BlockCard({ block, isNew, visiblyInvalid, onTamper }) {
           </div>
 
           {/* Divider */}
-          <div style={{ height: 1, background: 'rgba(59,140,255,0.08)' }} />
+          <div style={{ height: 1, background: 'var(--glass-border)' }} />
 
           {/* Hashes */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
-            <HashField label="prev_hash" value={block.prevHash} color="#f59e0b" />
-            <HashField label="this_hash" value={block.hash}    color="#14b8a6" />
+            <HashField label="prev_hash" value={block.prevHash} color="var(--color-gold)" />
+            <HashField label="this_hash" value={block.hash}    color="var(--color-teal)" />
           </div>
         </div>
 
@@ -485,7 +485,7 @@ function TamperModal({ block, onSave, onClose }) {
           <button
             onClick={onClose}
             style={{
-              background: 'none', border: 'none', color: '#7a8fb0',
+              background: 'none', border: 'none', color: 'var(--text-secondary)',
               cursor: 'pointer', fontSize: '1.1rem', padding: 4,
             }}
           >✕</button>
@@ -495,29 +495,29 @@ function TamperModal({ block, onSave, onClose }) {
         <div style={{ padding: isMobile ? '16px' : '24px' }}>
           <div style={{
             fontFamily: 'Manrope, sans-serif', fontSize: '0.84rem',
-            color: '#7a8fb0', lineHeight: 1.6, marginBottom: 20,
+            color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: 20,
           }}>
             You are about to alter the <strong style={{ color: '#fbbf24' }}>amount</strong> in Block #{block.index}.
             This will change the block's fingerprint — breaking every block after it.
-            This demonstrates <strong style={{ color: '#3b8cff' }}>Layer 2 tamper protection</strong>.
+            This demonstrates <strong style={{ color: 'var(--color-electric-blue)' }}>Layer 2 tamper protection</strong>.
           </div>
 
           <div style={{ marginBottom: 20 }}>
             <div style={{
               fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem',
-              color: '#7a8fb0', textTransform: 'uppercase', letterSpacing: '0.08em',
+              color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.08em',
               marginBottom: 6,
             }}>Current amount</div>
             <div style={{
               fontFamily: 'JetBrains Mono, monospace', fontSize: '1rem',
-              color: '#10b981', fontWeight: 700,
+              color: 'var(--color-green)', fontWeight: 700,
             }}>{block.amount}</div>
           </div>
 
           <div style={{ marginBottom: 24 }}>
             <label style={{
               fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem',
-              color: '#f59e0b', textTransform: 'uppercase', letterSpacing: '0.08em',
+              color: 'var(--color-gold)', textTransform: 'uppercase', letterSpacing: '0.08em',
               display: 'block', marginBottom: 6,
             }}>New amount (₹)</label>
             <input
@@ -562,7 +562,7 @@ function TamperModal({ block, onSave, onClose }) {
                 padding: '11px 18px', borderRadius: 9,
                 background: 'transparent',
                 border: '1px solid rgba(59,140,255,0.2)',
-                color: '#7a8fb0', fontFamily: 'Manrope, sans-serif',
+                color: 'var(--text-secondary)', fontFamily: 'Manrope, sans-serif',
                 fontWeight: 500, fontSize: '0.88rem', cursor: 'pointer',
               }}
             >
@@ -587,7 +587,7 @@ const selectStyle = {
   background: 'rgba(59,140,255,0.06)',
   border: '1px solid rgba(59,140,255,0.2)',
   borderRadius: 9, padding: '9px 12px',
-  color: '#d4e0ef', outline: 'none', cursor: 'pointer',
+  color: 'var(--text-primary)', outline: 'none', cursor: 'pointer',
   appearance: 'none',
 }
 
@@ -643,9 +643,9 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
 
   const btnColor =
     isComputing ? '#6aaeff' :
-    isSigning   ? '#14b8a6' :
-    addPhase === 'done' ? '#10b981' :
-    '#3b8cff'
+    isSigning   ? 'var(--color-teal)' :
+    addPhase === 'done' ? 'var(--color-green)' :
+    'var(--color-electric-blue)'
 
   return (
     <div style={{
@@ -662,7 +662,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
         {/* Sidebar heading */}
         <div style={{
           fontFamily: 'Manrope, sans-serif', fontWeight: 700,
-          fontSize: '0.9rem', color: '#d4e0ef', marginBottom: 18,
+          fontSize: '0.9rem', color: 'var(--text-primary)', marginBottom: 18,
           display: 'flex', alignItems: 'center', gap: 8,
         }}>
           <span>⛓</span> Add New Tranche
@@ -673,7 +673,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
           <div>
             <label style={{
               fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem',
-              color: '#7a8fb0', textTransform: 'uppercase', letterSpacing: '0.08em',
+              color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.08em',
               display: 'block', marginBottom: 5,
             }}>From (NBFC Node)</label>
             <div style={{ position: 'relative' }}>
@@ -687,7 +687,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
                 {FROM_OPTIONS.map(o => <option key={o} value={o}>{o}</option>)}
               </select>
               <svg style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}
-                width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#7a8fb0" strokeWidth="2">
+                width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" strokeWidth="2">
                 <path d="M6 9l6 6 6-6"/>
               </svg>
             </div>
@@ -697,7 +697,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
           <div>
             <label style={{
               fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem',
-              color: '#7a8fb0', textTransform: 'uppercase', letterSpacing: '0.08em',
+              color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.08em',
               display: 'block', marginBottom: 5,
             }}>To (Institution / Platform)</label>
             <div style={{ position: 'relative' }}>
@@ -711,7 +711,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
                 {TO_OPTIONS.map(o => <option key={o} value={o}>{o}</option>)}
               </select>
               <svg style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}
-                width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#7a8fb0" strokeWidth="2">
+                width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" strokeWidth="2">
                 <path d="M6 9l6 6 6-6"/>
               </svg>
             </div>
@@ -721,7 +721,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
           <div>
             <label style={{
               fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem',
-              color: '#7a8fb0', textTransform: 'uppercase', letterSpacing: '0.08em',
+              color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.08em',
               display: 'block', marginBottom: 5,
             }}>Milestone</label>
             <div style={{ position: 'relative' }}>
@@ -739,7 +739,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
                 ))}
               </select>
               <svg style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}
-                width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#7a8fb0" strokeWidth="2">
+                width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" strokeWidth="2">
                 <path d="M6 9l6 6 6-6"/>
               </svg>
             </div>
@@ -749,7 +749,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
           <div>
             <label style={{
               fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem',
-              color: '#7a8fb0', textTransform: 'uppercase', letterSpacing: '0.08em',
+              color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.08em',
               display: 'block', marginBottom: 5,
             }}>Amount (₹)</label>
             <input
@@ -764,7 +764,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
                 background: 'rgba(16,185,129,0.06)',
                 border: '1px solid rgba(16,185,129,0.2)',
                 borderRadius: 9, padding: '9px 12px',
-                color: '#10b981', outline: 'none',
+                color: 'var(--color-green)', outline: 'none',
                 opacity: busy ? 0.5 : 1,
               }}
               onFocus={e => { e.target.style.borderColor = 'rgba(16,185,129,0.5)' }}
@@ -783,7 +783,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
               >
                 <div style={{
                   fontFamily: 'JetBrains Mono, monospace', fontSize: '0.58rem',
-                  color: '#7a8fb0', textTransform: 'uppercase', letterSpacing: '0.08em',
+                  color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.08em',
                   marginBottom: 4,
                 }}>Computing fingerprint…</div>
                 <motion.div
@@ -816,7 +816,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
                 >🔏</motion.span>
                 <span style={{
                   fontFamily: 'Manrope, sans-serif', fontSize: '0.78rem',
-                  color: '#14b8a6',
+                  color: 'var(--color-teal)',
                 }}>Applying digital signature (wax seal)…</span>
               </motion.div>
             )}
@@ -832,7 +832,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
                 exit={{ opacity: 0 }}
                 style={{
                   padding: '9px 12px', borderRadius: 8,
-                  background: 'rgba(239,68,68,0.1)',
+                  background: 'var(--badge-red-border)',
                   border: '1px solid rgba(239,68,68,0.3)',
                   fontFamily: 'Manrope, sans-serif', fontSize: '0.78rem',
                   color: '#f87171', lineHeight: 1.4,
@@ -880,7 +880,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
       <div className="glass-card" style={{ padding: '14px 16px' }}>
         <div style={{
           fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem',
-          color: '#3b8cff', textTransform: 'uppercase', letterSpacing: '0.08em',
+          color: 'var(--color-electric-blue)', textTransform: 'uppercase', letterSpacing: '0.08em',
           marginBottom: 7,
         }}>Loan Reference</div>
         <div style={{
@@ -889,7 +889,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
         }}>{LOAN_ID}</div>
         <div style={{
           fontFamily: 'Manrope, sans-serif', fontSize: '0.74rem',
-          color: '#7a8fb0', lineHeight: 1.55,
+          color: 'var(--text-secondary)', lineHeight: 1.55,
         }}>
           Each disbursement milestone can only appear once in the chain.
           Attempting to re-add a disbursed milestone will be rejected as a
@@ -924,7 +924,7 @@ function StatsBar({ blocks, onReset, onRemoveTamper }) {
         transition={{ duration: 1.5, repeat: Infinity }}
         style={{
           width: 9, height: 9, borderRadius: '50%', flexShrink: 0,
-          background: isClean ? '#10b981' : '#ef4444',
+          background: isClean ? 'var(--color-green)' : 'var(--color-red)',
           boxShadow: `0 0 8px ${isClean ? '#10b98180' : '#ef444480'}`,
           transition: 'background 0.4s, box-shadow 0.4s',
         }}
@@ -932,13 +932,13 @@ function StatsBar({ blocks, onReset, onRemoveTamper }) {
 
       {[
         { label: 'Chain Length', value: `${blocks.length}` },
-        { label: 'Valid Blocks', value: `${valid}`, color: '#10b981' },
-        { label: 'Status', value: isClean ? '✓ Verified' : '⚠ Compromised', color: isClean ? '#10b981' : '#ef4444' },
+        { label: 'Valid Blocks', value: `${valid}`, color: 'var(--color-green)' },
+        { label: 'Status', value: isClean ? '✓ Verified' : '⚠ Compromised', color: isClean ? 'var(--color-green)' : 'var(--color-red)' },
         { label: 'Verification Time', value: '<12ms', color: '#a78bfa' },
       ].map(s => (
         <div key={s.label} style={{ display: 'flex', gap: 6, alignItems: 'baseline' }}>
           <span style={{
-            fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem', color: '#7a8fb0',
+            fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem', color: 'var(--text-secondary)',
           }}>{s.label}:</span>
           <motion.span
             key={s.value}
@@ -946,7 +946,7 @@ function StatsBar({ blocks, onReset, onRemoveTamper }) {
             animate={{ opacity: 1, y: 0 }}
             style={{
               fontFamily: 'JetBrains Mono, monospace', fontWeight: 700,
-              fontSize: '0.82rem', color: s.color || '#d4e0ef',
+              fontSize: '0.82rem', color: s.color || 'var(--text-primary)',
             }}
           >{s.value}</motion.span>
         </div>
@@ -959,7 +959,7 @@ function StatsBar({ blocks, onReset, onRemoveTamper }) {
             style={{
               display: 'flex', alignItems: 'center', gap: 6,
               padding: '6px 14px', borderRadius: 8,
-              background: 'rgba(16,185,129,0.1)',
+              background: 'var(--badge-teal-border)',
               border: '1px solid rgba(16,185,129,0.25)',
               color: '#34d399', fontFamily: 'Manrope, sans-serif',
               fontWeight: 600, fontSize: '0.75rem', cursor: 'pointer',
@@ -970,7 +970,7 @@ function StatsBar({ blocks, onReset, onRemoveTamper }) {
               e.currentTarget.style.borderColor = 'rgba(16,185,129,0.5)'
             }}
             onMouseLeave={e => {
-              e.currentTarget.style.background = 'rgba(16,185,129,0.1)'
+              e.currentTarget.style.background = 'var(--badge-teal-border)'
               e.currentTarget.style.borderColor = 'rgba(16,185,129,0.25)'
             }}
           >
@@ -1023,7 +1023,7 @@ function TamperBanner({ info, onDismiss }) {
       style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '12px 18px', borderRadius: 10,
-        background: 'rgba(239,68,68,0.1)',
+        background: 'var(--badge-red-border)',
         border: '1.5px solid rgba(239,68,68,0.35)',
         gap: 10, flexWrap: 'wrap',
       }}
