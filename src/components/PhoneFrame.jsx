@@ -53,32 +53,32 @@ export default function PhoneFrame({ accentColor = 'var(--color-gold)', isConsen
         <div style={{
           position: 'absolute', right: -4, top: '32%',
           width: 4, height: 42, borderRadius: '0 3px 3px 0',
-          background: 'var(--bg-body)',
+          background: '#1c2438',
         }} />
         {/* Volume up — left */}
         <div style={{
           position: 'absolute', left: -4, top: '25%',
           width: 4, height: 28, borderRadius: '3px 0 0 3px',
-          background: 'var(--bg-body)',
+          background: '#1c2438',
         }} />
         {/* Volume down — left */}
         <div style={{
           position: 'absolute', left: -4, top: '35%',
           width: 4, height: 28, borderRadius: '3px 0 0 3px',
-          background: 'var(--bg-body)',
+          background: '#1c2438',
         }} />
         {/* Silent toggle — left */}
         <div style={{
           position: 'absolute', left: -4, top: '16%',
           width: 4, height: 16, borderRadius: '3px 0 0 3px',
-          background: 'var(--bg-body)',
+          background: '#1c2438',
         }} />
 
         {/* Screen */}
         <div style={{
           width: '100%', height: '100%',
           borderRadius: 38,
-          background: 'var(--bg-body)',
+          background: '#070b12',
           overflow: 'hidden',
           position: 'relative',
           display: 'flex', flexDirection: 'column',
@@ -88,17 +88,17 @@ export default function PhoneFrame({ accentColor = 'var(--color-gold)', isConsen
             position: 'absolute', top: 10, left: '50%',
             transform: 'translateX(-50%)',
             width: 88, height: 26, borderRadius: 14,
-            background: 'var(--bg-body)',
+            background: '#000',
             zIndex: 10,
             display: 'flex', alignItems: 'center', justifyContent: 'space-around',
             padding: '0 14px',
           }}>
             {/* Camera */}
-            <div style={{ width: 10, height: 10, borderRadius: '50%', background: 'var(--bg-body)', border: '1px solid #1a2030' }}>
-              <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--bg-body)', margin: '1px auto' }} />
+            <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#0d1017', border: '1px solid #1a2030' }}>
+              <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#111', margin: '1px auto' }} />
             </div>
             {/* Microphone dot */}
-            <div style={{ width: 5, height: 5, borderRadius: '50%', background: 'var(--bg-body)' }} />
+            <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#0d1017' }} />
           </div>
 
           {/* Status bar */}
@@ -159,7 +159,7 @@ export default function PhoneFrame({ accentColor = 'var(--color-gold)', isConsen
           }}>
             <div style={{
               width: 80, height: 4, borderRadius: 999,
-              background: 'var(--glass-border)',
+              background: 'rgba(255,255,255,0.2)',
             }} />
           </div>
         </div>
