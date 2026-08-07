@@ -463,7 +463,7 @@ function ChainBlock({ block, index, totalBlocks, inView, animDelay }) {
       initial={{ opacity: 0, y: 20 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ delay: animDelay, duration: 0.45 }}
-      style={{ flex: 1, minWidth: 200, maxWidth: 280 }}
+      style={{ flex: 1, minWidth: 240, maxWidth: 350 }}
     >
       <div className="glass-card" style={{ padding: '0', overflow: 'hidden' }}>
         {/* Block header */}
@@ -472,7 +472,7 @@ function ChainBlock({ block, index, totalBlocks, inView, animDelay }) {
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         }}>
           <span style={{
-            fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: 'var(--color-electric-blue)',
+            fontFamily: 'JetBrains Mono, monospace', fontSize: '0.78rem', color: 'var(--color-electric-blue)',
           }}>Block #{block.index}</span>
           <div style={{
             width: 7, height: 7, borderRadius: '50%', background: 'var(--color-green)',
@@ -490,11 +490,11 @@ function ChainBlock({ block, index, totalBlocks, inView, animDelay }) {
           ].map(({ k, v, c }) => (
             <div key={k} style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
               <span style={{
-                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.58rem', color: 'var(--text-secondary)',
+                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: 'var(--text-secondary)',
                 textTransform: 'uppercase', letterSpacing: '0.06em',
               }}>{k}</span>
               <span style={{
-                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.7rem', color: c,
+                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.85rem', color: c,
               }}>{v}</span>
             </div>
           ))}
@@ -503,11 +503,11 @@ function ChainBlock({ block, index, totalBlocks, inView, animDelay }) {
             {/* prev_hash */}
             <div>
               <span style={{
-                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.58rem', color: 'var(--color-gold)',
+                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: 'var(--color-gold)',
                 textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: '2px',
               }}>prev_hash</span>
               <span style={{
-                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.7rem',
+                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.85rem',
                 color: isFirst ? 'var(--text-secondary)' : 'var(--color-gold)',
                 background: isFirst ? 'transparent' : 'rgba(245,158,11,0.08)',
                 borderRadius: '4px', padding: isFirst ? '0' : '2px 6px',
@@ -517,11 +517,11 @@ function ChainBlock({ block, index, totalBlocks, inView, animDelay }) {
             {/* this_hash */}
             <div>
               <span style={{
-                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.58rem', color: 'var(--color-teal)',
+                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: 'var(--color-teal)',
                 textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: '2px',
               }}>this_hash</span>
               <span style={{
-                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.7rem', color: 'var(--color-teal)',
+                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.85rem', color: 'var(--color-teal)',
                 background: 'rgba(20,184,166,0.08)', borderRadius: '4px', padding: '2px 6px',
               }}>{trunc(block.hash, 8)}</span>
             </div>
@@ -536,7 +536,7 @@ function ChainConnector({ fromHash, toBlock, inView, delay }) {
   return (
     <div style={{
       display: 'flex', flexDirection: 'column', alignItems: 'center',
-      justifyContent: 'center', gap: '4px', width: '70px', flexShrink: 0,
+      justifyContent: 'center', gap: '4px', minWidth: '50px', flex: 1,
     }}>
       {/* Animated arrow line */}
       <div style={{ position: 'relative', width: '100%', height: '28px', display: 'flex', alignItems: 'center' }}>
@@ -612,7 +612,7 @@ function Section3() {
           overflowX: 'auto', paddingBottom: '8px',
         }}>
           <div style={{
-            display: 'flex', alignItems: 'center', gap: '0',
+            display: 'flex', alignItems: 'center', gap: '0', justifyContent: 'space-between',
             minWidth: '700px',
           }}>
             {STATIC_CHAIN.map((block, i) => (
