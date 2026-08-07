@@ -55,13 +55,13 @@ function EntityPill({ name }) {
         width: 30, height: 30, borderRadius: 8,
         background: `${m.color}20`, border: `1.5px solid ${m.color}50`,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontFamily: 'JetBrains Mono, monospace', fontWeight: 800,
-        fontSize: '0.85rem', color: m.color,
+        fontFamily: 'JetBrains Mono, monospace', fontWeight: 700,
+        fontSize: '0.68rem', color: m.color,
         flexShrink: 0,
       }}>{m.initials}</div>
       <span style={{
-        fontFamily: 'Manrope, sans-serif', fontWeight: 800,
-        fontSize: '1.02rem', color: 'var(--text-primary)',
+        fontFamily: 'Manrope, sans-serif', fontWeight: 600,
+        fontSize: '0.82rem', color: 'var(--text-primary)',
       }}>{name}</span>
     </div>
   )
@@ -75,14 +75,14 @@ function HashLine({ label, value, color, strikethrough = false, typingValue = nu
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
       <span style={{
-        fontFamily: 'JetBrains Mono, monospace', fontSize: '0.72rem',
+        fontFamily: 'JetBrains Mono, monospace', fontSize: '0.58rem',
         color, opacity: 0.65, textTransform: 'uppercase', letterSpacing: '0.08em',
       }}>{label}</span>
 
       <div style={{ position: 'relative', minHeight: 20 }}>
         {/* Original hash — can strike through */}
         <div style={{
-          fontFamily: 'JetBrains Mono, monospace', fontSize: '0.81rem',
+          fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem',
           color: strikethrough ? `${color}40` : color,
           textDecoration: strikethrough ? 'line-through' : 'none',
           wordBreak: 'break-all', lineHeight: 1.4,
@@ -99,7 +99,7 @@ function HashLine({ label, value, color, strikethrough = false, typingValue = nu
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               style={{
-                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.81rem',
+                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem',
                 color: 'var(--color-red)', wordBreak: 'break-all', lineHeight: 1.4,
                 marginTop: 4,
                 background: 'rgba(239,68,68,0.08)',
@@ -228,16 +228,16 @@ function DemoBlock({
                 }}
               />
               <span style={{
-                fontFamily: 'JetBrains Mono, monospace', fontWeight: 800,
-                fontSize: '0.98rem', color: 'var(--text-secondary)',
+                fontFamily: 'JetBrains Mono, monospace', fontWeight: 700,
+                fontSize: '0.78rem', color: 'var(--text-secondary)',
               }}>Block #{block.index}</span>
             </div>
             <motion.span
               animate={{ color: statusColor }}
               transition={{ duration: 0.4 }}
               style={{
-                fontFamily: 'Manrope, sans-serif', fontWeight: 800,
-                fontSize: '0.94rem',
+                fontFamily: 'Manrope, sans-serif', fontWeight: 700,
+                fontSize: '0.75rem',
               }}
             >
               {statusIcon} {status === 'valid' ? 'Valid' : status === 'tampered' ? 'Tampered' : 'Broken'}
@@ -250,7 +250,7 @@ function DemoBlock({
             <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
               <EntityPill name={block.from} />
               <div style={{
-                fontFamily: 'Manrope, sans-serif', fontSize: '0.90rem',
+                fontFamily: 'Manrope, sans-serif', fontSize: '0.72rem',
                 color: 'var(--text-secondary)', paddingLeft: 8,
               }}>↓ disburses to</div>
               <EntityPill name={block.to} />
@@ -262,8 +262,8 @@ function DemoBlock({
             {/* Milestone + Amount */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
               <div style={{
-                fontFamily: 'Manrope, sans-serif', fontSize: '0.95rem',
-                color: 'var(--color-electric-blue)', fontWeight: 800,
+                fontFamily: 'Manrope, sans-serif', fontSize: '0.76rem',
+                color: 'var(--color-electric-blue)', fontWeight: 500,
               }}>{block.milestone}</div>
 
               {/* AMOUNT — animated glitch target */}
@@ -278,7 +278,7 @@ function DemoBlock({
                 style={{
                   fontFamily: 'JetBrains Mono, monospace',
                   fontWeight: 800,
-                  fontSize: '1.88rem',
+                  fontSize: '1.5rem',
                   letterSpacing: '-0.02em',
                   lineHeight: 1,
                   color:
@@ -292,7 +292,7 @@ function DemoBlock({
               </motion.div>
 
               <div style={{
-                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem',
+                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem',
                 color: 'var(--text-secondary)',
               }}>{block.timestamp}</div>
             </div>
@@ -392,7 +392,7 @@ function DemoConnector({ broken, shockwavePassing }) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ type: 'spring', stiffness: 400, damping: 18 }}
             style={{
-              fontSize: '1.25rem', lineHeight: 1, marginTop: 4,
+              fontSize: '1rem', lineHeight: 1, marginTop: 4,
               filter: 'drop-shadow(0 0 4px rgba(239,68,68,0.6))',
             }}
           >💥</motion.div>
@@ -431,7 +431,7 @@ function PhaseIndicator({ currentPhase }) {
               }}
             >
               <span style={{
-                fontFamily: 'Manrope, sans-serif', fontSize: '0.90rem',
+                fontFamily: 'Manrope, sans-serif', fontSize: '0.72rem',
                 fontWeight: isActive ? 700 : 400,
                 color: isActive ? 'var(--color-electric-blue)' : isDone ? 'var(--color-green)' : 'var(--text-secondary)',
               }}>
@@ -472,7 +472,7 @@ function TamperBanner() {
         <motion.div
           animate={{ scale: [1, 1.15, 1], rotate: [-3, 3, -3, 0] }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          style={{ fontSize: '2.50rem', lineHeight: 1 }}
+          style={{ fontSize: '2rem', lineHeight: 1 }}
         >
           🚨
         </motion.div>
@@ -486,8 +486,8 @@ function TamperBanner() {
             TAMPERING DETECTED
           </div>
           <div style={{
-            fontFamily: 'Manrope, sans-serif', fontWeight: 800,
-            fontSize: '1.13rem', color: 'rgba(248,113,113,0.75)',
+            fontFamily: 'Manrope, sans-serif', fontWeight: 500,
+            fontSize: '0.9rem', color: 'rgba(248,113,113,0.75)',
           }}>
             Chain broken at Tranche 2 · 3 blocks compromised
           </div>
@@ -501,7 +501,7 @@ function TamperBanner() {
             padding: '4px 12px', borderRadius: 999,
             background: 'rgba(239,68,68,0.15)',
             border: '1px solid rgba(239,68,68,0.35)',
-            fontFamily: 'JetBrains Mono, monospace', fontSize: '0.85rem',
+            fontFamily: 'JetBrains Mono, monospace', fontSize: '0.68rem',
             color: 'var(--color-red)',
           }}>{label}</span>
         ))}
@@ -528,8 +528,8 @@ function SecurityNote() {
       }}
     >
       <div style={{
-        fontFamily: 'Manrope, sans-serif', fontWeight: 800,
-        fontSize: '1.06rem', color: 'var(--color-electric-blue)', marginBottom: 10,
+        fontFamily: 'Manrope, sans-serif', fontWeight: 700,
+        fontSize: '0.85rem', color: 'var(--color-electric-blue)', marginBottom: 10,
         display: 'flex', alignItems: 'center', gap: 8,
       }}>
         <span>🛡️</span> Why this fraud can't be hidden — Two-Layer Protection
@@ -561,7 +561,7 @@ function SecurityNote() {
               width: 36, height: 36, borderRadius: 9,
               background: `${item.color}15`, border: `1px solid ${item.color}30`,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: '1.25rem', flexShrink: 0,
+              fontSize: '1rem', flexShrink: 0,
             }}>{item.icon}</div>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
@@ -569,16 +569,16 @@ function SecurityNote() {
                   padding: '2px 8px', borderRadius: 999,
                   background: `${item.color}15`,
                   border: `1px solid ${item.color}25`,
-                  fontFamily: 'JetBrains Mono, monospace', fontSize: '0.78rem',
+                  fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem',
                   color: item.color,
                 }}>{item.layer}</span>
                 <span style={{
-                  fontFamily: 'Manrope, sans-serif', fontWeight: 800,
-                  fontSize: '1.00rem', color: 'var(--text-primary)',
+                  fontFamily: 'Manrope, sans-serif', fontWeight: 600,
+                  fontSize: '0.8rem', color: 'var(--text-primary)',
                 }}>{item.title}</span>
               </div>
               <p style={{
-                fontFamily: 'Manrope, sans-serif', fontSize: '1.00rem',
+                fontFamily: 'Manrope, sans-serif', fontSize: '0.8rem',
                 color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0,
               }}>{item.text}</p>
             </div>
@@ -803,12 +803,12 @@ export default function TamperTab({ blocks, setBlocks }) {
                   padding: '18px 44px', borderRadius: 14, border: 'none',
                   background: 'linear-gradient(135deg, #ef4444, #dc2626)',
                   color: '#ffffff', fontFamily: 'Manrope, sans-serif',
-                  fontWeight: 800, fontSize: '1.38rem', cursor: 'pointer',
+                  fontWeight: 800, fontSize: '1.1rem', cursor: 'pointer',
                   boxShadow: '0 8px 32px rgba(239,68,68,0.35)',
                   letterSpacing: '-0.01em',
                 }}
               >
-                <span style={{ fontSize: '1.75rem' }}>🔨</span>
+                <span style={{ fontSize: '1.4rem' }}>🔨</span>
                 Attempt Tampering
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                   <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -829,7 +829,7 @@ export default function TamperTab({ blocks, setBlocks }) {
                     background: 'rgba(59,140,255,0.1)',
                     border: '1.5px solid rgba(59,140,255,0.35)',
                     color: 'var(--color-electric-blue)', fontFamily: 'Manrope, sans-serif',
-                    fontWeight: 800, fontSize: '1.19rem', cursor: 'pointer',
+                    fontWeight: 700, fontSize: '0.95rem', cursor: 'pointer',
                     transition: 'all 0.15s',
                   }}
                   onMouseEnter={e => { e.currentTarget.style.background = 'rgba(59,140,255,0.18)' }}
@@ -864,8 +864,8 @@ export default function TamperTab({ blocks, setBlocks }) {
                   }}
                 />
                 <span style={{
-                  fontFamily: 'Manrope, sans-serif', fontWeight: 800,
-                  fontSize: '1.13rem', color: 'var(--color-red)',
+                  fontFamily: 'Manrope, sans-serif', fontWeight: 600,
+                  fontSize: '0.9rem', color: 'var(--color-red)',
                 }}>Tampering sequence running…</span>
               </motion.div>
             )}
@@ -891,7 +891,7 @@ export default function TamperTab({ blocks, setBlocks }) {
                 background: 'rgba(59,140,255,0.04)',
                 border: '1px solid rgba(59,140,255,0.1)',
                 borderRadius: 12,
-                fontFamily: 'Manrope, sans-serif', fontSize: '1.06rem',
+                fontFamily: 'Manrope, sans-serif', fontSize: '0.85rem',
                 color: 'var(--text-secondary)', lineHeight: 1.65, textAlign: 'center',
               }}
             >
