@@ -153,7 +153,7 @@ function PortalBlock({ block, accentColor, style = {}, onClick }) {
           </span>
         </div>
         <span style={{
-          fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.6rem',
+          fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '0.6rem',
           color: statusColor,
         }}>
           {block.status === 'valid' ? <><CheckCircle2 size={16} /> Valid</> : 
@@ -277,11 +277,11 @@ function NBFCContent({ chain, onBlockClick, step, setStep, pendingBlock }) {
           width: 32, height: 32, borderRadius: 9,
           background: 'var(--nav-border)', border: '1px solid rgba(59,140,255,0.35)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontFamily: 'JetBrains Mono, monospace', fontWeight: 700,
+          fontFamily: 'JetBrains Mono, monospace', fontWeight: 800,
           fontSize: '0.7rem', color: accentColor, flexShrink: 0,
         }}>AF</div>
         <div>
-          <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '1.05rem', color: 'var(--text-primary)' }}>
+          <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '1.05rem', color: 'var(--text-primary)' }}>
             NBFC 3
           </div>
           <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
@@ -293,7 +293,7 @@ function NBFCContent({ chain, onBlockClick, step, setStep, pendingBlock }) {
             padding: '3px 8px', borderRadius: 999,
             background: 'rgba(16,185,129,0.12)',
             border: '1px solid rgba(16,185,129,0.3)',
-            fontFamily: 'Manrope, sans-serif', fontWeight: 700,
+            fontFamily: 'Manrope, sans-serif', fontWeight: 800,
             fontSize: '0.6rem', color: '#34d399',
           }}><CheckCircle2 size={16} /> SYNCED</div>
         </div>
@@ -322,7 +322,7 @@ function NBFCContent({ chain, onBlockClick, step, setStep, pendingBlock }) {
               background: 'rgba(59,140,255,0.1)', border: '1px dashed rgba(59,140,255,0.4)',
               display: 'flex', flexDirection: 'column', gap: 10
             }}>
-              <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem', color: '#6aaeff', fontWeight: 600 }}>
+              <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem', color: '#6aaeff', fontWeight: 800 }}>
                 Pending Disbursement (Semester 3)
               </div>
               <PortalBlock block={pendingBlock} accentColor={accentColor} />
@@ -330,7 +330,7 @@ function NBFCContent({ chain, onBlockClick, step, setStep, pendingBlock }) {
                 onClick={() => setStep(1)}
                 style={{
                   padding: '8px 16px', borderRadius: 8, background: 'var(--color-electric-blue)', color: '#ffffff',
-                  border: 'none', fontFamily: 'Manrope, sans-serif', fontWeight: 700, cursor: 'pointer',
+                  border: 'none', fontFamily: 'Manrope, sans-serif', fontWeight: 800, cursor: 'pointer',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6
                 }}>
                 <PenTool size={16} /> Approve & Sign Transaction
@@ -389,10 +389,10 @@ function FintechCompanyContent({ chain, onBlockClick, step, pendingBlock }) {
             }}>
               <span style={{
                 fontFamily: 'Manrope, sans-serif', fontSize: '0.6rem',
-                color: 'var(--color-gold)', fontWeight: 600,
+                color: 'var(--color-gold)', fontWeight: 800,
               }}>{block.milestone}</span>
               <span style={{
-                fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.62rem',
+                fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '0.62rem',
                 color: 'var(--color-green)',
               }}><CheckCircle2 size={16} /></span>
             </div>
@@ -434,10 +434,10 @@ function FintechCompanyContent({ chain, onBlockClick, step, pendingBlock }) {
             }}>
               <span style={{
                 fontFamily: 'Manrope, sans-serif', fontSize: '0.6rem',
-                color: step === 2 ? 'var(--color-gold)' : 'var(--color-electric-blue)', fontWeight: 600,
+                color: step === 2 ? 'var(--color-gold)' : 'var(--color-electric-blue)', fontWeight: 800,
               }}>{pendingBlock.milestone}</span>
               <span style={{
-                fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.62rem',
+                fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '0.62rem',
                 color: step === 2 ? 'var(--color-green)' : 'var(--color-electric-blue)',
               }}>{step === 2 ? <CheckCircle2 size={16} /> : "Awaiting Inst..."}</span>
             </div>
@@ -497,7 +497,7 @@ function InstitutionContent({ chain, onBlockClick, step, setStep, pendingBlock }
           fontSize: '1rem', flexShrink: 0,
         }}><Building2 size={16} /></div>
         <div>
-          <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '1.05rem', color: 'var(--text-primary)' }}>
+          <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '1.05rem', color: 'var(--text-primary)' }}>
             Partner Institute
           </div>
           <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
@@ -509,7 +509,7 @@ function InstitutionContent({ chain, onBlockClick, step, setStep, pendingBlock }
             padding: '3px 8px', borderRadius: 999,
             background: 'rgba(16,185,129,0.12)',
             border: '1px solid rgba(16,185,129,0.3)',
-            fontFamily: 'Manrope, sans-serif', fontWeight: 700,
+            fontFamily: 'Manrope, sans-serif', fontWeight: 800,
             fontSize: '0.6rem', color: '#34d399',
           }}><CheckCircle2 size={16} /> VERIFIED</div>
         </div>
@@ -538,7 +538,7 @@ function InstitutionContent({ chain, onBlockClick, step, setStep, pendingBlock }
               background: 'rgba(167,139,250,0.1)', border: '1px dashed rgba(167,139,250,0.4)',
               display: 'flex', flexDirection: 'column', gap: 10
             }}>
-              <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem', color: '#c4b5fd', fontWeight: 600 }}>
+              <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem', color: '#c4b5fd', fontWeight: 800 }}>
                 Incoming Transfer Detected (Unverified)
               </div>
               <PortalBlock block={pendingBlock} accentColor={accentColor} />
@@ -624,7 +624,7 @@ export default function Dashboard() {
           <div>
             <button onClick={() => setTransactionStep(0)} style={{
               padding: '10px 20px', borderRadius: 8, background: 'var(--glass-border)', color: '#ffffff',
-              border: '1px solid rgba(255,255,255,0.1)', fontFamily: 'Manrope, sans-serif', fontWeight: 600, cursor: 'pointer',
+              border: '1px solid rgba(255,255,255,0.1)', fontFamily: 'Manrope, sans-serif', fontWeight: 800, cursor: 'pointer',
             }}>
               RESET DASHBOARD
             </button>
@@ -679,7 +679,7 @@ export default function Dashboard() {
             <div key={item.title} style={{ display: 'flex', gap: 12 }}>
               <span style={{ fontSize: '1.2rem', flexShrink: 0 }}>{item.icon}</span>
               <div>
-                <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: 4 }}>{item.title}</div>
+                <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: 4 }}>{item.title}</div>
                 <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.78rem', color: 'var(--text-secondary)', lineHeight: 1.55 }}>{item.text}</div>
               </div>
             </div>

@@ -87,7 +87,7 @@ function SectionLabel({ num, label, color = 'var(--color-electric-blue)' }) {
         width: 32, height: 32, borderRadius: '8px',
         background: `${color}18`, border: `1px solid ${color}35`,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontFamily: 'JetBrains Mono, monospace', fontWeight: 700,
+        fontFamily: 'JetBrains Mono, monospace', fontWeight: 800,
         fontSize: '0.75rem', color,
       }}>{num}</div>
       <span style={{
@@ -248,7 +248,7 @@ function Section1() {
           {/* Avalanche demo */}
           <div className="glass-card" style={{ padding: '24px', borderColor: 'rgba(245,158,11,0.2)' }}>
             <div style={{
-              fontFamily: 'Manrope, sans-serif', fontWeight: 600, fontSize: '0.85rem',
+              fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '0.85rem',
               color: '#fbbf24', marginBottom: '16px',
             }}>
               ⚡ Avalanche Effect — change one character, everything changes
@@ -291,7 +291,7 @@ function Section1() {
                   border: '1px solid rgba(245,158,11,0.2)', borderRadius: '8px',
                   padding: '10px 12px', wordBreak: 'break-all', lineHeight: 1.5, marginBottom: '10px',
                 }}>
-                  …<span style={{ color: '#fbbf24', fontWeight: 700 }}>{mutatedInput.slice(-8)}</span>
+                  …<span style={{ color: '#fbbf24', fontWeight: 800 }}>{mutatedInput.slice(-8)}</span>
                 </div>
                 <div style={{
                   fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem',
@@ -422,7 +422,7 @@ function Section2() {
           {/* Field legend */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             <div style={{
-              fontFamily: 'Manrope, sans-serif', fontWeight: 600, fontSize: '0.82rem',
+              fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '0.82rem',
               color: 'var(--text-secondary)', marginBottom: '4px',
             }}>What each field means:</div>
             {BLOCK_FIELDS.map((field, i) => (
@@ -710,7 +710,7 @@ function TamperBlock({ block, status, isEditing, editAmount, onEditAmount, onEdi
             fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: 'var(--text-secondary)',
           }}>Block #{block.index}</span>
           <span style={{
-            fontFamily: 'Manrope, sans-serif', fontWeight: 600, fontSize: '0.65rem',
+            fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '0.65rem',
             color: dotColor, transition: 'color 0.4s',
           }}>{statusLabel}</span>
         </div>
@@ -740,7 +740,7 @@ function TamperBlock({ block, status, isEditing, editAmount, onEditAmount, onEdi
               <span style={{
                 fontFamily: 'JetBrains Mono, monospace', fontSize: '0.82rem',
                 color: status === 'tampered' ? '#fbbf24' : 'var(--color-green)',
-                fontWeight: 700,
+                fontWeight: 800,
               }}>{block.amount}</span>
             )}
           </div>
@@ -774,7 +774,7 @@ function TamperBlock({ block, status, isEditing, editAmount, onEditAmount, onEdi
                 style={{
                   flex: 1, padding: '7px', borderRadius: '7px',
                   background: 'rgba(245,158,11,0.12)', border: '1px solid rgba(245,158,11,0.3)',
-                  color: '#fbbf24', fontFamily: 'Manrope, sans-serif', fontWeight: 600,
+                  color: '#fbbf24', fontFamily: 'Manrope, sans-serif', fontWeight: 800,
                   fontSize: '0.75rem', cursor: 'pointer',
                 }}
               >
@@ -787,7 +787,7 @@ function TamperBlock({ block, status, isEditing, editAmount, onEditAmount, onEdi
                   style={{
                     flex: 1, padding: '7px', borderRadius: '7px',
                     background: 'rgba(239,68,68,0.15)', border: '1px solid rgba(239,68,68,0.4)',
-                    color: '#f87171', fontFamily: 'Manrope, sans-serif', fontWeight: 700,
+                    color: '#f87171', fontFamily: 'Manrope, sans-serif', fontWeight: 800,
                     fontSize: '0.75rem', cursor: 'pointer',
                   }}
                 >
@@ -798,7 +798,7 @@ function TamperBlock({ block, status, isEditing, editAmount, onEditAmount, onEdi
                   style={{
                     padding: '7px 10px', borderRadius: '7px',
                     background: 'transparent', border: '1px solid rgba(59,140,255,0.2)',
-                    color: 'var(--text-secondary)', fontFamily: 'Manrope, sans-serif', fontWeight: 500,
+                    color: 'var(--text-secondary)', fontFamily: 'Manrope, sans-serif', fontWeight: 800,
                     fontSize: '0.75rem', cursor: 'pointer',
                   }}
                 >
@@ -975,7 +975,7 @@ function Section4() {
                 style={{
                   marginLeft: '16px', padding: '4px 12px', borderRadius: '6px',
                   background: 'rgba(59,140,255,0.1)', border: '1px solid rgba(59,140,255,0.25)',
-                  color: '#6aaeff', fontFamily: 'Manrope, sans-serif', fontWeight: 600,
+                  color: '#6aaeff', fontFamily: 'Manrope, sans-serif', fontWeight: 800,
                   fontSize: '0.76rem', cursor: 'pointer',
                 }}
               >
@@ -1028,7 +1028,7 @@ function Section5() {
         {/* Signing flow */}
         <div className="glass-card" style={{ padding: isMobile ? '24px 20px' : '32px 28px', marginBottom: '20px' }}>
           <div style={{
-            fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.85rem',
+            fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '0.85rem',
             color: 'var(--text-secondary)', marginBottom: '24px',
           }}>Signing a tranche (Layer 1 protection):</div>
 
@@ -1061,7 +1061,7 @@ function Section5() {
             <motion.span
               initial={{ opacity: 0 }}
               animate={step >= 1 ? { opacity: 1 } : {}}
-              style={{ padding: '0 14px', color: 'var(--text-secondary)', fontSize: '1.2rem', fontWeight: 300 }}
+              style={{ padding: '0 14px', color: 'var(--text-secondary)', fontSize: '1.2rem', fontWeight: 400 }}
             >+</motion.span>
 
             {/* Message */}
@@ -1125,7 +1125,7 @@ function Section5() {
         {/* Verification row */}
         <div className="glass-card" style={{ padding: '24px 28px' }}>
           <div style={{
-            fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.85rem',
+            fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '0.85rem',
             color: 'var(--text-secondary)', marginBottom: '20px',
           }}>Verification (anyone can do this — only NBFC 2 could have created it):</div>
 
@@ -1310,7 +1310,7 @@ function Section6() {
                 : 'linear-gradient(135deg, rgba(20,184,166,0.18), rgba(59,140,255,0.12))',
               border: `1px solid ${syncing ? 'rgba(20,184,166,0.4)' : 'rgba(20,184,166,0.3)'}`,
               color: syncing ? 'var(--color-teal)' : '#2dd4bf',
-              fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.9rem',
+              fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '0.9rem',
               cursor: syncing ? 'wait' : 'pointer',
               transition: 'all 0.2s',
               display: 'flex', alignItems: 'center', gap: '10px',

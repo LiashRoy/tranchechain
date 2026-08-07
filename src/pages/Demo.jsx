@@ -38,7 +38,7 @@ export default function Demo() {
                 style={{
                   position: 'relative',
                   padding: '10px 24px', border: 'none', background: 'transparent',
-                  fontFamily: 'Manrope, sans-serif', fontWeight: 600, fontSize: '0.9rem',
+                  fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '0.9rem',
                   color: isActive ? 'var(--bg-body)' : 'var(--text-secondary)', cursor: 'pointer',
                   transition: 'color 0.2s', zIndex: 1
                 }}

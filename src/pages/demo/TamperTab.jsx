@@ -55,12 +55,12 @@ function EntityPill({ name }) {
         width: 30, height: 30, borderRadius: 8,
         background: `${m.color}20`, border: `1.5px solid ${m.color}50`,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontFamily: 'JetBrains Mono, monospace', fontWeight: 700,
+        fontFamily: 'JetBrains Mono, monospace', fontWeight: 800,
         fontSize: '0.68rem', color: m.color,
         flexShrink: 0,
       }}>{m.initials}</div>
       <span style={{
-        fontFamily: 'Manrope, sans-serif', fontWeight: 600,
+        fontFamily: 'Manrope, sans-serif', fontWeight: 800,
         fontSize: '0.82rem', color: 'var(--text-primary)',
       }}>{name}</span>
     </div>
@@ -228,7 +228,7 @@ function DemoBlock({
                 }}
               />
               <span style={{
-                fontFamily: 'JetBrains Mono, monospace', fontWeight: 700,
+                fontFamily: 'JetBrains Mono, monospace', fontWeight: 800,
                 fontSize: '0.78rem', color: 'var(--text-secondary)',
               }}>Block #{block.index}</span>
             </div>
@@ -236,7 +236,7 @@ function DemoBlock({
               animate={{ color: statusColor }}
               transition={{ duration: 0.4 }}
               style={{
-                fontFamily: 'Manrope, sans-serif', fontWeight: 700,
+                fontFamily: 'Manrope, sans-serif', fontWeight: 800,
                 fontSize: '0.75rem',
               }}
             >
@@ -263,7 +263,7 @@ function DemoBlock({
             <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
               <div style={{
                 fontFamily: 'Manrope, sans-serif', fontSize: '0.76rem',
-                color: 'var(--color-electric-blue)', fontWeight: 500,
+                color: 'var(--color-electric-blue)', fontWeight: 800,
               }}>{block.milestone}</div>
 
               {/* AMOUNT — animated glitch target */}
@@ -486,7 +486,7 @@ function TamperBanner() {
             TAMPERING DETECTED
           </div>
           <div style={{
-            fontFamily: 'Manrope, sans-serif', fontWeight: 500,
+            fontFamily: 'Manrope, sans-serif', fontWeight: 800,
             fontSize: '0.9rem', color: 'rgba(248,113,113,0.75)',
           }}>
             Chain broken at Tranche 2 · 3 blocks compromised
@@ -528,7 +528,7 @@ function SecurityNote() {
       }}
     >
       <div style={{
-        fontFamily: 'Manrope, sans-serif', fontWeight: 700,
+        fontFamily: 'Manrope, sans-serif', fontWeight: 800,
         fontSize: '0.85rem', color: 'var(--color-electric-blue)', marginBottom: 10,
         display: 'flex', alignItems: 'center', gap: 8,
       }}>
@@ -573,7 +573,7 @@ function SecurityNote() {
                   color: item.color,
                 }}>{item.layer}</span>
                 <span style={{
-                  fontFamily: 'Manrope, sans-serif', fontWeight: 600,
+                  fontFamily: 'Manrope, sans-serif', fontWeight: 800,
                   fontSize: '0.8rem', color: 'var(--text-primary)',
                 }}>{item.title}</span>
               </div>
@@ -829,7 +829,7 @@ export default function TamperTab({ blocks, setBlocks }) {
                     background: 'rgba(59,140,255,0.1)',
                     border: '1.5px solid rgba(59,140,255,0.35)',
                     color: 'var(--color-electric-blue)', fontFamily: 'Manrope, sans-serif',
-                    fontWeight: 700, fontSize: '0.95rem', cursor: 'pointer',
+                    fontWeight: 800, fontSize: '0.95rem', cursor: 'pointer',
                     transition: 'all 0.15s',
                   }}
                   onMouseEnter={e => { e.currentTarget.style.background = 'rgba(59,140,255,0.18)' }}
@@ -864,7 +864,7 @@ export default function TamperTab({ blocks, setBlocks }) {
                   }}
                 />
                 <span style={{
-                  fontFamily: 'Manrope, sans-serif', fontWeight: 600,
+                  fontFamily: 'Manrope, sans-serif', fontWeight: 800,
                   fontSize: '0.9rem', color: 'var(--color-red)',
                 }}>Tampering sequence running…</span>
               </motion.div>

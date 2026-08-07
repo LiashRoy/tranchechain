@@ -107,7 +107,7 @@ export default function PhoneFrame({ accentColor = 'var(--color-gold)', isConsen
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             flexShrink: 0,
           }}>
-            <span style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.65rem', color: 'var(--text-primary)' }}>9:41</span>
+            <span style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '0.65rem', color: 'var(--text-primary)' }}>9:41</span>
             <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
               {/* Signal */}
               <div style={{ display: 'flex', alignItems: 'flex-end', gap: 1 }}>

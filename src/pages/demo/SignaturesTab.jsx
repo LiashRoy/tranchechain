@@ -68,7 +68,7 @@ function CopyButton({ text }) {
         background: copied ? 'rgba(16,185,129,0.15)' : 'rgba(59,140,255,0.1)',
         color: copied ? 'var(--color-green)' : 'var(--color-electric-blue)',
         fontFamily: 'Manrope, sans-serif', fontSize: '0.65rem',
-        fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s',
+        fontWeight: 800, cursor: 'pointer', transition: 'all 0.2s',
         flexShrink: 0,
       }}
     >
@@ -103,7 +103,7 @@ function HexCard({ label, value, icon, color, note, glow = false }) {
           <span style={{ fontSize: '1rem' }}>{icon}</span>
           <span style={{
             fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem',
-            color, textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 700,
+            color, textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 800,
           }}>{label}</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -174,7 +174,7 @@ function TrancheMsgCard({ tranche, editable = false, editAmount, onEditAmount })
               onChange={e => onEditAmount(e.target.value)}
               style={{
                 fontFamily: 'JetBrains Mono, monospace', fontSize: '0.9rem',
-                fontWeight: 700, background: 'rgba(245,158,11,0.1)',
+                fontWeight: 800, background: 'rgba(245,158,11,0.1)',
                 border: '1.5px solid rgba(245,158,11,0.4)',
                 borderRadius: 6, padding: '4px 10px',
                 color: 'var(--color-gold)', outline: 'none', width: '100%', boxSizing: 'border-box',
@@ -183,7 +183,7 @@ function TrancheMsgCard({ tranche, editable = false, editAmount, onEditAmount })
               onBlur={e => { e.target.style.borderColor = 'rgba(245,158,11,0.4)' }}
             />
           ) : (
-            <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.9rem', fontWeight: 700, color: 'var(--color-green)' }}>{tranche.amount}</span>
+            <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.9rem', fontWeight: 800, color: 'var(--color-green)' }}>{tranche.amount}</span>
           )}
         </div>
       </div>
@@ -233,7 +233,7 @@ function ProgressBar({ activeStep }) {
                   </motion.svg>
                 ) : (
                   <span style={{
-                    fontFamily: 'JetBrains Mono, monospace', fontWeight: 700,
+                    fontFamily: 'JetBrains Mono, monospace', fontWeight: 800,
                     fontSize: '0.78rem',
                     color: current ? '#fff' : 'var(--text-secondary)',
                   }}>{s.n}</span>
@@ -313,7 +313,7 @@ function Step1({ onComplete }) {
             padding: '14px 30px', borderRadius: 12, border: 'none',
             background: 'linear-gradient(135deg, #3b8cff, #1d6fe8)',
             color: '#ffffff', fontFamily: 'Manrope, sans-serif',
-            fontWeight: 700, fontSize: '0.95rem', cursor: 'pointer',
+            fontWeight: 800, fontSize: '0.95rem', cursor: 'pointer',
             boxShadow: '0 6px 24px rgba(59,140,255,0.3)',
             marginBottom: 28,
           }}
@@ -440,7 +440,7 @@ function Step1({ onComplete }) {
                 padding: '12px 26px', borderRadius: 10, border: 'none',
                 background: 'linear-gradient(135deg, #10b981, #059669)',
                 color: '#ffffff', fontFamily: 'Manrope, sans-serif',
-                fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer',
+                fontWeight: 800, fontSize: '0.9rem', cursor: 'pointer',
                 boxShadow: '0 4px 18px rgba(16,185,129,0.3)',
               }}
             >
@@ -535,7 +535,7 @@ function Step2({ keys, tranche, onComplete }) {
             </motion.div>
 
             {/* Plus */}
-            <span style={{ color: 'var(--text-secondary)', fontSize: '1.3rem', fontWeight: 300 }}>+</span>
+            <span style={{ color: 'var(--text-secondary)', fontSize: '1.3rem', fontWeight: 400 }}>+</span>
 
             {/* Message */}
             <motion.div
@@ -581,7 +581,7 @@ function Step2({ keys, tranche, onComplete }) {
             padding: '13px 28px', borderRadius: 11, border: 'none',
             background: 'linear-gradient(135deg, #14b8a6, #0d9488)',
             color: '#ffffff', fontFamily: 'Manrope, sans-serif',
-            fontWeight: 700, fontSize: '0.92rem', cursor: 'pointer',
+            fontWeight: 800, fontSize: '0.92rem', cursor: 'pointer',
             boxShadow: '0 6px 22px rgba(20,184,166,0.3)',
             marginBottom: 24,
           }}
@@ -630,7 +630,7 @@ function Step2({ keys, tranche, onComplete }) {
                 padding: '12px 26px', borderRadius: 10, border: 'none',
                 background: 'linear-gradient(135deg, #10b981, #059669)',
                 color: '#ffffff', fontFamily: 'Manrope, sans-serif',
-                fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer',
+                fontWeight: 800, fontSize: '0.9rem', cursor: 'pointer',
                 boxShadow: '0 4px 18px rgba(16,185,129,0.3)',
               }}
             >
@@ -706,7 +706,7 @@ function Step3({ keys, tranche, sig, onComplete }) {
                 padding: '13px 28px', borderRadius: 11, border: 'none',
                 background: 'linear-gradient(135deg, #10b981, #059669)',
                 color: '#ffffff', fontFamily: 'Manrope, sans-serif',
-                fontWeight: 700, fontSize: '0.92rem', cursor: 'pointer',
+                fontWeight: 800, fontSize: '0.92rem', cursor: 'pointer',
                 boxShadow: '0 6px 22px rgba(16,185,129,0.3)',
                 marginBottom: 20,
               }}
@@ -797,7 +797,7 @@ function Step3({ keys, tranche, sig, onComplete }) {
               padding: '12px 26px', borderRadius: 10, border: 'none',
               background: 'linear-gradient(135deg, #f59e0b, #d97706)',
               color: '#ffffff', fontFamily: 'Manrope, sans-serif',
-              fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer',
+              fontWeight: 800, fontSize: '0.9rem', cursor: 'pointer',
               boxShadow: '0 4px 18px rgba(245,158,11,0.3)',
             }}
           >
@@ -929,7 +929,7 @@ function Step4({ keys, tranche, sig }) {
             borderWidth: phase === 'invalid' ? 1 : 0,
             borderStyle: 'solid',
             fontFamily: 'Manrope, sans-serif',
-            fontWeight: 700, fontSize: '0.92rem',
+            fontWeight: 800, fontSize: '0.92rem',
             cursor: phase === 'verifying' ? 'wait' : 'pointer',
             transition: 'all 0.3s',
           }}
@@ -949,7 +949,7 @@ function Step4({ keys, tranche, sig }) {
               background: 'transparent',
               border: '1px solid rgba(59,140,255,0.2)',
               color: 'var(--text-secondary)', fontFamily: 'Manrope, sans-serif',
-              fontWeight: 500, fontSize: '0.88rem', cursor: 'pointer',
+              fontWeight: 800, fontSize: '0.88rem', cursor: 'pointer',
             }}
           >Reset amount</button>
         )}
@@ -1008,7 +1008,7 @@ function Step4({ keys, tranche, sig }) {
               border: '1px solid rgba(239,68,68,0.15)',
             }}>
               <div style={{
-                fontFamily: 'Manrope, sans-serif', fontWeight: 700,
+                fontFamily: 'Manrope, sans-serif', fontWeight: 800,
                 fontSize: '0.82rem', color: 'var(--color-red)', marginBottom: 4,
               }}>Why this happened:</div>
               {[
@@ -1024,7 +1024,7 @@ function Step4({ keys, tranche, sig }) {
                   transition={{ delay: 0.2 + i * 0.1 }}
                   style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}
                 >
-                  <span style={{ color: 'var(--color-red)', fontWeight: 700, flexShrink: 0 }}>→</span>
+                  <span style={{ color: 'var(--color-red)', fontWeight: 800, flexShrink: 0 }}>→</span>
                   <span style={{
                     fontFamily: 'Manrope, sans-serif', fontSize: '0.8rem',
                     color: 'var(--text-secondary)', lineHeight: 1.55,
@@ -1141,7 +1141,7 @@ export default function SignaturesTab({ latestBlock }) {
                 background: 'transparent',
                 border: '1px solid rgba(59,140,255,0.25)',
                 color: 'var(--text-secondary)', fontFamily: 'Manrope, sans-serif',
-                fontWeight: 600, fontSize: '0.8rem', cursor: 'pointer',
+                fontWeight: 800, fontSize: '0.8rem', cursor: 'pointer',
                 transition: 'all 0.2s',
               }}
             >
@@ -1165,7 +1165,7 @@ export default function SignaturesTab({ latestBlock }) {
                 background: 'transparent',
                 border: '1px solid rgba(239,68,68,0.25)',
                 color: 'var(--color-red)', fontFamily: 'Manrope, sans-serif',
-                fontWeight: 600, fontSize: '0.8rem', cursor: 'pointer',
+                fontWeight: 800, fontSize: '0.8rem', cursor: 'pointer',
                 transition: 'all 0.2s',
               }}
             >

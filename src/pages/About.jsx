@@ -36,7 +36,7 @@ export default function About() {
       >
         <h2 style={{
           fontFamily: 'Manrope, sans-serif',
-          fontWeight: 700,
+          fontWeight: 800,
           fontSize: '1.1rem',
           color: 'var(--text-primary)',
           margin: '0 0 14px',
@@ -63,7 +63,7 @@ export default function About() {
       >
         <h2 style={{
           fontFamily: 'Manrope, sans-serif',
-          fontWeight: 700,
+          fontWeight: 800,
           fontSize: '1.1rem',
           color: 'var(--text-primary)',
           margin: '0 0 14px',

@@ -16,7 +16,7 @@ function MiniPreviewBlock({ amount, from, milestone }) {
       border: '1px solid rgba(20,184,166,0.2)',
     }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-        <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.55rem', color: 'var(--color-teal)', fontWeight: 600 }}>{milestone}</span>
+        <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.55rem', color: 'var(--color-teal)', fontWeight: 800 }}>{milestone}</span>
         <CheckCircle2 size={12} color="var(--color-green)" />
       </div>
       <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.8rem', color: 'var(--color-green)', fontWeight: 800 }}>{amount}</div>
@@ -87,7 +87,7 @@ function ProblemCard({ card, i }) {
         }}>
           <h3 style={{
             fontFamily: 'Manrope, sans-serif',
-            fontWeight: 700,
+            fontWeight: 800,
             fontSize: '1rem',
             color: 'var(--text-primary)',
             margin: 0,
@@ -154,7 +154,7 @@ function TraditionalFlowDiagram() {
                 {node.icon}
               </div>
               <div style={{ textAlign: 'center' }}>
-                <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '3px' }}>{node.label}</div>
+                <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '3px' }}>{node.label}</div>
                 <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem', color: node.color, opacity: 0.75 }}>{node.sub}</div>
               </div>
             </motion.div>
@@ -180,7 +180,7 @@ function TraditionalFlowDiagram() {
                     <div style={{ background: 'rgba(239,68,68,0.15)', padding: '4px', borderRadius: '50%' }}>
                       <AlertTriangle size={16} fill="rgba(239,68,68,0.3)" />
                     </div>
-                    <div style={{ position: 'absolute', top: 26, width: '130px', textAlign: 'center', fontFamily: 'Manrope, sans-serif', fontSize: '0.55rem', color: 'var(--color-red)', fontWeight: 700, lineHeight: 1.2, background: 'var(--glass-bg)', padding: '4px 6px', borderRadius: '4px', border: '1px solid rgba(239,68,68,0.4)', boxShadow: '0 4px 12px rgba(239,68,68,0.15)' }}>
+                    <div style={{ position: 'absolute', top: 26, width: '130px', textAlign: 'center', fontFamily: 'Manrope, sans-serif', fontSize: '0.55rem', color: 'var(--color-red)', fontWeight: 800, lineHeight: 1.2, background: 'var(--glass-bg)', padding: '4px 6px', borderRadius: '4px', border: '1px solid rgba(239,68,68,0.4)', boxShadow: '0 4px 12px rgba(239,68,68,0.15)' }}>
                       ⚠ Double-Disbursement Risk
                     </div>
                   </motion.div>
@@ -251,7 +251,7 @@ function FlowDiagram() {
               <div style={{ textAlign: 'center' }}>
                 <div style={{
                   fontFamily: 'Manrope, sans-serif',
-                  fontWeight: 700,
+                  fontWeight: 800,
                   fontSize: '0.85rem',
                   color: 'var(--text-primary)',
                   marginBottom: '3px',
@@ -413,7 +413,7 @@ function StatCard({ stat, i }) {
     >
       <div style={{
         fontFamily: 'JetBrains Mono, monospace',
-        fontWeight: 700,
+        fontWeight: 800,
         fontSize: 'clamp(2rem, 4vw, 2.8rem)',
         color: stat.color,
         letterSpacing: '-0.02em',
@@ -431,7 +431,7 @@ function StatCard({ stat, i }) {
         fontFamily: 'Manrope, sans-serif',
         fontSize: '0.82rem',
         color: 'var(--text-secondary)',
-        fontWeight: 500,
+        fontWeight: 800,
       }}>{stat.label}</div>
     </motion.div>
   )
@@ -780,7 +780,7 @@ export default function Home() {
             <div>
               <div style={{
                 fontFamily: 'Manrope, sans-serif',
-                fontWeight: 700,
+                fontWeight: 800,
                 fontSize: '0.95rem',
                 color: 'var(--text-primary)',
                 marginBottom: '6px',
@@ -855,7 +855,7 @@ export default function Home() {
                 ].map(s => (
                   <div key={s.step} style={{ background: `rgba(239,68,68,0.02)`, border: `1px solid rgba(239,68,68,0.08)`, padding: '16px', borderRadius: '8px' }}>
                     <div style={{ fontFamily: 'JetBrains Mono', fontSize: '0.65rem', color: s.color, marginBottom: '6px' }}>STEP {s.step}</div>
-                    <div style={{ fontFamily: 'Manrope', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '6px' }}>{s.title}</div>
+                    <div style={{ fontFamily: 'Manrope', fontSize: '0.75rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '6px' }}>{s.title}</div>
                     <div style={{ fontFamily: 'Manrope', fontSize: '0.7rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>{s.desc}</div>
                   </div>
                 ))}
@@ -899,7 +899,7 @@ export default function Home() {
                   }}>STEP {s.step}</div>
                   <div style={{
                     fontFamily: 'Manrope, sans-serif',
-                    fontWeight: 600,
+                    fontWeight: 800,
                     fontSize: '0.85rem',
                     color: 'var(--text-secondary)',
                   }}>{s.title}</div>

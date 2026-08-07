@@ -123,14 +123,14 @@ function EntityBadge({ name, size = 28 }) {
         width: size, height: size, borderRadius: '7px',
         background: meta.bg, border: `1px solid ${meta.color}40`,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontFamily: 'JetBrains Mono, monospace', fontWeight: 700,
+        fontFamily: 'JetBrains Mono, monospace', fontWeight: 800,
         fontSize: `${size * 0.35}px`, color: meta.color,
         flexShrink: 0,
       }}>
         {meta.initials}
       </div>
       <span style={{
-        fontFamily: 'Manrope, sans-serif', fontWeight: 600,
+        fontFamily: 'Manrope, sans-serif', fontWeight: 800,
         fontSize: '0.78rem', color: 'var(--text-primary)',
       }}>{name}</span>
     </div>
@@ -148,7 +148,7 @@ function StatusBadge({ status }) {
     <span style={{
       padding: '3px 9px', borderRadius: '999px',
       background: s.bg, border: `1px solid ${s.border}`,
-      fontFamily: 'Manrope, sans-serif', fontWeight: 700,
+      fontFamily: 'Manrope, sans-serif', fontWeight: 800,
       fontSize: '0.68rem', color: s.color, letterSpacing: '0.02em',
     }}>{s.label}</span>
   )
@@ -364,14 +364,14 @@ function BlockCard({ block, isNew, visiblyInvalid, onTamper }) {
           {/* Amount + Milestone */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             <div style={{
-              fontFamily: 'JetBrains Mono, monospace', fontWeight: 700,
+              fontFamily: 'JetBrains Mono, monospace', fontWeight: 800,
               fontSize: '1.12rem', color: 'var(--color-green)', letterSpacing: '-0.01em',
             }}>
               {block.amount}
             </div>
             <div style={{
               fontFamily: 'Manrope, sans-serif', fontSize: '0.76rem',
-              color: 'var(--color-electric-blue)', fontWeight: 500,
+              color: 'var(--color-electric-blue)', fontWeight: 800,
             }}>{block.milestone}</div>
             <div style={{
               fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem',
@@ -404,7 +404,7 @@ function BlockCard({ block, isNew, visiblyInvalid, onTamper }) {
               background: 'rgba(245,158,11,0.08)',
               border: '1px solid rgba(245,158,11,0.22)',
               color: 'var(--color-gold)', fontFamily: 'Manrope, sans-serif',
-              fontWeight: 600, fontSize: '0.7rem', cursor: 'pointer',
+              fontWeight: 800, fontSize: '0.7rem', cursor: 'pointer',
               transition: 'all 0.15s',
             }}
             onMouseEnter={e => {
@@ -478,7 +478,7 @@ function TamperModal({ block, onSave, onClose }) {
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <span style={{ fontSize: '1.2rem' }}>⚠️</span>
             <span style={{
-              fontFamily: 'Manrope, sans-serif', fontWeight: 700,
+              fontFamily: 'Manrope, sans-serif', fontWeight: 800,
               fontSize: '0.95rem', color: 'var(--color-gold)',
             }}>Tamper with Block #{block.index}</span>
           </div>
@@ -510,7 +510,7 @@ function TamperModal({ block, onSave, onClose }) {
             }}>Current amount</div>
             <div style={{
               fontFamily: 'JetBrains Mono, monospace', fontSize: '1rem',
-              color: 'var(--color-green)', fontWeight: 700,
+              color: 'var(--color-green)', fontWeight: 800,
             }}>{block.amount}</div>
           </div>
 
@@ -548,7 +548,7 @@ function TamperModal({ block, onSave, onClose }) {
                 background: 'linear-gradient(135deg, rgba(239,68,68,0.2), rgba(239,68,68,0.12))',
                 border: '1.5px solid rgba(239,68,68,0.4)',
                 color: 'var(--color-red)', fontFamily: 'Manrope, sans-serif',
-                fontWeight: 700, fontSize: '0.88rem', cursor: 'pointer',
+                fontWeight: 800, fontSize: '0.88rem', cursor: 'pointer',
                 transition: 'all 0.15s',
               }}
               onMouseEnter={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.25)' }}
@@ -563,7 +563,7 @@ function TamperModal({ block, onSave, onClose }) {
                 background: 'transparent',
                 border: '1px solid rgba(59,140,255,0.2)',
                 color: 'var(--text-secondary)', fontFamily: 'Manrope, sans-serif',
-                fontWeight: 500, fontSize: '0.88rem', cursor: 'pointer',
+                fontWeight: 800, fontSize: '0.88rem', cursor: 'pointer',
               }}
             >
               Cancel
@@ -661,7 +661,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
       >
         {/* Sidebar heading */}
         <div style={{
-          fontFamily: 'Manrope, sans-serif', fontWeight: 700,
+          fontFamily: 'Manrope, sans-serif', fontWeight: 800,
           fontSize: '0.9rem', color: 'var(--text-primary)', marginBottom: 18,
           display: 'flex', alignItems: 'center', gap: 8,
         }}>
@@ -857,7 +857,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
                 ? `linear-gradient(135deg, ${btnColor}30, ${btnColor}18)`
                 : `linear-gradient(135deg, ${btnColor}, ${btnColor}cc)`,
               color: busy ? btnColor : 'var(--bg-body)',
-              fontFamily: 'Manrope, sans-serif', fontWeight: 700,
+              fontFamily: 'Manrope, sans-serif', fontWeight: 800,
               fontSize: '0.85rem', cursor: busy ? 'wait' : 'pointer',
               transition: 'background 0.3s, color 0.3s',
               border: busy ? `1px solid ${btnColor}40` : 'none',
@@ -945,7 +945,7 @@ function StatsBar({ blocks, onReset, onRemoveTamper }) {
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
             style={{
-              fontFamily: 'JetBrains Mono, monospace', fontWeight: 700,
+              fontFamily: 'JetBrains Mono, monospace', fontWeight: 800,
               fontSize: '0.82rem', color: s.color || 'var(--text-primary)',
             }}
           >{s.value}</motion.span>
@@ -962,7 +962,7 @@ function StatsBar({ blocks, onReset, onRemoveTamper }) {
               background: 'var(--badge-teal-border)',
               border: '1px solid rgba(16,185,129,0.25)',
               color: 'var(--color-green)', fontFamily: 'Manrope, sans-serif',
-              fontWeight: 600, fontSize: '0.75rem', cursor: 'pointer',
+              fontWeight: 800, fontSize: '0.75rem', cursor: 'pointer',
               transition: 'all 0.15s',
             }}
             onMouseEnter={e => {
@@ -986,7 +986,7 @@ function StatsBar({ blocks, onReset, onRemoveTamper }) {
             background: 'rgba(59,140,255,0.1)',
             border: '1px solid rgba(59,140,255,0.25)',
             color: 'var(--color-electric-blue)', fontFamily: 'Manrope, sans-serif',
-            fontWeight: 600, fontSize: '0.75rem', cursor: 'pointer',
+            fontWeight: 800, fontSize: '0.75rem', cursor: 'pointer',
             transition: 'all 0.15s',
           }}
           onMouseEnter={e => {
@@ -1035,12 +1035,12 @@ function TamperBanner({ info, onDismiss }) {
           style={{ fontSize: '1.1rem' }}
         >⚠️</motion.span>
         <span style={{
-          fontFamily: 'Manrope, sans-serif', fontWeight: 600,
+          fontFamily: 'Manrope, sans-serif', fontWeight: 800,
           fontSize: '0.84rem', color: 'var(--color-red)',
         }}>
           Tamper detected — chain integrity broken from Tranche #{info.fromTranche} onward.
           {' '}
-          <span style={{ fontWeight: 400, color: 'var(--badge-red-border)' }}>
+          <span style={{ fontWeight: 800, color: 'var(--badge-red-border)' }}>
             The ledger fingerprint chain has been compromised.
           </span>
         </span>
