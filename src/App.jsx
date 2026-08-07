@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard'
 import About from './pages/About'
 import CustomCursor from './components/CustomCursor'
 import { GlobalChainProvider } from './context/GlobalChainContext'
+import { ThemeProvider } from './context/ThemeContext'
 
 function PageTransition({ children }) {
   return (
@@ -41,11 +42,13 @@ function AnimatedRoutes() {
 
 export default function App() {
   return (
-    <GlobalChainProvider>
+    <ThemeProvider>
+      <GlobalChainProvider>
       <HashRouter>
         <CustomCursor />
         <AnimatedRoutes />
       </HashRouter>
     </GlobalChainProvider>
+    </ThemeProvider>
   )
 }
