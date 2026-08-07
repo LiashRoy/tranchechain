@@ -367,7 +367,7 @@ function Step1({ onComplete }) {
                   label="Private Key — NBFC 2 ONLY"
                   value={keys.privHex}
                   icon=<Lock size={16} />
-                  color="var(--color-red)"
+                  color="#ef4444"
                   note="NEVER shared. Used only to sign. Without this, no one can forge NBFC 2's signature."
                   glow
                 />
@@ -401,7 +401,7 @@ function Step1({ onComplete }) {
                   label="Public Key — Shared openly"
                   value={keys.pubHex}
                   icon=<Unlock size={16} />
-                  color="var(--color-green)"
+                  color="#10b981"
                   note="Published by NBFC 2. Anyone can use it to verify signatures — cannot be used to sign."
                   glow
                 />
@@ -604,7 +604,7 @@ function Step2({ keys, tranche, onComplete }) {
               label="Digital Signature (ECDSA P-256)"
               value={sig.sigHex}
               icon=<Fingerprint size={16} />
-              color="var(--color-green)"
+              color="#10b981"
               note="This signature is uniquely bound to NBFC 2's private key AND the exact tranche message above. Change even one character in the message → signature becomes invalid."
               glow
             />
@@ -690,9 +690,9 @@ function Step3({ keys, tranche, sig, onComplete }) {
         display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
         gap: 12, marginBottom: 20,
       }}>
-        <HexCard label="Public Key (NBFC 2)" value={keys.pubHex} icon=<Unlock size={16} /> color="var(--color-green)" />
+        <HexCard label="Public Key (NBFC 2)" value={keys.pubHex} icon=<Unlock size={16} /> color="#10b981" />
         <TrancheMsgCard tranche={tranche} />
-        <HexCard label="Signature (from block)" value={sig.sigHex} icon=<Fingerprint size={16} /> color="var(--color-teal)" />
+        <HexCard label="Signature (from block)" value={sig.sigHex} icon=<Fingerprint size={16} /> color="#14b8a6" />
       </div>
 
       {/* Verify button */}
@@ -905,7 +905,7 @@ function Step4({ keys, tranche, sig }) {
           label="Original Signature (attacker re-uses it)"
           value={sig.sigHex}
           icon=<Fingerprint size={16} />
-          color="var(--color-gold)"
+          color="#f59e0b"
           note="This signature was created for the original amount. The attacker cannot generate a new valid signature without NBFC 2's private key."
         />
       </div>
