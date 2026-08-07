@@ -609,7 +609,7 @@ function Section3() {
 
         {/* Chain visualization */}
         <div style={{
-          overflowX: 'auto', paddingBottom: '8px',
+          overflowX: 'auto', paddingBottom: '8px', paddingTop: '8px',
         }}>
           <div style={{
             display: 'flex', alignItems: 'center', gap: '0', justifyContent: 'space-between',
@@ -622,14 +622,14 @@ function Section3() {
                   index={i}
                   totalBlocks={STATIC_CHAIN.length}
                   inView={inView}
-                  animDelay={0.15 + i * 0.2}
+                  animDelay={0.2 + i * 1.2}
                 />
                 {i < STATIC_CHAIN.length - 1 && (
                   <ChainConnector
                     fromHash={block.hash}
                     toBlock={STATIC_CHAIN[i + 1]}
                     inView={inView}
-                    delay={0.3 + i * 0.2}
+                    delay={0.4 + i * 1.2}
                   />
                 )}
               </Fragment>
