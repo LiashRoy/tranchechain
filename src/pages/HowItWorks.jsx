@@ -536,7 +536,7 @@ function ChainConnector({ fromHash, toBlock, inView, delay }) {
   return (
     <div style={{
       display: 'flex', flexDirection: 'column', alignItems: 'center',
-      justifyContent: 'center', gap: '4px', width: '56px', flexShrink: 0,
+      justifyContent: 'center', gap: '4px', width: '70px', flexShrink: 0,
       paddingTop: '40px',
     }}>
       {/* Animated arrow line */}
@@ -579,7 +579,7 @@ function ChainConnector({ fromHash, toBlock, inView, delay }) {
         style={{
           fontFamily: 'JetBrains Mono, monospace', fontSize: '0.52rem',
           color: 'var(--color-gold)', textAlign: 'center', opacity: 0.7,
-          lineHeight: 1.3,
+          lineHeight: 1.3, whiteSpace: 'nowrap',
         }}
       >
         prev_hash<br />links here
