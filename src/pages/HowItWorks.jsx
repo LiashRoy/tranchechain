@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
+import { useState, useEffect, useRef, useMemo, useCallback, Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { Key, FileText, ShieldCheck, Unlock, BookOpen } from 'lucide-react'
@@ -616,7 +616,7 @@ function Section3() {
             minWidth: '700px',
           }}>
             {STATIC_CHAIN.map((block, i) => (
-              <div key={block.index} style={{ display: 'flex', alignItems: 'center', flex: 1 }}>
+              <Fragment key={block.index}>
                 <ChainBlock
                   block={block}
                   index={i}
@@ -632,7 +632,7 @@ function Section3() {
                     delay={0.3 + i * 0.2}
                   />
                 )}
-              </div>
+              </Fragment>
             ))}
           </div>
         </div>
