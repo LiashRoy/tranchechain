@@ -59,7 +59,7 @@ function FloatingBlock({ block }) {
       }}>
         <div style={{
           fontFamily: 'JetBrains Mono, monospace',
-          fontSize: '0.58rem',
+          fontSize: '0.72rem',
           color: 'rgba(59,140,255,0.4)',
           letterSpacing: '0.04em',
           textTransform: 'uppercase',
@@ -73,7 +73,7 @@ function FloatingBlock({ block }) {
           transition={{ duration: 0.35 }}
           style={{
             fontFamily: 'JetBrains Mono, monospace',
-            fontSize: '0.62rem',
+            fontSize: '0.78rem',
             color: 'rgba(20,184,166,0.6)',
             letterSpacing: '0.02em',
           }}
@@ -87,7 +87,7 @@ function FloatingBlock({ block }) {
         }} />
         <div style={{
           fontFamily: 'JetBrains Mono, monospace',
-          fontSize: '0.55rem',
+          fontSize: '0.69rem',
           color: 'rgba(100,130,180,0.3)',
         }}>
           prev: a3f9…

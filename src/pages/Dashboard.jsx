@@ -64,32 +64,32 @@ function BlockModal({ block, onClose, accentColor = 'var(--color-electric-blue)'
             {block.status === 'valid' ? <CheckCircle2 size={20} /> : block.status === 'tampered' ? <AlertTriangle size={20} /> : <XCircle size={20} />}
           </div>
           <div>
-            <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '1.2rem', color: 'var(--text-primary)' }}>Block #{block.index}</div>
-            <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.8rem', color: statusColor }}>{block.status.toUpperCase()}</div>
+            <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '1.50rem', color: 'var(--text-primary)' }}>Block #{block.index}</div>
+            <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '1.00rem', color: statusColor }}>{block.status.toUpperCase()}</div>
           </div>
         </div>
 
         <div style={{ display: 'grid', gap: 12 }}>
           <div style={{ background: 'var(--bg-body)', padding: '12px', borderRadius: 8, border: '1px solid #1e293b' }}>
-            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: 'var(--text-secondary)', marginBottom: 4 }}>TRANSACTION</div>
-            <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.9rem', color: 'var(--text-primary)' }}>{block.from} → {block.to}</div>
+            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.81rem', color: 'var(--text-secondary)', marginBottom: 4 }}>TRANSACTION</div>
+            <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '1.13rem', color: 'var(--text-primary)' }}>{block.from} → {block.to}</div>
           </div>
           <div style={{ background: 'var(--bg-body)', padding: '12px', borderRadius: 8, border: '1px solid #1e293b' }}>
-            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: 'var(--text-secondary)', marginBottom: 4 }}>AMOUNT</div>
-            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontWeight: 800, fontSize: '1.1rem', color: statusColor }}>{block.amount}</div>
+            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.81rem', color: 'var(--text-secondary)', marginBottom: 4 }}>AMOUNT</div>
+            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontWeight: 800, fontSize: '1.38rem', color: statusColor }}>{block.amount}</div>
           </div>
           <div style={{ background: 'var(--bg-body)', padding: '12px', borderRadius: 8, border: '1px solid #1e293b' }}>
-            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: 'var(--text-secondary)', marginBottom: 4 }}>TIMESTAMP</div>
-            <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.9rem', color: 'var(--text-primary)' }}>{block.timestamp}</div>
+            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.81rem', color: 'var(--text-secondary)', marginBottom: 4 }}>TIMESTAMP</div>
+            <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '1.13rem', color: 'var(--text-primary)' }}>{block.timestamp}</div>
           </div>
           <div style={{ background: 'var(--bg-body)', padding: '12px', borderRadius: 8, border: '1px solid #1e293b', overflow: 'hidden' }}>
-            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: 'var(--text-secondary)', marginBottom: 4 }}>BLOCK HASH (SHA-256)</div>
-            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem', color: 'var(--color-teal)', wordBreak: 'break-all' }}>{block.hash || 'Pending Computation...'}</div>
+            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.81rem', color: 'var(--text-secondary)', marginBottom: 4 }}>BLOCK HASH (SHA-256)</div>
+            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.94rem', color: 'var(--color-teal)', wordBreak: 'break-all' }}>{block.hash || 'Pending Computation...'}</div>
           </div>
           {block.prevHash && (
             <div style={{ background: 'var(--bg-body)', padding: '12px', borderRadius: 8, border: '1px solid #1e293b', overflow: 'hidden' }}>
-              <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: 'var(--text-secondary)', marginBottom: 4 }}>PREVIOUS HASH</div>
-              <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem', color: 'var(--text-secondary)', wordBreak: 'break-all' }}>{block.prevHash}</div>
+              <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.81rem', color: 'var(--text-secondary)', marginBottom: 4 }}>PREVIOUS HASH</div>
+              <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.94rem', color: 'var(--text-secondary)', wordBreak: 'break-all' }}>{block.prevHash}</div>
             </div>
           )}
         </div>
@@ -148,12 +148,12 @@ function PortalBlock({ block, accentColor, style = {}, onClick }) {
             transition={{ duration: 0.4 }}
             style={{ width: 6, height: 6, borderRadius: '50%', boxShadow: `0 0 5px ${statusColor}80` }}
           />
-          <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.58rem', color: 'var(--text-secondary)' }}>
+          <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.72rem', color: 'var(--text-secondary)' }}>
             #{block.index}
           </span>
         </div>
         <span style={{
-          fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.6rem',
+          fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '0.75rem',
           color: statusColor,
         }}>
           {block.status === 'valid' ? <><CheckCircle2 size={16} /> Valid</> : 
@@ -167,12 +167,12 @@ function PortalBlock({ block, accentColor, style = {}, onClick }) {
         <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
           {[block.from, block.to].map((e, i) => (
             <span key={i} style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-              {i === 1 && <span style={{ color: 'var(--text-secondary)', fontSize: '0.65rem' }}>→</span>}
+              {i === 1 && <span style={{ color: 'var(--text-secondary)', fontSize: '0.81rem' }}>→</span>}
               <span style={{
                 padding: '1px 5px', borderRadius: 4,
                 background: `${ENTITY_COLORS[e] || accentColor}15`,
                 border: `1px solid ${ENTITY_COLORS[e] || accentColor}30`,
-                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.55rem',
+                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.69rem',
                 color: ENTITY_COLORS[e] || accentColor,
               }}>{ENTITY_INITIALS[e] || e.slice(0, 2)}</span>
             </span>
@@ -185,7 +185,7 @@ function PortalBlock({ block, accentColor, style = {}, onClick }) {
           animate={{ opacity: 1 }}
           style={{
             fontFamily: 'JetBrains Mono, monospace', fontWeight: 800,
-            fontSize: '1.05rem',
+            fontSize: '1.31rem',
             color: block.status === 'tampered' ? '#fbbf24' :
                    block.status === 'invalid'  ? '#f87171' : 
                    block.status === 'pending'  ? '#6aaeff' : 'var(--color-green)',
@@ -193,12 +193,12 @@ function PortalBlock({ block, accentColor, style = {}, onClick }) {
           }}
         >{block.amount}</motion.div>
 
-        <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.62rem', color: '#a78bfa' }}>
+        <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.78rem', color: '#a78bfa' }}>
           {block.milestone}
         </div>
 
         <div style={{ borderTop: `1px solid ${border}`, paddingTop: 5 }}>
-          <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.55rem', color: '#14b8a690' }}>
+          <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.69rem', color: '#14b8a690' }}>
             hash: {trunc(block.hash)}
           </span>
         </div>
@@ -245,7 +245,7 @@ function BrowserFrame({ url, accentColor, isConsensus, children }) {
             <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
           </svg>
           <span style={{
-            fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem', color: 'var(--text-secondary)',
+            fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem', color: 'var(--text-secondary)',
             overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
           }}>{url}</span>
         </div>
@@ -277,14 +277,14 @@ function NBFCContent({ chain, onBlockClick, step, setStep, pendingBlock }) {
           width: 32, height: 32, borderRadius: 9,
           background: 'var(--nav-border)', border: '1px solid rgba(59,140,255,0.35)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontFamily: 'JetBrains Mono, monospace', fontWeight: 700,
-          fontSize: '0.7rem', color: accentColor, flexShrink: 0,
+          fontFamily: 'JetBrains Mono, monospace', fontWeight: 800,
+          fontSize: '0.88rem', color: accentColor, flexShrink: 0,
         }}>AF</div>
         <div>
-          <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '1.05rem', color: 'var(--text-primary)' }}>
+          <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '1.31rem', color: 'var(--text-primary)' }}>
             NBFC 3
           </div>
-          <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+          <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.94rem', color: 'var(--text-secondary)' }}>
             Disbursement Console
           </div>
         </div>
@@ -293,14 +293,14 @@ function NBFCContent({ chain, onBlockClick, step, setStep, pendingBlock }) {
             padding: '3px 8px', borderRadius: 999,
             background: 'rgba(16,185,129,0.12)',
             border: '1px solid rgba(16,185,129,0.3)',
-            fontFamily: 'Manrope, sans-serif', fontWeight: 700,
-            fontSize: '0.6rem', color: '#34d399',
+            fontFamily: 'Manrope, sans-serif', fontWeight: 800,
+            fontSize: '0.75rem', color: '#34d399',
           }}><CheckCircle2 size={16} /> SYNCED</div>
         </div>
       </div>
 
       <div style={{
-        fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem', color: 'var(--text-secondary)',
+        fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem', color: 'var(--text-secondary)',
         marginBottom: 4,
       }}>LOAN: EDU-2024-001 · 3 tranches</div>
 
@@ -322,7 +322,7 @@ function NBFCContent({ chain, onBlockClick, step, setStep, pendingBlock }) {
               background: 'rgba(59,140,255,0.1)', border: '1px dashed rgba(59,140,255,0.4)',
               display: 'flex', flexDirection: 'column', gap: 10
             }}>
-              <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem', color: '#6aaeff', fontWeight: 600 }}>
+              <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.94rem', color: '#6aaeff', fontWeight: 800 }}>
                 Pending Disbursement (Semester 3)
               </div>
               <PortalBlock block={pendingBlock} accentColor={accentColor} />
@@ -330,7 +330,7 @@ function NBFCContent({ chain, onBlockClick, step, setStep, pendingBlock }) {
                 onClick={() => setStep(1)}
                 style={{
                   padding: '8px 16px', borderRadius: 8, background: 'var(--color-electric-blue)', color: '#ffffff',
-                  border: 'none', fontFamily: 'Manrope, sans-serif', fontWeight: 700, cursor: 'pointer',
+                  border: 'none', fontFamily: 'Manrope, sans-serif', fontWeight: 800, cursor: 'pointer',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6
                 }}>
                 <PenTool size={16} /> Approve & Sign Transaction
@@ -362,13 +362,13 @@ function FintechCompanyContent({ chain, onBlockClick, step, pendingBlock }) {
           width: 28, height: 28, borderRadius: 8,
           background: 'linear-gradient(135deg, #f59e0b, #d97706)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: '0.8rem', flexShrink: 0,
+          fontSize: '1.00rem', flexShrink: 0,
         }}><LinkIcon size={16} /></div>
         <div>
-          <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '1.05rem', color: '#fbbf24' }}>
+          <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '1.31rem', color: '#fbbf24' }}>
             Fintech Company
           </div>
-          <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+          <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.94rem', color: 'var(--text-secondary)' }}>
             Education Finance
           </div>
         </div>
@@ -388,11 +388,11 @@ function FintechCompanyContent({ chain, onBlockClick, step, pendingBlock }) {
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             }}>
               <span style={{
-                fontFamily: 'Manrope, sans-serif', fontSize: '0.6rem',
-                color: 'var(--color-gold)', fontWeight: 600,
+                fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem',
+                color: 'var(--color-gold)', fontWeight: 800,
               }}>{block.milestone}</span>
               <span style={{
-                fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.62rem',
+                fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '0.78rem',
                 color: 'var(--color-green)',
               }}><CheckCircle2 size={16} /></span>
             </div>
@@ -400,18 +400,18 @@ function FintechCompanyContent({ chain, onBlockClick, step, pendingBlock }) {
               <div>
                 <div style={{
                   fontFamily: 'JetBrains Mono, monospace', fontWeight: 800,
-                  fontSize: '0.92rem', color: 'var(--color-green)',
+                  fontSize: '1.15rem', color: 'var(--color-green)',
                 }}>{block.amount}</div>
-                <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.55rem', color: 'var(--text-secondary)' }}>
+                <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.69rem', color: 'var(--text-secondary)' }}>
                   {block.from} → PI
                 </div>
               </div>
               <div style={{ textAlign: 'right' }}>
                 <div style={{
-                  fontFamily: 'JetBrains Mono, monospace', fontSize: '0.52rem',
+                  fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem',
                   color: '#14b8a650',
                 }}>{trunc(block.hash, 8)}</div>
-                <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.52rem', color: 'var(--text-secondary)' }}>
+                <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.65rem', color: 'var(--text-secondary)' }}>
                   {block.timestamp.split(' ')[0]}
                 </div>
               </div>
@@ -433,11 +433,11 @@ function FintechCompanyContent({ chain, onBlockClick, step, pendingBlock }) {
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             }}>
               <span style={{
-                fontFamily: 'Manrope, sans-serif', fontSize: '0.6rem',
-                color: step === 2 ? 'var(--color-gold)' : 'var(--color-electric-blue)', fontWeight: 600,
+                fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem',
+                color: step === 2 ? 'var(--color-gold)' : 'var(--color-electric-blue)', fontWeight: 800,
               }}>{pendingBlock.milestone}</span>
               <span style={{
-                fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.62rem',
+                fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '0.78rem',
                 color: step === 2 ? 'var(--color-green)' : 'var(--color-electric-blue)',
               }}>{step === 2 ? <CheckCircle2 size={16} /> : "Awaiting Inst..."}</span>
             </div>
@@ -445,18 +445,18 @@ function FintechCompanyContent({ chain, onBlockClick, step, pendingBlock }) {
               <div>
                 <div style={{
                   fontFamily: 'JetBrains Mono, monospace', fontWeight: 800,
-                  fontSize: '0.92rem', color: step === 2 ? 'var(--color-green)' : 'var(--color-electric-blue)',
+                  fontSize: '1.15rem', color: step === 2 ? 'var(--color-green)' : 'var(--color-electric-blue)',
                 }}>{pendingBlock.amount}</div>
-                <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.55rem', color: 'var(--text-secondary)' }}>
+                <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.69rem', color: 'var(--text-secondary)' }}>
                   {pendingBlock.from} → PI
                 </div>
               </div>
               <div style={{ textAlign: 'right' }}>
                 <div style={{
-                  fontFamily: 'JetBrains Mono, monospace', fontSize: '0.52rem',
+                  fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem',
                   color: '#14b8a650',
                 }}>{step === 2 ? trunc(computeHash({...pendingBlock, amount: '₹24,000'}), 8) : 'PENDING'}</div>
-                <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.52rem', color: 'var(--text-secondary)' }}>
+                <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.65rem', color: 'var(--text-secondary)' }}>
                   {pendingBlock.timestamp.split(' ')[0]}
                 </div>
               </div>
@@ -472,7 +472,7 @@ function FintechCompanyContent({ chain, onBlockClick, step, pendingBlock }) {
         display: 'flex', alignItems: 'center', gap: 8,
       }}>
         <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--color-green)', boxShadow: '0 0 6px #10b98180' }} />
-        <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.6rem', color: '#34d399' }}>
+        <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem', color: '#34d399' }}>
           All nodes in consensus
         </span>
       </div>
@@ -494,13 +494,13 @@ function InstitutionContent({ chain, onBlockClick, step, setStep, pendingBlock }
           width: 32, height: 32, borderRadius: 9,
           background: 'rgba(167,139,250,0.15)', border: '1px solid rgba(167,139,250,0.35)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: '1rem', flexShrink: 0,
+          fontSize: '1.25rem', flexShrink: 0,
         }}><Building2 size={16} /></div>
         <div>
-          <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '1.05rem', color: 'var(--text-primary)' }}>
+          <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '1.31rem', color: 'var(--text-primary)' }}>
             Partner Institute
           </div>
-          <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+          <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.94rem', color: 'var(--text-secondary)' }}>
             Finance Office Portal
           </div>
         </div>
@@ -509,14 +509,14 @@ function InstitutionContent({ chain, onBlockClick, step, setStep, pendingBlock }
             padding: '3px 8px', borderRadius: 999,
             background: 'rgba(16,185,129,0.12)',
             border: '1px solid rgba(16,185,129,0.3)',
-            fontFamily: 'Manrope, sans-serif', fontWeight: 700,
-            fontSize: '0.6rem', color: '#34d399',
+            fontFamily: 'Manrope, sans-serif', fontWeight: 800,
+            fontSize: '0.75rem', color: '#34d399',
           }}><CheckCircle2 size={16} /> VERIFIED</div>
         </div>
       </div>
 
       <div style={{
-        fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem', color: 'var(--text-secondary)',
+        fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem', color: 'var(--text-secondary)',
         marginBottom: 4,
       }}>STUDENT LOAN: EDU-2024-001 · ₹66,000 total</div>
 
@@ -538,7 +538,7 @@ function InstitutionContent({ chain, onBlockClick, step, setStep, pendingBlock }
               background: 'rgba(167,139,250,0.1)', border: '1px dashed rgba(167,139,250,0.4)',
               display: 'flex', flexDirection: 'column', gap: 10
             }}>
-              <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem', color: '#c4b5fd', fontWeight: 600 }}>
+              <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.94rem', color: '#c4b5fd', fontWeight: 800 }}>
                 Incoming Transfer Detected (Unverified)
               </div>
               <PortalBlock block={pendingBlock} accentColor={accentColor} />
@@ -567,12 +567,12 @@ function InstitutionContent({ chain, onBlockClick, step, setStep, pendingBlock }
         border: '1px solid rgba(167,139,250,0.15)',
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
       }}>
-        <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.72rem', color: 'var(--text-secondary)' }}>
+        <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.90rem', color: 'var(--text-secondary)' }}>
           Total received
         </span>
         <span style={{
           fontFamily: 'JetBrains Mono, monospace', fontWeight: 800,
-          fontSize: '0.9rem', color: '#c4b5fd',
+          fontSize: '1.13rem', color: '#c4b5fd',
         }}>₹{42000 + (step === 2 ? 24000 : 0)}</span>
       </div>
     </div>
@@ -617,14 +617,14 @@ export default function Dashboard() {
             <h1 style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: 'clamp(1.7rem, 4vw, 2.8rem)', letterSpacing: '-0.03em', color: 'var(--text-primary)', margin: '0 0 10px' }}>
               Three Nodes · One Truth
             </h1>
-            <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.9rem', color: 'var(--text-secondary)', margin: 0, maxWidth: 560, lineHeight: 1.65 }}>
+            <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '1.13rem', color: 'var(--text-secondary)', margin: 0, maxWidth: 560, lineHeight: 1.65 }}>
               NBFC, Fintech Company, and Institution each hold an independent, identical copy of the ledger. Show a live transaction propagating across the network.
             </p>
           </div>
           <div>
             <button onClick={() => setTransactionStep(0)} style={{
               padding: '10px 20px', borderRadius: 8, background: 'var(--glass-border)', color: '#ffffff',
-              border: '1px solid rgba(255,255,255,0.1)', fontFamily: 'Manrope, sans-serif', fontWeight: 600, cursor: 'pointer',
+              border: '1px solid rgba(255,255,255,0.1)', fontFamily: 'Manrope, sans-serif', fontWeight: 800, cursor: 'pointer',
             }}>
               RESET DASHBOARD
             </button>
@@ -639,7 +639,7 @@ export default function Dashboard() {
           {/* NBFC Portal */}
           <div style={{ flex: 1, minWidth: isMobile ? '100%' : 320, display: 'flex', flexDirection: 'column', gap: 8 }}>
             <div style={{ textAlign: 'center' }}>
-              <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem', color: 'var(--color-electric-blue)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>💻 NBFC Node</span>
+              <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem', color: 'var(--color-electric-blue)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>💻 NBFC Node</span>
             </div>
             <BrowserFrame url="nbfc.tranchechain.fi/console" accentColor="var(--color-electric-blue)">
               <NBFCContent chain={CLEAN_CHAIN} onBlockClick={setSelectedBlock} step={transactionStep} setStep={setTransactionStep} pendingBlock={pendingBlock} />
@@ -649,7 +649,7 @@ export default function Dashboard() {
           {/* Fintech App */}
           <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
              <div style={{ textAlign: 'center' }}>
-              <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem', color: 'var(--color-gold)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>📱 Fintech Node</span>
+              <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem', color: 'var(--color-gold)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>📱 Fintech Node</span>
             </div>
             <PhoneFrame accentColor="var(--color-gold)">
               <FintechCompanyContent chain={CLEAN_CHAIN} onBlockClick={setSelectedBlock} step={transactionStep} pendingBlock={pendingBlock} />
@@ -659,7 +659,7 @@ export default function Dashboard() {
           {/* Institution Portal */}
           <div style={{ flex: 1, minWidth: isMobile ? '100%' : 320, display: 'flex', flexDirection: 'column', gap: 8 }}>
             <div style={{ textAlign: 'center' }}>
-              <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem', color: '#a78bfa', textTransform: 'uppercase', letterSpacing: '0.08em' }}>💻 Institution Node</span>
+              <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem', color: '#a78bfa', textTransform: 'uppercase', letterSpacing: '0.08em' }}>💻 Institution Node</span>
             </div>
             <BrowserFrame url="narayana.tranchechain.fi/finance" accentColor="#a78bfa">
               <InstitutionContent chain={CLEAN_CHAIN} onBlockClick={setSelectedBlock} step={transactionStep} setStep={setTransactionStep} pendingBlock={pendingBlock} />
@@ -677,10 +677,10 @@ export default function Dashboard() {
             { icon: <Settings size={18} color="var(--text-secondary)" />,  title: 'Node vs Transactor', text: 'NBFC, Fintech Company, and Institution are nodes — they hold full ledger copies. The student is a transactor — they only need a wallet address.' },
           ].map(item => (
             <div key={item.title} style={{ display: 'flex', gap: 12 }}>
-              <span style={{ fontSize: '1.2rem', flexShrink: 0 }}>{item.icon}</span>
+              <span style={{ fontSize: '1.50rem', flexShrink: 0 }}>{item.icon}</span>
               <div>
-                <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: 4 }}>{item.title}</div>
-                <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.78rem', color: 'var(--text-secondary)', lineHeight: 1.55 }}>{item.text}</div>
+                <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '1.00rem', color: 'var(--text-secondary)', marginBottom: 4 }}>{item.title}</div>
+                <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.98rem', color: 'var(--text-secondary)', lineHeight: 1.55 }}>{item.text}</div>
               </div>
             </div>
           ))}

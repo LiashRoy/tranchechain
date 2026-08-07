@@ -16,11 +16,11 @@ function MiniPreviewBlock({ amount, from, milestone }) {
       border: '1px solid rgba(20,184,166,0.2)',
     }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-        <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.55rem', color: 'var(--color-teal)', fontWeight: 600 }}>{milestone}</span>
+        <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.69rem', color: 'var(--color-teal)', fontWeight: 800 }}>{milestone}</span>
         <CheckCircle2 size={12} color="var(--color-green)" />
       </div>
-      <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.8rem', color: 'var(--color-green)', fontWeight: 800 }}>{amount}</div>
-      <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.5rem', color: 'var(--text-secondary)' }}>{from} → PI</div>
+      <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '1.00rem', color: 'var(--color-green)', fontWeight: 800 }}>{amount}</div>
+      <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.63rem', color: 'var(--text-secondary)' }}>{from} → PI</div>
     </div>
   )
 }
@@ -73,7 +73,7 @@ function ProblemCard({ card, i }) {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        fontSize: '1.5rem',
+        fontSize: '1.88rem',
       }}>
         {card.icon}
       </div>
@@ -87,8 +87,8 @@ function ProblemCard({ card, i }) {
         }}>
           <h3 style={{
             fontFamily: 'Manrope, sans-serif',
-            fontWeight: 700,
-            fontSize: '1rem',
+            fontWeight: 800,
+            fontSize: '1.25rem',
             color: 'var(--text-primary)',
             margin: 0,
           }}>{card.title}</h3>
@@ -98,13 +98,13 @@ function ProblemCard({ card, i }) {
             background: `${card.color}12`,
             border: `1px solid ${card.color}25`,
             fontFamily: 'JetBrains Mono, monospace',
-            fontSize: '0.64rem',
+            fontSize: '0.80rem',
             color: card.color,
           }}>{card.tag}</span>
         </div>
         <p style={{
           fontFamily: 'Manrope, sans-serif',
-          fontSize: '0.87rem',
+          fontSize: '1.09rem',
           color: 'var(--text-secondary)',
           lineHeight: 1.65,
           margin: 0,
@@ -149,13 +149,13 @@ function TraditionalFlowDiagram() {
               <div style={{
                 width: 64, height: 64, borderRadius: '16px', background: `${node.color}14`,
                 border: `1.5px dashed ${node.color}50`, display: 'flex', alignItems: 'center',
-                justifyContent: 'center', fontSize: '1.7rem',
+                justifyContent: 'center', fontSize: '2.13rem',
               }}>
                 {node.icon}
               </div>
               <div style={{ textAlign: 'center' }}>
-                <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '3px' }}>{node.label}</div>
-                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem', color: node.color, opacity: 0.75 }}>{node.sub}</div>
+                <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '1.06rem', color: 'var(--text-secondary)', marginBottom: '3px' }}>{node.label}</div>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.78rem', color: node.color, opacity: 0.75 }}>{node.sub}</div>
               </div>
             </motion.div>
 
@@ -166,7 +166,7 @@ function TraditionalFlowDiagram() {
                 <div style={{ position: 'absolute', top: '50%', left: 0, right: 0, height: '1.5px', borderBottom: '1.5px dashed rgba(239,68,68,0.3)', transform: 'translateY(-50%)' }} />
                 
                 {/* Label */}
-                <div style={{ position: 'absolute', top: -20, fontFamily: 'JetBrains Mono, monospace', fontSize: '0.55rem', color: 'var(--color-red)', opacity: 0.8, whiteSpace: 'nowrap' }}>
+                <div style={{ position: 'absolute', top: -20, fontFamily: 'JetBrains Mono, monospace', fontSize: '0.69rem', color: 'var(--color-red)', opacity: 0.8, whiteSpace: 'nowrap' }}>
                   {i === 0 ? 'Email/API' : i === 1 ? 'Manual Sync' : 'Wait for Updates'}
                 </div>
                 
@@ -180,7 +180,7 @@ function TraditionalFlowDiagram() {
                     <div style={{ background: 'rgba(239,68,68,0.15)', padding: '4px', borderRadius: '50%' }}>
                       <AlertTriangle size={16} fill="rgba(239,68,68,0.3)" />
                     </div>
-                    <div style={{ position: 'absolute', top: 26, width: '130px', textAlign: 'center', fontFamily: 'Manrope, sans-serif', fontSize: '0.55rem', color: 'var(--color-red)', fontWeight: 700, lineHeight: 1.2, background: 'var(--glass-bg)', padding: '4px 6px', borderRadius: '4px', border: '1px solid rgba(239,68,68,0.4)', boxShadow: '0 4px 12px rgba(239,68,68,0.15)' }}>
+                    <div style={{ position: 'absolute', top: 26, width: '130px', textAlign: 'center', fontFamily: 'Manrope, sans-serif', fontSize: '0.69rem', color: 'var(--color-red)', fontWeight: 800, lineHeight: 1.2, background: 'var(--glass-bg)', padding: '4px 6px', borderRadius: '4px', border: '1px solid rgba(239,68,68,0.4)', boxShadow: '0 4px 12px rgba(239,68,68,0.15)' }}>
                       ⚠ Double-Disbursement Risk
                     </div>
                   </motion.div>
@@ -243,7 +243,7 @@ function FlowDiagram() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: '1.7rem',
+                fontSize: '2.13rem',
                 boxShadow: `0 0 18px ${node.color}18`,
               }}>
                 {node.icon}
@@ -251,14 +251,14 @@ function FlowDiagram() {
               <div style={{ textAlign: 'center' }}>
                 <div style={{
                   fontFamily: 'Manrope, sans-serif',
-                  fontWeight: 700,
-                  fontSize: '0.85rem',
+                  fontWeight: 800,
+                  fontSize: '1.06rem',
                   color: 'var(--text-primary)',
                   marginBottom: '3px',
                 }}>{node.label}</div>
                 <div style={{
                   fontFamily: 'JetBrains Mono, monospace',
-                  fontSize: '0.62rem',
+                  fontSize: '0.78rem',
                   color: node.color,
                   opacity: 0.75,
                 }}>{node.sub}</div>
@@ -351,7 +351,7 @@ function FlowDiagram() {
             }} />
             <span style={{
               fontFamily: 'Manrope, sans-serif',
-              fontSize: '0.78rem',
+              fontSize: '0.98rem',
               color: 'var(--text-secondary)',
             }}>{item.label}</span>
           </div>
@@ -413,7 +413,7 @@ function StatCard({ stat, i }) {
     >
       <div style={{
         fontFamily: 'JetBrains Mono, monospace',
-        fontWeight: 700,
+        fontWeight: 800,
         fontSize: 'clamp(2rem, 4vw, 2.8rem)',
         color: stat.color,
         letterSpacing: '-0.02em',
@@ -429,9 +429,9 @@ function StatCard({ stat, i }) {
       </div>
       <div style={{
         fontFamily: 'Manrope, sans-serif',
-        fontSize: '0.82rem',
+        fontSize: '1.02rem',
         color: 'var(--text-secondary)',
-        fontWeight: 500,
+        fontWeight: 800,
       }}>{stat.label}</div>
     </motion.div>
   )
@@ -462,7 +462,7 @@ function SectionHeading({ eyebrow, title, sub }) {
       {eyebrow && (
         <div style={{
           fontFamily: 'JetBrains Mono, monospace',
-          fontSize: '0.72rem',
+          fontSize: '0.90rem',
           letterSpacing: '0.12em',
           textTransform: 'uppercase',
           color: 'var(--color-electric-blue)',
@@ -483,7 +483,7 @@ function SectionHeading({ eyebrow, title, sub }) {
       {sub && (
         <p style={{
           fontFamily: 'Manrope, sans-serif',
-          fontSize: '0.95rem',
+          fontSize: '1.19rem',
           color: 'var(--text-secondary)',
           maxWidth: '500px',
           margin: '0 auto',
@@ -627,10 +627,10 @@ export default function Home() {
                 flexWrap: 'wrap',
               }}
             >
-              <Link to="/demo" className="btn-primary" style={{ fontSize: '0.95rem', padding: '13px 28px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Link to="/demo" className="btn-primary" style={{ fontSize: '1.19rem', padding: '13px 28px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <BookOpen size={18} /> Enter the Ledger
               </Link>
-              <Link to="/how-it-works" className="btn-ghost" style={{ fontSize: '0.95rem', padding: '13px 28px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Link to="/how-it-works" className="btn-ghost" style={{ fontSize: '1.19rem', padding: '13px 28px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <GraduationCap size={18} /> How It Works
               </Link>
             </motion.div>
@@ -651,7 +651,7 @@ export default function Home() {
               {['SHA-256', '·', 'ECDSA', '·', 'PoW / PoS', '·', 'Multi-Node Consensus'].map((t, i) => (
                 <span key={i} style={{
                   fontFamily: 'JetBrains Mono, monospace',
-                  fontSize: '0.72rem',
+                  fontSize: '0.90rem',
                   color: 'var(--text-secondary)',
                 }}>{t}</span>
               ))}
@@ -672,8 +672,8 @@ export default function Home() {
             <PhoneFrame accentColor="var(--color-teal)" label="" autoScroll={true}>
               <div style={{ padding: '0 8px' }}>
                 <div style={{ padding: '12px 4px', borderBottom: '1px solid rgba(20,184,166,0.1)', marginBottom: '12px' }}>
-                  <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '0.8rem', color: '#2dd4bf' }}>Active Ledger</div>
-                  <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.6rem', color: 'var(--text-secondary)' }}>Live syncing</div>
+                  <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '1.00rem', color: '#2dd4bf' }}>Active Ledger</div>
+                  <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Live syncing</div>
                 </div>
                 {[1, 2, 3, 4, 5, 6].map((i) => (
                   <MiniPreviewBlock 
@@ -706,7 +706,7 @@ export default function Home() {
         >
           <span style={{
             fontFamily: 'Manrope, sans-serif',
-            fontSize: '0.7rem',
+            fontSize: '0.88rem',
             color: 'var(--text-secondary)',
             letterSpacing: '0.08em',
             textTransform: 'uppercase',
@@ -780,8 +780,8 @@ export default function Home() {
             <div>
               <div style={{
                 fontFamily: 'Manrope, sans-serif',
-                fontWeight: 700,
-                fontSize: '0.95rem',
+                fontWeight: 800,
+                fontSize: '1.19rem',
                 color: 'var(--text-primary)',
                 marginBottom: '6px',
               }}>
@@ -789,7 +789,7 @@ export default function Home() {
               </div>
               <p style={{
                 fontFamily: 'Manrope, sans-serif',
-                fontSize: '0.85rem',
+                fontSize: '1.06rem',
                 color: 'var(--text-secondary)',
                 lineHeight: 1.65,
                 margin: 0,
@@ -829,10 +829,10 @@ export default function Home() {
             {/* The Broken Traditional Flow */}
             <div style={{ marginBottom: '32px', paddingBottom: '32px', borderBottom: '1px solid rgba(239,68,68,0.1)' }}>
               <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-                <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.7rem', color: 'var(--color-red)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.88rem', color: 'var(--color-red)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                   The Problem: Traditional Flow
                 </span>
-                <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.85rem', color: 'var(--text-secondary)', margin: '8px 0 0' }}>
+                <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '1.06rem', color: 'var(--text-secondary)', margin: '8px 0 0' }}>
                   Data is fragmented. Trust relies on manual emails and reconciliation.
                 </p>
               </div>
@@ -854,9 +854,9 @@ export default function Home() {
                   { step: '04', color: 'var(--text-secondary)', title: 'Reconciliation happens later', desc: "Mismatches surface weeks later, or never" },
                 ].map(s => (
                   <div key={s.step} style={{ background: `rgba(239,68,68,0.02)`, border: `1px solid rgba(239,68,68,0.08)`, padding: '16px', borderRadius: '8px' }}>
-                    <div style={{ fontFamily: 'JetBrains Mono', fontSize: '0.65rem', color: s.color, marginBottom: '6px' }}>STEP {s.step}</div>
-                    <div style={{ fontFamily: 'Manrope', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '6px' }}>{s.title}</div>
-                    <div style={{ fontFamily: 'Manrope', fontSize: '0.7rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>{s.desc}</div>
+                    <div style={{ fontFamily: 'JetBrains Mono', fontSize: '0.81rem', color: s.color, marginBottom: '6px' }}>STEP {s.step}</div>
+                    <div style={{ fontFamily: 'Manrope', fontSize: '0.94rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '6px' }}>{s.title}</div>
+                    <div style={{ fontFamily: 'Manrope', fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>{s.desc}</div>
                   </div>
                 ))}
               </div>
@@ -864,10 +864,10 @@ export default function Home() {
 
             {/* The TrancheChain Consensus Flow */}
             <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-              <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.7rem', color: 'var(--color-green)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+              <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.88rem', color: 'var(--color-green)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                 The Solution: TrancheChain Flow
               </span>
-              <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.85rem', color: 'var(--text-secondary)', margin: '8px 0 0' }}>
+              <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: '1.06rem', color: 'var(--text-secondary)', margin: '8px 0 0' }}>
                 All nodes are synchronized. Digital signatures and hash-chaining guarantee data integrity.
               </p>
             </div>
@@ -892,20 +892,20 @@ export default function Home() {
                 <div key={s.step} style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                   <div style={{
                     fontFamily: 'JetBrains Mono, monospace',
-                    fontSize: '0.65rem',
+                    fontSize: '0.81rem',
                     color: s.color,
                     opacity: 0.7,
                     letterSpacing: '0.08em',
                   }}>STEP {s.step}</div>
                   <div style={{
                     fontFamily: 'Manrope, sans-serif',
-                    fontWeight: 600,
-                    fontSize: '0.85rem',
+                    fontWeight: 800,
+                    fontSize: '1.06rem',
                     color: 'var(--text-secondary)',
                   }}>{s.title}</div>
                   <div style={{
                     fontFamily: 'Manrope, sans-serif',
-                    fontSize: '0.78rem',
+                    fontSize: '0.98rem',
                     color: 'var(--text-secondary)',
                     lineHeight: 1.55,
                   }}>{s.desc}</div>

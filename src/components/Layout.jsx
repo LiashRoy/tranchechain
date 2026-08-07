@@ -90,14 +90,14 @@ export default function Layout() {
       }}>
         <span style={{
           fontFamily: 'Manrope, sans-serif',
-          fontSize: '0.78rem',
+          fontSize: '0.98rem',
           color: 'var(--text-secondary)',
         }}>
           TrancheChain — PGDM Fintech Course Prototype · Not a real financial product
         </span>
         <span style={{
           fontFamily: 'JetBrains Mono, monospace',
-          fontSize: '0.72rem',
+          fontSize: '0.90rem',
           color: 'var(--text-secondary)',
         }}>
           Fintech Company-style education finance platform

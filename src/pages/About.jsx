@@ -36,8 +36,8 @@ export default function About() {
       >
         <h2 style={{
           fontFamily: 'Manrope, sans-serif',
-          fontWeight: 700,
-          fontSize: '1.1rem',
+          fontWeight: 800,
+          fontSize: '1.38rem',
           color: 'var(--text-primary)',
           margin: '0 0 14px',
         }}>
@@ -45,7 +45,7 @@ export default function About() {
         </h2>
         <p style={{
           fontFamily: 'Manrope, sans-serif',
-          fontSize: '0.9rem',
+          fontSize: '1.13rem',
           color: 'var(--text-secondary)',
           lineHeight: 1.7,
           margin: 0,
@@ -63,8 +63,8 @@ export default function About() {
       >
         <h2 style={{
           fontFamily: 'Manrope, sans-serif',
-          fontWeight: 700,
-          fontSize: '1.1rem',
+          fontWeight: 800,
+          fontSize: '1.38rem',
           color: 'var(--text-primary)',
           margin: '0 0 14px',
         }}>
@@ -84,7 +84,7 @@ export default function About() {
             <span style={{
               fontFamily: 'Manrope, sans-serif',
               fontWeight: 800,
-              fontSize: '0.9rem',
+              fontSize: '1.13rem',
               color: 'var(--text-primary)',
               textTransform: 'uppercase',
               letterSpacing: '0.02em',
@@ -102,7 +102,7 @@ export default function About() {
       >
         <p style={{
           fontFamily: 'JetBrains Mono, monospace',
-          fontSize: '0.75rem',
+          fontSize: '0.94rem',
           color: 'var(--text-secondary)',
           lineHeight: 1.6,
           margin: 0,

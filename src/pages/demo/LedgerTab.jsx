@@ -123,15 +123,15 @@ function EntityBadge({ name, size = 28 }) {
         width: size, height: size, borderRadius: '7px',
         background: meta.bg, border: `1px solid ${meta.color}40`,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontFamily: 'JetBrains Mono, monospace', fontWeight: 700,
+        fontFamily: 'JetBrains Mono, monospace', fontWeight: 800,
         fontSize: `${size * 0.35}px`, color: meta.color,
         flexShrink: 0,
       }}>
         {meta.initials}
       </div>
       <span style={{
-        fontFamily: 'Manrope, sans-serif', fontWeight: 600,
-        fontSize: '0.78rem', color: 'var(--text-primary)',
+        fontFamily: 'Manrope, sans-serif', fontWeight: 800,
+        fontSize: '0.98rem', color: 'var(--text-primary)',
       }}>{name}</span>
     </div>
   )
@@ -148,8 +148,8 @@ function StatusBadge({ status }) {
     <span style={{
       padding: '3px 9px', borderRadius: '999px',
       background: s.bg, border: `1px solid ${s.border}`,
-      fontFamily: 'Manrope, sans-serif', fontWeight: 700,
-      fontSize: '0.68rem', color: s.color, letterSpacing: '0.02em',
+      fontFamily: 'Manrope, sans-serif', fontWeight: 800,
+      fontSize: '0.85rem', color: s.color, letterSpacing: '0.02em',
     }}>{s.label}</span>
   )
 }
@@ -159,7 +159,7 @@ function HashField({ label, value, color = 'var(--color-teal)' }) {
   return (
     <div>
       <div style={{
-        fontFamily: 'JetBrains Mono, monospace', fontSize: '0.55rem',
+        fontFamily: 'JetBrains Mono, monospace', fontSize: '0.69rem',
         color: color, opacity: 0.7, textTransform: 'uppercase',
         letterSpacing: '0.08em', marginBottom: '3px',
       }}>{label}</div>
@@ -167,7 +167,7 @@ function HashField({ label, value, color = 'var(--color-teal)' }) {
         onClick={() => setExpanded(e => !e)}
         title={expanded ? 'Click to collapse' : 'Click to expand full hash'}
         style={{
-          fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem',
+          fontFamily: 'JetBrains Mono, monospace', fontSize: '0.81rem',
           color, background: `${color}0d`,
           border: `1px solid ${color}20`, borderRadius: '6px',
           padding: '4px 8px', wordBreak: 'break-all', lineHeight: 1.4,
@@ -274,7 +274,7 @@ function ChainConnector({ broken, pulsing, isMobile }) {
           <motion.div
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
-            style={{ position: 'absolute', fontSize: '1.4rem', zIndex: 10 }}
+            style={{ position: 'absolute', fontSize: '1.75rem', zIndex: 10 }}
           >💥</motion.div>
         )}
       </motion.div>
@@ -342,7 +342,7 @@ function BlockCard({ block, isNew, visiblyInvalid, onTamper }) {
             }} />
             <span style={{
               fontFamily: 'JetBrains Mono, monospace',
-              fontSize: '0.68rem', color: 'var(--text-secondary)',
+              fontSize: '0.85rem', color: 'var(--text-secondary)',
             }}>Block #{block.index}</span>
           </div>
           <StatusBadge status={effectiveStatus} />
@@ -354,7 +354,7 @@ function BlockCard({ block, isNew, visiblyInvalid, onTamper }) {
           {/* From → To */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
             <EntityBadge name={block.from} />
-            <div style={{ paddingLeft: 8, color: 'var(--text-secondary)', fontSize: '0.7rem' }}>↓</div>
+            <div style={{ paddingLeft: 8, color: 'var(--text-secondary)', fontSize: '0.88rem' }}>↓</div>
             <EntityBadge name={block.to} />
           </div>
 
@@ -364,17 +364,17 @@ function BlockCard({ block, isNew, visiblyInvalid, onTamper }) {
           {/* Amount + Milestone */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             <div style={{
-              fontFamily: 'JetBrains Mono, monospace', fontWeight: 700,
-              fontSize: '1.12rem', color: 'var(--color-green)', letterSpacing: '-0.01em',
+              fontFamily: 'JetBrains Mono, monospace', fontWeight: 800,
+              fontSize: '1.40rem', color: 'var(--color-green)', letterSpacing: '-0.01em',
             }}>
               {block.amount}
             </div>
             <div style={{
-              fontFamily: 'Manrope, sans-serif', fontSize: '0.76rem',
-              color: 'var(--color-electric-blue)', fontWeight: 500,
+              fontFamily: 'Manrope, sans-serif', fontSize: '0.95rem',
+              color: 'var(--color-electric-blue)', fontWeight: 800,
             }}>{block.milestone}</div>
             <div style={{
-              fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem',
+              fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem',
               color: 'var(--text-secondary)',
             }}>{block.timestamp}</div>
           </div>
@@ -404,7 +404,7 @@ function BlockCard({ block, isNew, visiblyInvalid, onTamper }) {
               background: 'rgba(245,158,11,0.08)',
               border: '1px solid rgba(245,158,11,0.22)',
               color: 'var(--color-gold)', fontFamily: 'Manrope, sans-serif',
-              fontWeight: 600, fontSize: '0.7rem', cursor: 'pointer',
+              fontWeight: 800, fontSize: '0.88rem', cursor: 'pointer',
               transition: 'all 0.15s',
             }}
             onMouseEnter={e => {
@@ -476,17 +476,17 @@ function TamperModal({ block, onSave, onClose }) {
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <span style={{ fontSize: '1.2rem' }}>⚠️</span>
+            <span style={{ fontSize: '1.50rem' }}>⚠️</span>
             <span style={{
-              fontFamily: 'Manrope, sans-serif', fontWeight: 700,
-              fontSize: '0.95rem', color: 'var(--color-gold)',
+              fontFamily: 'Manrope, sans-serif', fontWeight: 800,
+              fontSize: '1.19rem', color: 'var(--color-gold)',
             }}>Tamper with Block #{block.index}</span>
           </div>
           <button
             onClick={onClose}
             style={{
               background: 'none', border: 'none', color: 'var(--text-secondary)',
-              cursor: 'pointer', fontSize: '1.1rem', padding: 4,
+              cursor: 'pointer', fontSize: '1.38rem', padding: 4,
             }}
           >✕</button>
         </div>
@@ -494,7 +494,7 @@ function TamperModal({ block, onSave, onClose }) {
         {/* Modal body */}
         <div style={{ padding: isMobile ? '16px' : '24px' }}>
           <div style={{
-            fontFamily: 'Manrope, sans-serif', fontSize: '0.84rem',
+            fontFamily: 'Manrope, sans-serif', fontSize: '1.05rem',
             color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: 20,
           }}>
             You are about to alter the <strong style={{ color: 'var(--color-gold)' }}>amount</strong> in Block #{block.index}.
@@ -504,19 +504,19 @@ function TamperModal({ block, onSave, onClose }) {
 
           <div style={{ marginBottom: 20 }}>
             <div style={{
-              fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem',
+              fontFamily: 'JetBrains Mono, monospace', fontSize: '0.81rem',
               color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.08em',
               marginBottom: 6,
             }}>Current amount</div>
             <div style={{
-              fontFamily: 'JetBrains Mono, monospace', fontSize: '1rem',
-              color: 'var(--color-green)', fontWeight: 700,
+              fontFamily: 'JetBrains Mono, monospace', fontSize: '1.25rem',
+              color: 'var(--color-green)', fontWeight: 800,
             }}>{block.amount}</div>
           </div>
 
           <div style={{ marginBottom: 24 }}>
             <label style={{
-              fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem',
+              fontFamily: 'JetBrains Mono, monospace', fontSize: '0.81rem',
               color: 'var(--color-gold)', textTransform: 'uppercase', letterSpacing: '0.08em',
               display: 'block', marginBottom: 6,
             }}>New amount (₹)</label>
@@ -527,7 +527,7 @@ function TamperModal({ block, onSave, onClose }) {
               placeholder="e.g. 50000"
               style={{
                 width: '100%', boxSizing: 'border-box',
-                fontFamily: 'JetBrains Mono, monospace', fontSize: '1rem',
+                fontFamily: 'JetBrains Mono, monospace', fontSize: '1.25rem',
                 background: 'rgba(245,158,11,0.08)',
                 border: '1.5px solid rgba(245,158,11,0.35)',
                 borderRadius: 9, padding: '10px 14px',
@@ -548,7 +548,7 @@ function TamperModal({ block, onSave, onClose }) {
                 background: 'linear-gradient(135deg, rgba(239,68,68,0.2), rgba(239,68,68,0.12))',
                 border: '1.5px solid rgba(239,68,68,0.4)',
                 color: 'var(--color-red)', fontFamily: 'Manrope, sans-serif',
-                fontWeight: 700, fontSize: '0.88rem', cursor: 'pointer',
+                fontWeight: 800, fontSize: '1.10rem', cursor: 'pointer',
                 transition: 'all 0.15s',
               }}
               onMouseEnter={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.25)' }}
@@ -563,7 +563,7 @@ function TamperModal({ block, onSave, onClose }) {
                 background: 'transparent',
                 border: '1px solid rgba(59,140,255,0.2)',
                 color: 'var(--text-secondary)', fontFamily: 'Manrope, sans-serif',
-                fontWeight: 500, fontSize: '0.88rem', cursor: 'pointer',
+                fontWeight: 800, fontSize: '1.10rem', cursor: 'pointer',
               }}
             >
               Cancel
@@ -583,7 +583,7 @@ const EMPTY_FORM = { from: '', to: '', milestone: '', amount: '' }
 
 const selectStyle = {
   width: '100%', boxSizing: 'border-box',
-  fontFamily: 'Manrope, sans-serif', fontSize: '0.84rem',
+  fontFamily: 'Manrope, sans-serif', fontSize: '1.05rem',
   background: 'rgba(59,140,255,0.06)',
   border: '1px solid rgba(59,140,255,0.2)',
   borderRadius: 9, padding: '9px 12px',
@@ -661,8 +661,8 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
       >
         {/* Sidebar heading */}
         <div style={{
-          fontFamily: 'Manrope, sans-serif', fontWeight: 700,
-          fontSize: '0.9rem', color: 'var(--text-primary)', marginBottom: 18,
+          fontFamily: 'Manrope, sans-serif', fontWeight: 800,
+          fontSize: '1.13rem', color: 'var(--text-primary)', marginBottom: 18,
           display: 'flex', alignItems: 'center', gap: 8,
         }}>
           <span>⛓</span> Add New Tranche
@@ -672,7 +672,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
           {/* From */}
           <div>
             <label style={{
-              fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem',
+              fontFamily: 'JetBrains Mono, monospace', fontSize: '0.78rem',
               color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.08em',
               display: 'block', marginBottom: 5,
             }}>From (NBFC Node)</label>
@@ -696,7 +696,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
           {/* To */}
           <div>
             <label style={{
-              fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem',
+              fontFamily: 'JetBrains Mono, monospace', fontSize: '0.78rem',
               color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.08em',
               display: 'block', marginBottom: 5,
             }}>To (Institution / Platform)</label>
@@ -720,7 +720,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
           {/* Milestone */}
           <div>
             <label style={{
-              fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem',
+              fontFamily: 'JetBrains Mono, monospace', fontSize: '0.78rem',
               color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.08em',
               display: 'block', marginBottom: 5,
             }}>Milestone</label>
@@ -748,7 +748,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
           {/* Amount */}
           <div>
             <label style={{
-              fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem',
+              fontFamily: 'JetBrains Mono, monospace', fontSize: '0.78rem',
               color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.08em',
               display: 'block', marginBottom: 5,
             }}>Amount (₹)</label>
@@ -760,7 +760,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
               disabled={busy}
               style={{
                 width: '100%', boxSizing: 'border-box',
-                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.88rem',
+                fontFamily: 'JetBrains Mono, monospace', fontSize: '1.10rem',
                 background: 'rgba(16,185,129,0.06)',
                 border: '1px solid rgba(16,185,129,0.2)',
                 borderRadius: 9, padding: '9px 12px',
@@ -782,7 +782,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
                 exit={{ opacity: 0, height: 0 }}
               >
                 <div style={{
-                  fontFamily: 'JetBrains Mono, monospace', fontSize: '0.58rem',
+                  fontFamily: 'JetBrains Mono, monospace', fontSize: '0.72rem',
                   color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.08em',
                   marginBottom: 4,
                 }}>Computing fingerprint…</div>
@@ -812,10 +812,10 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
                 <motion.span
                   animate={{ rotate: [0, 20, -20, 0], scale: [1, 1.2, 1] }}
                   transition={{ duration: 0.6, repeat: Infinity }}
-                  style={{ fontSize: '1.1rem' }}
+                  style={{ fontSize: '1.38rem' }}
                 >🔏</motion.span>
                 <span style={{
-                  fontFamily: 'Manrope, sans-serif', fontSize: '0.78rem',
+                  fontFamily: 'Manrope, sans-serif', fontSize: '0.98rem',
                   color: 'var(--color-teal)',
                 }}>Applying digital signature (wax seal)…</span>
               </motion.div>
@@ -834,7 +834,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
                   padding: '9px 12px', borderRadius: 8,
                   background: 'var(--badge-red-border)',
                   border: '1px solid rgba(239,68,68,0.3)',
-                  fontFamily: 'Manrope, sans-serif', fontSize: '0.78rem',
+                  fontFamily: 'Manrope, sans-serif', fontSize: '0.98rem',
                   color: 'var(--color-red)', lineHeight: 1.4,
                 }}
               >
@@ -857,8 +857,8 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
                 ? `linear-gradient(135deg, ${btnColor}30, ${btnColor}18)`
                 : `linear-gradient(135deg, ${btnColor}, ${btnColor}cc)`,
               color: busy ? btnColor : 'var(--bg-body)',
-              fontFamily: 'Manrope, sans-serif', fontWeight: 700,
-              fontSize: '0.85rem', cursor: busy ? 'wait' : 'pointer',
+              fontFamily: 'Manrope, sans-serif', fontWeight: 800,
+              fontSize: '1.06rem', cursor: busy ? 'wait' : 'pointer',
               transition: 'background 0.3s, color 0.3s',
               border: busy ? `1px solid ${btnColor}40` : 'none',
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
@@ -868,7 +868,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
               <motion.span
                 animate={{ rotate: 360 }}
                 transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                style={{ display: 'inline-block', fontSize: '0.9rem' }}
+                style={{ display: 'inline-block', fontSize: '1.13rem' }}
               >⚙</motion.span>
             )}
             {btnLabel}
@@ -879,16 +879,16 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
       {/* Info card */}
       <div className="glass-card" style={{ padding: '14px 16px' }}>
         <div style={{
-          fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem',
+          fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem',
           color: 'var(--color-electric-blue)', textTransform: 'uppercase', letterSpacing: '0.08em',
           marginBottom: 7,
         }}>Loan Reference</div>
         <div style={{
-          fontFamily: 'JetBrains Mono, monospace', fontSize: '0.78rem',
+          fontFamily: 'JetBrains Mono, monospace', fontSize: '0.98rem',
           color: 'var(--color-electric-blue)', marginBottom: 10,
         }}>{LOAN_ID}</div>
         <div style={{
-          fontFamily: 'Manrope, sans-serif', fontSize: '0.74rem',
+          fontFamily: 'Manrope, sans-serif', fontSize: '0.93rem',
           color: 'var(--text-secondary)', lineHeight: 1.55,
         }}>
           Each disbursement milestone can only appear once in the chain.
@@ -938,15 +938,15 @@ function StatsBar({ blocks, onReset, onRemoveTamper }) {
       ].map(s => (
         <div key={s.label} style={{ display: 'flex', gap: 6, alignItems: 'baseline' }}>
           <span style={{
-            fontFamily: 'Manrope, sans-serif', fontSize: '0.75rem', color: 'var(--text-secondary)',
+            fontFamily: 'Manrope, sans-serif', fontSize: '0.94rem', color: 'var(--text-secondary)',
           }}>{s.label}:</span>
           <motion.span
             key={s.value}
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
             style={{
-              fontFamily: 'JetBrains Mono, monospace', fontWeight: 700,
-              fontSize: '0.82rem', color: s.color || 'var(--text-primary)',
+              fontFamily: 'JetBrains Mono, monospace', fontWeight: 800,
+              fontSize: '1.02rem', color: s.color || 'var(--text-primary)',
             }}
           >{s.value}</motion.span>
         </div>
@@ -962,7 +962,7 @@ function StatsBar({ blocks, onReset, onRemoveTamper }) {
               background: 'var(--badge-teal-border)',
               border: '1px solid rgba(16,185,129,0.25)',
               color: 'var(--color-green)', fontFamily: 'Manrope, sans-serif',
-              fontWeight: 600, fontSize: '0.75rem', cursor: 'pointer',
+              fontWeight: 800, fontSize: '0.94rem', cursor: 'pointer',
               transition: 'all 0.15s',
             }}
             onMouseEnter={e => {
@@ -986,7 +986,7 @@ function StatsBar({ blocks, onReset, onRemoveTamper }) {
             background: 'rgba(59,140,255,0.1)',
             border: '1px solid rgba(59,140,255,0.25)',
             color: 'var(--color-electric-blue)', fontFamily: 'Manrope, sans-serif',
-            fontWeight: 600, fontSize: '0.75rem', cursor: 'pointer',
+            fontWeight: 800, fontSize: '0.94rem', cursor: 'pointer',
             transition: 'all 0.15s',
           }}
           onMouseEnter={e => {
@@ -1032,15 +1032,15 @@ function TamperBanner({ info, onDismiss }) {
         <motion.span
           animate={{ rotate: [0, -8, 8, 0] }}
           transition={{ duration: 0.4, delay: 0.2 }}
-          style={{ fontSize: '1.1rem' }}
+          style={{ fontSize: '1.38rem' }}
         >⚠️</motion.span>
         <span style={{
-          fontFamily: 'Manrope, sans-serif', fontWeight: 600,
-          fontSize: '0.84rem', color: 'var(--color-red)',
+          fontFamily: 'Manrope, sans-serif', fontWeight: 800,
+          fontSize: '1.05rem', color: 'var(--color-red)',
         }}>
           Tamper detected — chain integrity broken from Tranche #{info.fromTranche} onward.
           {' '}
-          <span style={{ fontWeight: 400, color: 'var(--badge-red-border)' }}>
+          <span style={{ fontWeight: 800, color: 'var(--badge-red-border)' }}>
             The ledger fingerprint chain has been compromised.
           </span>
         </span>
@@ -1049,7 +1049,7 @@ function TamperBanner({ info, onDismiss }) {
         onClick={onDismiss}
         style={{
           background: 'none', border: 'none', color: 'var(--badge-red-border)',
-          cursor: 'pointer', fontFamily: 'Manrope, sans-serif', fontSize: '0.78rem',
+          cursor: 'pointer', fontFamily: 'Manrope, sans-serif', fontSize: '0.98rem',
           padding: '2px 6px',
         }}
       >Dismiss</button>
@@ -1322,7 +1322,7 @@ export default function LedgerTab({ blocks, setBlocks }) {
           {/* Scroll hint */}
           {blocks.length > 2 && !isMobile && (
             <div style={{
-              fontFamily: 'Manrope, sans-serif', fontSize: '0.72rem',
+              fontFamily: 'Manrope, sans-serif', fontSize: '0.90rem',
               color: 'var(--text-secondary)', textAlign: 'center',
             }}>
               ← scroll chain horizontally · click any hash to expand
