@@ -322,3 +322,10 @@ option {
   background-color: var(--dropdown-bg);
   color: var(--dropdown-text);
 }
+
+
+/* Fix select option dropdowns in dark/light mode */
+option {
+  background: var(--bg-body);
+  color: var(--text-primary);
+}
