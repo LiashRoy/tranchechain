@@ -9,7 +9,7 @@ createRoot(document.getElementById('root')).render(
   </StrictMode>,
 )
 
-console.log("Cache bust version: 1786032027832");
+console.log("Cache bust version: 1786043839493");
 
 console.log("Cache bust version: 1786032034661");
 
