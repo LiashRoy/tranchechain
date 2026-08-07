@@ -642,10 +642,10 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
     '⛓ Sign & Add Block'
 
   const btnColor =
-    isComputing ? 'var(--color-electric-blue)' :
-    isSigning   ? 'var(--color-teal)' :
-    addPhase === 'done' ? 'var(--color-green)' :
-    'var(--color-electric-blue)'
+    isComputing ? '#3b8cff' :
+    isSigning   ? '#14b8a6' :
+    addPhase === 'done' ? '#10b981' :
+    '#3b8cff'
 
   return (
     <div style={{

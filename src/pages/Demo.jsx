@@ -39,7 +39,7 @@ export default function Demo() {
                   position: 'relative',
                   padding: '10px 24px', border: 'none', background: 'transparent',
                   fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '0.9rem',
-                  color: isActive ? 'var(--bg-body)' : 'var(--text-secondary)', cursor: 'pointer',
+                  color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)', cursor: 'pointer',
                   transition: 'color 0.2s', zIndex: 1
                 }}
               >
