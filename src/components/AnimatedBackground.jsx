@@ -48,7 +48,7 @@ function FloatingBlock({ block }) {
         width: 110,
         height: 72,
         borderRadius: '10px',
-        background: 'rgba(15,26,46,0.3)',
+        background: 'var(--glass-bg)',
         border: '1px solid rgba(59,140,255,0.1)',
         willChange: 'transform, opacity',
         padding: '10px 12px',

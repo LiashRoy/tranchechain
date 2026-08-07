@@ -449,7 +449,7 @@ function TamperModal({ block, onSave, onClose }) {
       exit={{ opacity: 0 }}
       style={{
         position: 'fixed', inset: 0, zIndex: 200,
-        background: 'rgba(4,8,15,0.75)', backdropFilter: 'blur(8px)',
+        background: 'var(--glass-bg)', backdropFilter: 'blur(8px)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         padding: 24,
       }}

@@ -119,7 +119,7 @@ const FLOW_NODES = [
   { id: 'nbfc',     label: 'NBFC',              sub: 'NBFC 1 · NBFC 2',   icon: <Landmark size={28} color="var(--color-electric-blue)" />, color: 'var(--color-electric-blue)' },
   { id: 'platform', label: 'Fintech Company', sub: 'Education Finance Node',      icon: <LinkIcon size={28} color="var(--color-electric-blue)" />, color: 'var(--color-electric-blue)' },
   { id: 'inst',     label: 'Institution',        sub: 'Full Ledger Copy',            icon: <Building2 size={28} color="var(--color-electric-blue)" />, color: 'var(--color-electric-blue)' },
-  { id: 'student',  label: 'Student / Parent',   sub: 'Wallet — no node required',  icon: <User size={28} color="#94a3b8" />, color: '#94a3b8' },
+  { id: 'student',  label: 'Student / Parent',   sub: 'Wallet — no node required',  icon: <User size={28} color="var(--text-secondary)" />, color: 'var(--text-secondary)' },
 ]
 
 
@@ -127,7 +127,7 @@ const TRAD_NODES = [
   { id: 'nbfc', label: 'NBFC', sub: 'Siloed Database', icon: <Database size={28} color="var(--color-red)" />, color: 'var(--color-red)' },
   { id: 'platform', label: 'Fintech Company', sub: 'Spreadsheet / DB', icon: <FileText size={28} color="var(--color-gold)" />, color: 'var(--color-gold)' },
   { id: 'inst', label: 'Institution', sub: 'Manual Entry', icon: <Building2 size={28} color="var(--color-red)" />, color: 'var(--color-red)' },
-  { id: 'student', label: 'Student / Parent', sub: 'Manual App Check', icon: <User size={28} color="#94a3b8" />, color: '#94a3b8' },
+  { id: 'student', label: 'Student / Parent', sub: 'Manual App Check', icon: <User size={28} color="var(--text-secondary)" />, color: 'var(--text-secondary)' },
 ]
 
 function TraditionalFlowDiagram() {
@@ -180,7 +180,7 @@ function TraditionalFlowDiagram() {
                     <div style={{ background: 'rgba(239,68,68,0.15)', padding: '4px', borderRadius: '50%' }}>
                       <AlertTriangle size={16} fill="rgba(239,68,68,0.3)" />
                     </div>
-                    <div style={{ position: 'absolute', top: 26, width: '130px', textAlign: 'center', fontFamily: 'Manrope, sans-serif', fontSize: '0.55rem', color: 'var(--color-red)', fontWeight: 700, lineHeight: 1.2, background: 'rgba(20,20,20,0.95)', padding: '4px 6px', borderRadius: '4px', border: '1px solid rgba(239,68,68,0.4)', boxShadow: '0 4px 12px rgba(239,68,68,0.15)' }}>
+                    <div style={{ position: 'absolute', top: 26, width: '130px', textAlign: 'center', fontFamily: 'Manrope, sans-serif', fontSize: '0.55rem', color: 'var(--color-red)', fontWeight: 700, lineHeight: 1.2, background: 'var(--glass-bg)', padding: '4px 6px', borderRadius: '4px', border: '1px solid rgba(239,68,68,0.4)', boxShadow: '0 4px 12px rgba(239,68,68,0.15)' }}>
                       ⚠ Double-Disbursement Risk
                     </div>
                   </motion.div>
@@ -707,7 +707,7 @@ export default function Home() {
           <span style={{
             fontFamily: 'Manrope, sans-serif',
             fontSize: '0.7rem',
-            color: '#243352',
+            color: 'var(--text-secondary)',
             letterSpacing: '0.08em',
             textTransform: 'uppercase',
           }}>Scroll</span>
@@ -851,7 +851,7 @@ export default function Home() {
                   { step: '01', color: 'var(--color-red)', title: 'NBFC logs disbursement', desc: "Recorded only in NBFC's internal system" },
                   { step: '02', color: 'var(--color-gold)', title: 'Sent via email/spreadsheet', desc: "No verification the data wasn't altered in transit" },
                   { step: '03', color: 'var(--color-red)', title: 'Institution re-enters manually', desc: "Human error, no cross-check against NBFC's original record" },
-                  { step: '04', color: '#94a3b8', title: 'Reconciliation happens later', desc: "Mismatches surface weeks later, or never" },
+                  { step: '04', color: 'var(--text-secondary)', title: 'Reconciliation happens later', desc: "Mismatches surface weeks later, or never" },
                 ].map(s => (
                   <div key={s.step} style={{ background: `rgba(239,68,68,0.02)`, border: `1px solid rgba(239,68,68,0.08)`, padding: '16px', borderRadius: '8px' }}>
                     <div style={{ fontFamily: 'JetBrains Mono', fontSize: '0.65rem', color: s.color, marginBottom: '6px' }}>STEP {s.step}</div>
@@ -901,7 +901,7 @@ export default function Home() {
                     fontFamily: 'Manrope, sans-serif',
                     fontWeight: 600,
                     fontSize: '0.85rem',
-                    color: '#b8c9df',
+                    color: 'var(--text-secondary)',
                   }}>{s.title}</div>
                   <div style={{
                     fontFamily: 'Manrope, sans-serif',

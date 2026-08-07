@@ -98,7 +98,7 @@ export default function Layout() {
         <span style={{
           fontFamily: 'JetBrains Mono, monospace',
           fontSize: '0.72rem',
-          color: '#243352',
+          color: 'var(--text-secondary)',
         }}>
           Fintech Company-style education finance platform
         </span>

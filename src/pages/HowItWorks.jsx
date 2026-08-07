@@ -400,7 +400,7 @@ function Section2() {
                     }}>{field.label}</span>
                     <span style={{
                       fontFamily: 'JetBrains Mono, monospace', fontSize: '0.72rem',
-                      color: '#b8c9df',
+                      color: 'var(--text-secondary)',
                     }}>{field.value}</span>
                   </motion.div>
                 ))}
@@ -490,7 +490,7 @@ function ChainBlock({ block, index, totalBlocks, inView, animDelay }) {
           ].map(({ k, v, c }) => (
             <div key={k} style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
               <span style={{
-                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.58rem', color: '#243352',
+                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.58rem', color: 'var(--text-secondary)',
                 textTransform: 'uppercase', letterSpacing: '0.06em',
               }}>{k}</span>
               <span style={{
@@ -508,7 +508,7 @@ function ChainBlock({ block, index, totalBlocks, inView, animDelay }) {
               }}>prev_hash</span>
               <span style={{
                 fontFamily: 'JetBrains Mono, monospace', fontSize: '0.7rem',
-                color: isFirst ? '#243352' : 'var(--color-gold)',
+                color: isFirst ? 'var(--text-secondary)' : 'var(--color-gold)',
                 background: isFirst ? 'transparent' : 'rgba(245,158,11,0.08)',
                 borderRadius: '4px', padding: isFirst ? '0' : '2px 6px',
               }}>{prevHashDisplay}</span>
@@ -718,13 +718,13 @@ function TamperBlock({ block, status, isEditing, editAmount, onEditAmount, onEdi
         {/* Body */}
         <div style={{ padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: '7px' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-            <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.58rem', color: '#243352', textTransform: 'uppercase' }}>from</span>
+            <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.58rem', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>from</span>
             <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.7rem', color: 'var(--text-secondary)' }}>{block.from}</span>
           </div>
 
           {/* Editable amount */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-            <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.58rem', color: '#243352', textTransform: 'uppercase' }}>amount</span>
+            <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.58rem', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>amount</span>
             {isEditing ? (
               <input
                 value={editAmount}
@@ -746,7 +746,7 @@ function TamperBlock({ block, status, isEditing, editAmount, onEditAmount, onEdi
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-            <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.58rem', color: '#243352', textTransform: 'uppercase' }}>milestone</span>
+            <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.58rem', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>milestone</span>
             <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.68rem', color: '#a78bfa' }}>{block.milestone}</span>
           </div>
 
@@ -1331,7 +1331,7 @@ function Section6() {
           </button>
 
           <div style={{
-            fontFamily: 'Manrope, sans-serif', fontSize: '0.78rem', color: '#243352', textAlign: 'center',
+            fontFamily: 'Manrope, sans-serif', fontSize: '0.78rem', color: 'var(--text-secondary)', textAlign: 'center',
           }}>
             Nodes vs Transactors: NBFC · Platform · Institution are nodes — they hold the full ledger.
             The student/guardian is a transactor — they only need a wallet.

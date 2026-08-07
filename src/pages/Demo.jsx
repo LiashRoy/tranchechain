@@ -20,7 +20,7 @@ export default function Demo() {
       {/* Persistent Tab Bar */}
       <div style={{ 
         position: 'sticky', top: 0, zIndex: 50,
-        background: 'rgba(8,16,29,0.85)', backdropFilter: 'blur(12px)',
+        background: 'var(--glass-bg)', backdropFilter: 'blur(12px)',
         borderBottom: '1px solid rgba(255,255,255,0.05)',
         padding: '16px 24px',
         display: 'flex', justifyContent: 'center'
@@ -39,7 +39,7 @@ export default function Demo() {
                   position: 'relative',
                   padding: '10px 24px', border: 'none', background: 'transparent',
                   fontFamily: 'Manrope, sans-serif', fontWeight: 600, fontSize: '0.9rem',
-                  color: isActive ? '#fff' : 'var(--text-secondary)', cursor: 'pointer',
+                  color: isActive ? 'var(--bg-body)' : 'var(--text-secondary)', cursor: 'pointer',
                   transition: 'color 0.2s', zIndex: 1
                 }}
               >

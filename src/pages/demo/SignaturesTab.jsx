@@ -112,7 +112,7 @@ function HexCard({ label, value, icon, color, note, glow = false }) {
             onClick={() => setExpanded(e => !e)}
             style={{
               padding: '3px 8px', borderRadius: 5, border: 'none',
-              background: 'rgba(255,255,255,0.05)', color: 'var(--text-secondary)',
+              background: 'var(--glass-border)', color: 'var(--text-secondary)',
               fontFamily: 'Manrope, sans-serif', fontSize: '0.62rem',
               cursor: 'pointer',
             }}
@@ -215,8 +215,8 @@ function ProgressBar({ activeStep }) {
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
               <motion.div
                 animate={{
-                  background: done ? 'var(--color-green)' : current ? 'var(--color-electric-blue)' : 'rgba(255,255,255,0.05)',
-                  borderColor: done ? 'var(--color-green)' : current ? 'var(--color-electric-blue)' : 'rgba(255,255,255,0.12)',
+                  background: done ? 'var(--color-green)' : current ? 'var(--color-electric-blue)' : 'var(--glass-border)',
+                  borderColor: done ? 'var(--color-green)' : current ? 'var(--color-electric-blue)' : 'var(--glass-border)',
                   boxShadow: current ? '0 0 18px rgba(59,140,255,0.45)' : 'none',
                 }}
                 transition={{ duration: 0.35 }}
@@ -249,7 +249,7 @@ function ProgressBar({ activeStep }) {
             {/* Connector line */}
             {i < STEPS.length - 1 && (
               <motion.div
-                animate={{ background: done ? 'var(--badge-teal-bg)' : 'rgba(255,255,255,0.07)' }}
+                animate={{ background: done ? 'var(--badge-teal-bg)' : 'var(--glass-border)' }}
                 transition={{ duration: 0.4 }}
                 style={{ flex: 1, height: 2, borderRadius: 1, marginBottom: 22 }}
               />

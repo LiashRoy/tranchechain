@@ -138,7 +138,7 @@ export default function Navbar() {
               onMouseLeave={e => {
                 const isActive = e.currentTarget.getAttribute('aria-current') === 'page'
                 if (!isActive) {
-                  e.currentTarget.style.color = '#94a3b8'
+                  e.currentTarget.style.color = 'var(--text-secondary)'
                   e.currentTarget.style.background = 'transparent'
                 }
               }}

@@ -42,7 +42,7 @@ function BlockModal({ block, onClose, accentColor = 'var(--color-electric-blue)'
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 10 }}
         style={{
-          background: '#0a1120', border: `1px solid ${accentColor}40`,
+          background: 'var(--bg-body)', border: `1px solid ${accentColor}40`,
           borderRadius: 16, padding: '24px', width: '100%', maxWidth: 500,
           boxShadow: `0 20px 40px rgba(0,0,0,0.4), 0 0 0 1px ${accentColor}10`,
           position: 'relative',
@@ -70,26 +70,26 @@ function BlockModal({ block, onClose, accentColor = 'var(--color-electric-blue)'
         </div>
 
         <div style={{ display: 'grid', gap: 12 }}>
-          <div style={{ background: '#10192c', padding: '12px', borderRadius: 8, border: '1px solid #1e293b' }}>
+          <div style={{ background: 'var(--bg-body)', padding: '12px', borderRadius: 8, border: '1px solid #1e293b' }}>
             <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: 'var(--text-secondary)', marginBottom: 4 }}>TRANSACTION</div>
             <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.9rem', color: 'var(--text-primary)' }}>{block.from} → {block.to}</div>
           </div>
-          <div style={{ background: '#10192c', padding: '12px', borderRadius: 8, border: '1px solid #1e293b' }}>
+          <div style={{ background: 'var(--bg-body)', padding: '12px', borderRadius: 8, border: '1px solid #1e293b' }}>
             <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: 'var(--text-secondary)', marginBottom: 4 }}>AMOUNT</div>
             <div style={{ fontFamily: 'JetBrains Mono, monospace', fontWeight: 800, fontSize: '1.1rem', color: statusColor }}>{block.amount}</div>
           </div>
-          <div style={{ background: '#10192c', padding: '12px', borderRadius: 8, border: '1px solid #1e293b' }}>
+          <div style={{ background: 'var(--bg-body)', padding: '12px', borderRadius: 8, border: '1px solid #1e293b' }}>
             <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: 'var(--text-secondary)', marginBottom: 4 }}>TIMESTAMP</div>
             <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.9rem', color: 'var(--text-primary)' }}>{block.timestamp}</div>
           </div>
-          <div style={{ background: '#10192c', padding: '12px', borderRadius: 8, border: '1px solid #1e293b', overflow: 'hidden' }}>
+          <div style={{ background: 'var(--bg-body)', padding: '12px', borderRadius: 8, border: '1px solid #1e293b', overflow: 'hidden' }}>
             <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: 'var(--text-secondary)', marginBottom: 4 }}>BLOCK HASH (SHA-256)</div>
             <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem', color: 'var(--color-teal)', wordBreak: 'break-all' }}>{block.hash || 'Pending Computation...'}</div>
           </div>
           {block.prevHash && (
-            <div style={{ background: '#10192c', padding: '12px', borderRadius: 8, border: '1px solid #1e293b', overflow: 'hidden' }}>
+            <div style={{ background: 'var(--bg-body)', padding: '12px', borderRadius: 8, border: '1px solid #1e293b', overflow: 'hidden' }}>
               <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: 'var(--text-secondary)', marginBottom: 4 }}>PREVIOUS HASH</div>
-              <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem', color: '#94a3b8', wordBreak: 'break-all' }}>{block.prevHash}</div>
+              <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem', color: 'var(--text-secondary)', wordBreak: 'break-all' }}>{block.prevHash}</div>
             </div>
           )}
         </div>
@@ -110,7 +110,7 @@ function PortalBlock({ block, accentColor, style = {}, onClick }) {
   const bg =
     block.status === 'tampered' ? 'rgba(245,158,11,0.07)' :
     block.status === 'invalid'  ? 'rgba(239,68,68,0.07)'  :
-    block.status === 'pending'  ? 'rgba(59,140,255,0.07)' : 'rgba(15,26,46,0.5)'
+    block.status === 'pending'  ? 'rgba(59,140,255,0.07)' : 'var(--glass-bg)'
 
   const border =
     block.status === 'tampered' ? 'rgba(245,158,11,0.35)' :
@@ -167,7 +167,7 @@ function PortalBlock({ block, accentColor, style = {}, onClick }) {
         <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
           {[block.from, block.to].map((e, i) => (
             <span key={i} style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-              {i === 1 && <span style={{ color: '#243352', fontSize: '0.65rem' }}>→</span>}
+              {i === 1 && <span style={{ color: 'var(--text-secondary)', fontSize: '0.65rem' }}>→</span>}
               <span style={{
                 padding: '1px 5px', borderRadius: 4,
                 background: `${ENTITY_COLORS[e] || accentColor}15`,
@@ -220,13 +220,13 @@ function BrowserFrame({ url, accentColor, isConsensus, children }) {
       style={{
         borderRadius: 14, overflow: 'hidden',
         border: `1px solid rgba(255,255,255,0.07)`,
-        background: '#08101d',
+        background: 'var(--bg-body)',
         flex: 1, minWidth: 0,
         display: 'flex', flexDirection: 'column',
       }}
     >
       <div style={{
-        background: '#10192c',
+        background: 'var(--bg-body)',
         padding: '9px 14px',
         borderBottom: '1px solid rgba(255,255,255,0.05)',
         display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0,
@@ -237,7 +237,7 @@ function BrowserFrame({ url, accentColor, isConsensus, children }) {
           ))}
         </div>
         <div style={{
-          flex: 1, background: '#080f1c', borderRadius: 6,
+          flex: 1, background: 'var(--bg-body)', borderRadius: 6,
           padding: '4px 10px', display: 'flex', alignItems: 'center', gap: 5,
           border: '1px solid rgba(255,255,255,0.05)', minWidth: 0,
         }}>
@@ -300,7 +300,7 @@ function NBFCContent({ chain, onBlockClick, step, setStep, pendingBlock }) {
       </div>
 
       <div style={{
-        fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem', color: '#243352',
+        fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem', color: 'var(--text-secondary)',
         marginBottom: 4,
       }}>LOAN: EDU-2024-001 · 3 tranches</div>
 
@@ -329,7 +329,7 @@ function NBFCContent({ chain, onBlockClick, step, setStep, pendingBlock }) {
               <button 
                 onClick={() => setStep(1)}
                 style={{
-                  padding: '8px 16px', borderRadius: 8, background: 'var(--color-electric-blue)', color: '#fff',
+                  padding: '8px 16px', borderRadius: 8, background: 'var(--color-electric-blue)', color: '#ffffff',
                   border: 'none', fontFamily: 'Manrope, sans-serif', fontWeight: 700, cursor: 'pointer',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6
                 }}>
@@ -411,7 +411,7 @@ function FintechCompanyContent({ chain, onBlockClick, step, pendingBlock }) {
                   fontFamily: 'JetBrains Mono, monospace', fontSize: '0.52rem',
                   color: '#14b8a650',
                 }}>{trunc(block.hash, 8)}</div>
-                <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.52rem', color: '#243352' }}>
+                <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.52rem', color: 'var(--text-secondary)' }}>
                   {block.timestamp.split(' ')[0]}
                 </div>
               </div>
@@ -456,7 +456,7 @@ function FintechCompanyContent({ chain, onBlockClick, step, pendingBlock }) {
                   fontFamily: 'JetBrains Mono, monospace', fontSize: '0.52rem',
                   color: '#14b8a650',
                 }}>{step === 2 ? trunc(computeHash({...pendingBlock, amount: '₹24,000'}), 8) : 'PENDING'}</div>
-                <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.52rem', color: '#243352' }}>
+                <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.52rem', color: 'var(--text-secondary)' }}>
                   {pendingBlock.timestamp.split(' ')[0]}
                 </div>
               </div>
@@ -516,7 +516,7 @@ function InstitutionContent({ chain, onBlockClick, step, setStep, pendingBlock }
       </div>
 
       <div style={{
-        fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem', color: '#243352',
+        fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem', color: 'var(--text-secondary)',
         marginBottom: 4,
       }}>STUDENT LOAN: EDU-2024-001 · ₹66,000 total</div>
 
@@ -545,7 +545,7 @@ function InstitutionContent({ chain, onBlockClick, step, setStep, pendingBlock }
               <button 
                 onClick={() => setStep(2)}
                 style={{
-                  padding: '8px 16px', borderRadius: 8, background: '#a78bfa', color: '#10192c',
+                  padding: '8px 16px', borderRadius: 8, background: '#a78bfa', color: 'var(--bg-body)',
                   border: 'none', fontFamily: 'Manrope, sans-serif', fontWeight: 800, cursor: 'pointer',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6
                 }}>
@@ -623,7 +623,7 @@ export default function Dashboard() {
           </div>
           <div>
             <button onClick={() => setTransactionStep(0)} style={{
-              padding: '10px 20px', borderRadius: 8, background: 'rgba(255,255,255,0.05)', color: '#fff',
+              padding: '10px 20px', borderRadius: 8, background: 'var(--glass-border)', color: '#ffffff',
               border: '1px solid rgba(255,255,255,0.1)', fontFamily: 'Manrope, sans-serif', fontWeight: 600, cursor: 'pointer',
             }}>
               RESET DASHBOARD
@@ -679,7 +679,7 @@ export default function Dashboard() {
             <div key={item.title} style={{ display: 'flex', gap: 12 }}>
               <span style={{ fontSize: '1.2rem', flexShrink: 0 }}>{item.icon}</span>
               <div>
-                <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.8rem', color: '#b8c9df', marginBottom: 4 }}>{item.title}</div>
+                <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 700, fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: 4 }}>{item.title}</div>
                 <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.78rem', color: 'var(--text-secondary)', lineHeight: 1.55 }}>{item.text}</div>
               </div>
             </div>
