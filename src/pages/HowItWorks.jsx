@@ -537,7 +537,6 @@ function ChainConnector({ fromHash, toBlock, inView, delay }) {
     <div style={{
       display: 'flex', flexDirection: 'column', alignItems: 'center',
       justifyContent: 'center', gap: '4px', width: '70px', flexShrink: 0,
-      paddingTop: '40px',
     }}>
       {/* Animated arrow line */}
       <div style={{ position: 'relative', width: '100%', height: '28px', display: 'flex', alignItems: 'center' }}>
@@ -613,11 +612,11 @@ function Section3() {
           overflowX: 'auto', paddingBottom: '8px',
         }}>
           <div style={{
-            display: 'flex', alignItems: 'flex-start', gap: '0',
+            display: 'flex', alignItems: 'center', gap: '0',
             minWidth: '700px',
           }}>
             {STATIC_CHAIN.map((block, i) => (
-              <div key={block.index} style={{ display: 'flex', alignItems: 'flex-start', flex: 1 }}>
+              <div key={block.index} style={{ display: 'flex', alignItems: 'center', flex: 1 }}>
                 <ChainBlock
                   block={block}
                   index={i}
