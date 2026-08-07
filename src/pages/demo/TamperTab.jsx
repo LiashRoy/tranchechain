@@ -42,7 +42,7 @@ const PHASE_LABELS = [
 const ENTITY_META = {
   'NBFC 1':        { color: 'var(--color-electric-blue)', initials: 'N1' },
   'NBFC 2':        { color: 'var(--color-teal)', initials: 'N2' },
-  'NBFC 3':     { color: '#a78bfa', initials: 'N3' },
+  'NBFC 3':     { color: 'var(--color-electric-blue)', initials: 'N3' },
   'Fintech Company': { color: 'var(--color-gold)', initials: 'GQ' },
   'Partner Institute':    { color: 'var(--color-green)', initials: 'PI' },
 }
@@ -61,7 +61,7 @@ function EntityPill({ name }) {
       }}>{m.initials}</div>
       <span style={{
         fontFamily: 'Manrope, sans-serif', fontWeight: 600,
-        fontSize: '0.82rem', color: '#b8c9df',
+        fontSize: '0.82rem', color: 'var(--text-primary)',
       }}>{name}</span>
     </div>
   )
@@ -204,7 +204,7 @@ function DemoBlock({
         <div style={{
           borderRadius: 14,
           border: `2px solid ${borderColor}`,
-          background: 'rgba(15,26,46,0.85)',
+          background: 'var(--glass-bg)',
           backdropFilter: 'blur(14px)',
           overflow: 'hidden',
           transition: 'border-color 0.4s, box-shadow 0.4s',
@@ -251,7 +251,7 @@ function DemoBlock({
               <EntityPill name={block.from} />
               <div style={{
                 fontFamily: 'Manrope, sans-serif', fontSize: '0.72rem',
-                color: '#243352', paddingLeft: 8,
+                color: 'var(--text-secondary)', paddingLeft: 8,
               }}>↓ disburses to</div>
               <EntityPill name={block.to} />
             </div>
@@ -263,7 +263,7 @@ function DemoBlock({
             <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
               <div style={{
                 fontFamily: 'Manrope, sans-serif', fontSize: '0.76rem',
-                color: '#a78bfa', fontWeight: 500,
+                color: 'var(--color-electric-blue)', fontWeight: 500,
               }}>{block.milestone}</div>
 
               {/* AMOUNT — animated glitch target */}
@@ -293,7 +293,7 @@ function DemoBlock({
 
               <div style={{
                 fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem',
-                color: '#243352',
+                color: 'var(--text-secondary)',
               }}>{block.timestamp}</div>
             </div>
 
@@ -433,7 +433,7 @@ function PhaseIndicator({ currentPhase }) {
               <span style={{
                 fontFamily: 'Manrope, sans-serif', fontSize: '0.72rem',
                 fontWeight: isActive ? 700 : 400,
-                color: isActive ? '#6aaeff' : isDone ? '#34d399' : 'var(--text-secondary)',
+                color: isActive ? 'var(--color-electric-blue)' : isDone ? 'var(--color-green)' : 'var(--text-secondary)',
               }}>
                 {isDone ? '✓' : p.num} {p.label}
               </span>
@@ -480,7 +480,7 @@ function TamperBanner() {
           <div style={{
             fontFamily: 'Manrope, sans-serif', fontWeight: 800,
             fontSize: 'clamp(1.1rem, 3vw, 1.6rem)',
-            color: '#f87171', letterSpacing: '-0.02em',
+            color: 'var(--color-red)', letterSpacing: '-0.02em',
             marginBottom: 4,
           }}>
             TAMPERING DETECTED
@@ -502,7 +502,7 @@ function TamperBanner() {
             background: 'rgba(239,68,68,0.15)',
             border: '1px solid rgba(239,68,68,0.35)',
             fontFamily: 'JetBrains Mono, monospace', fontSize: '0.68rem',
-            color: '#f87171',
+            color: 'var(--color-red)',
           }}>{label}</span>
         ))}
       </div>
@@ -529,7 +529,7 @@ function SecurityNote() {
     >
       <div style={{
         fontFamily: 'Manrope, sans-serif', fontWeight: 700,
-        fontSize: '0.85rem', color: '#6aaeff', marginBottom: 10,
+        fontSize: '0.85rem', color: 'var(--color-electric-blue)', marginBottom: 10,
         display: 'flex', alignItems: 'center', gap: 8,
       }}>
         <span>🛡️</span> Why this fraud can't be hidden — Two-Layer Protection
@@ -574,7 +574,7 @@ function SecurityNote() {
                 }}>{item.layer}</span>
                 <span style={{
                   fontFamily: 'Manrope, sans-serif', fontWeight: 600,
-                  fontSize: '0.8rem', color: '#b8c9df',
+                  fontSize: '0.8rem', color: 'var(--text-primary)',
                 }}>{item.title}</span>
               </div>
               <p style={{
@@ -802,7 +802,7 @@ export default function TamperTab({ blocks, setBlocks }) {
                   display: 'flex', alignItems: 'center', gap: 12,
                   padding: '18px 44px', borderRadius: 14, border: 'none',
                   background: 'linear-gradient(135deg, #ef4444, #dc2626)',
-                  color: '#fff', fontFamily: 'Manrope, sans-serif',
+                  color: '#ffffff', fontFamily: 'Manrope, sans-serif',
                   fontWeight: 800, fontSize: '1.1rem', cursor: 'pointer',
                   boxShadow: '0 8px 32px rgba(239,68,68,0.35)',
                   letterSpacing: '-0.01em',
@@ -828,7 +828,7 @@ export default function TamperTab({ blocks, setBlocks }) {
                     padding: '14px 32px', borderRadius: 12,
                     background: 'rgba(59,140,255,0.1)',
                     border: '1.5px solid rgba(59,140,255,0.35)',
-                    color: '#6aaeff', fontFamily: 'Manrope, sans-serif',
+                    color: 'var(--color-electric-blue)', fontFamily: 'Manrope, sans-serif',
                     fontWeight: 700, fontSize: '0.95rem', cursor: 'pointer',
                     transition: 'all 0.15s',
                   }}
@@ -865,7 +865,7 @@ export default function TamperTab({ blocks, setBlocks }) {
                 />
                 <span style={{
                   fontFamily: 'Manrope, sans-serif', fontWeight: 600,
-                  fontSize: '0.9rem', color: '#f87171',
+                  fontSize: '0.9rem', color: 'var(--color-red)',
                 }}>Tampering sequence running…</span>
               </motion.div>
             )}

@@ -34,11 +34,11 @@ const uid = () => `block-${++_uid}-${Date.now()}`
 const ENTITIES = {
   'NBFC 1':          { color: 'var(--color-electric-blue)', bg: 'var(--nav-border)',  initials: 'N1', type: 'nbfc' },
   'NBFC 2':          { color: 'var(--color-teal)', bg: 'rgba(20,184,166,0.15)',  initials: 'N2', type: 'nbfc' },
-  'NBFC 3':       { color: '#a78bfa', bg: 'rgba(167,139,250,0.15)',initials: 'N3', type: 'nbfc' },
+  'NBFC 3':       { color: 'var(--color-electric-blue)', bg: 'rgba(167,139,250,0.15)',initials: 'N3', type: 'nbfc' },
   'Fintech Company':   { color: 'var(--color-gold)', bg: 'rgba(245,158,11,0.15)', initials: 'GQ', type: 'platform' },
   'Partner Institute':      { color: 'var(--color-green)', bg: 'rgba(16,185,129,0.15)', initials: 'PI', type: 'institution' },
-  'BITS Pilani':          { color: '#f87171', bg: 'rgba(248,113,113,0.15)',initials: 'BP', type: 'institution' },
-  'IIM Bangalore':        { color: '#fbbf24', bg: 'rgba(251,191,36,0.15)', initials: 'IB', type: 'institution' },
+  'BITS Pilani':          { color: 'var(--color-red)', bg: 'rgba(248,113,113,0.15)',initials: 'BP', type: 'institution' },
+  'IIM Bangalore':        { color: 'var(--color-gold)', bg: 'rgba(251,191,36,0.15)', initials: 'IB', type: 'institution' },
 }
 
 const FROM_OPTIONS = ['NBFC 1', 'NBFC 2', 'NBFC 3']
@@ -131,7 +131,7 @@ function EntityBadge({ name, size = 28 }) {
       </div>
       <span style={{
         fontFamily: 'Manrope, sans-serif', fontWeight: 600,
-        fontSize: '0.78rem', color: '#b8c9df',
+        fontSize: '0.78rem', color: 'var(--text-primary)',
       }}>{name}</span>
     </div>
   )
@@ -314,7 +314,7 @@ function BlockCard({ block, isNew, visiblyInvalid, onTamper }) {
       <div style={{
         borderRadius: 13,
         border: `1.5px solid ${borderColor}`,
-        background: 'rgba(15,26,46,0.72)',
+        background: 'var(--glass-bg)',
         backdropFilter: 'blur(14px)',
         overflow: 'hidden',
         transition: 'border-color 0.4s ease',
@@ -354,7 +354,7 @@ function BlockCard({ block, isNew, visiblyInvalid, onTamper }) {
           {/* From → To */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
             <EntityBadge name={block.from} />
-            <div style={{ paddingLeft: 8, color: '#243352', fontSize: '0.7rem' }}>↓</div>
+            <div style={{ paddingLeft: 8, color: 'var(--text-secondary)', fontSize: '0.7rem' }}>↓</div>
             <EntityBadge name={block.to} />
           </div>
 
@@ -371,11 +371,11 @@ function BlockCard({ block, isNew, visiblyInvalid, onTamper }) {
             </div>
             <div style={{
               fontFamily: 'Manrope, sans-serif', fontSize: '0.76rem',
-              color: '#a78bfa', fontWeight: 500,
+              color: 'var(--color-electric-blue)', fontWeight: 500,
             }}>{block.milestone}</div>
             <div style={{
               fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem',
-              color: '#243352',
+              color: 'var(--text-secondary)',
             }}>{block.timestamp}</div>
           </div>
 
@@ -403,7 +403,7 @@ function BlockCard({ block, isNew, visiblyInvalid, onTamper }) {
               padding: '5px 11px', borderRadius: 7,
               background: 'rgba(245,158,11,0.08)',
               border: '1px solid rgba(245,158,11,0.22)',
-              color: '#fbbf24', fontFamily: 'Manrope, sans-serif',
+              color: 'var(--color-gold)', fontFamily: 'Manrope, sans-serif',
               fontWeight: 600, fontSize: '0.7rem', cursor: 'pointer',
               transition: 'all 0.15s',
             }}
@@ -462,7 +462,7 @@ function TamperModal({ block, onSave, onClose }) {
         transition={{ type: 'spring', stiffness: 320, damping: 28 }}
         style={{
           width: '100%', maxWidth: 440,
-          background: 'rgba(15,26,46,0.95)',
+          background: 'var(--glass-bg)',
           border: '1.5px solid rgba(245,158,11,0.3)',
           borderRadius: 16, overflow: 'hidden',
           boxShadow: '0 20px 60px rgba(0,0,0,0.5)',
@@ -479,7 +479,7 @@ function TamperModal({ block, onSave, onClose }) {
             <span style={{ fontSize: '1.2rem' }}>⚠️</span>
             <span style={{
               fontFamily: 'Manrope, sans-serif', fontWeight: 700,
-              fontSize: '0.95rem', color: '#fbbf24',
+              fontSize: '0.95rem', color: 'var(--color-gold)',
             }}>Tamper with Block #{block.index}</span>
           </div>
           <button
@@ -497,7 +497,7 @@ function TamperModal({ block, onSave, onClose }) {
             fontFamily: 'Manrope, sans-serif', fontSize: '0.84rem',
             color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: 20,
           }}>
-            You are about to alter the <strong style={{ color: '#fbbf24' }}>amount</strong> in Block #{block.index}.
+            You are about to alter the <strong style={{ color: 'var(--color-gold)' }}>amount</strong> in Block #{block.index}.
             This will change the block's fingerprint — breaking every block after it.
             This demonstrates <strong style={{ color: 'var(--color-electric-blue)' }}>Layer 2 tamper protection</strong>.
           </div>
@@ -531,7 +531,7 @@ function TamperModal({ block, onSave, onClose }) {
                 background: 'rgba(245,158,11,0.08)',
                 border: '1.5px solid rgba(245,158,11,0.35)',
                 borderRadius: 9, padding: '10px 14px',
-                color: '#fbbf24', outline: 'none',
+                color: 'var(--color-gold)', outline: 'none',
               }}
               autoFocus
               onFocus={e => { e.target.style.borderColor = 'rgba(245,158,11,0.7)' }}
@@ -547,7 +547,7 @@ function TamperModal({ block, onSave, onClose }) {
                 flex: 1, padding: '11px', borderRadius: 9,
                 background: 'linear-gradient(135deg, rgba(239,68,68,0.2), rgba(239,68,68,0.12))',
                 border: '1.5px solid rgba(239,68,68,0.4)',
-                color: '#f87171', fontFamily: 'Manrope, sans-serif',
+                color: 'var(--color-red)', fontFamily: 'Manrope, sans-serif',
                 fontWeight: 700, fontSize: '0.88rem', cursor: 'pointer',
                 transition: 'all 0.15s',
               }}
@@ -642,7 +642,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
     '⛓ Sign & Add Block'
 
   const btnColor =
-    isComputing ? '#6aaeff' :
+    isComputing ? 'var(--color-electric-blue)' :
     isSigning   ? 'var(--color-teal)' :
     addPhase === 'done' ? 'var(--color-green)' :
     'var(--color-electric-blue)'
@@ -835,7 +835,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
                   background: 'var(--badge-red-border)',
                   border: '1px solid rgba(239,68,68,0.3)',
                   fontFamily: 'Manrope, sans-serif', fontSize: '0.78rem',
-                  color: '#f87171', lineHeight: 1.4,
+                  color: 'var(--color-red)', lineHeight: 1.4,
                 }}
               >
                 ⚠ {error}
@@ -856,7 +856,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
               background: busy
                 ? `linear-gradient(135deg, ${btnColor}30, ${btnColor}18)`
                 : `linear-gradient(135deg, ${btnColor}, ${btnColor}cc)`,
-              color: busy ? btnColor : '#fff',
+              color: busy ? btnColor : 'var(--bg-body)',
               fontFamily: 'Manrope, sans-serif', fontWeight: 700,
               fontSize: '0.85rem', cursor: busy ? 'wait' : 'pointer',
               transition: 'background 0.3s, color 0.3s',
@@ -885,7 +885,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
         }}>Loan Reference</div>
         <div style={{
           fontFamily: 'JetBrains Mono, monospace', fontSize: '0.78rem',
-          color: '#6aaeff', marginBottom: 10,
+          color: 'var(--color-electric-blue)', marginBottom: 10,
         }}>{LOAN_ID}</div>
         <div style={{
           fontFamily: 'Manrope, sans-serif', fontSize: '0.74rem',
@@ -934,7 +934,7 @@ function StatsBar({ blocks, onReset, onRemoveTamper }) {
         { label: 'Chain Length', value: `${blocks.length}` },
         { label: 'Valid Blocks', value: `${valid}`, color: 'var(--color-green)' },
         { label: 'Status', value: isClean ? '✓ Verified' : '⚠ Compromised', color: isClean ? 'var(--color-green)' : 'var(--color-red)' },
-        { label: 'Verification Time', value: '<12ms', color: '#a78bfa' },
+        { label: 'Verification Time', value: '<12ms', color: 'var(--color-electric-blue)' },
       ].map(s => (
         <div key={s.label} style={{ display: 'flex', gap: 6, alignItems: 'baseline' }}>
           <span style={{
@@ -961,7 +961,7 @@ function StatsBar({ blocks, onReset, onRemoveTamper }) {
               padding: '6px 14px', borderRadius: 8,
               background: 'var(--badge-teal-border)',
               border: '1px solid rgba(16,185,129,0.25)',
-              color: '#34d399', fontFamily: 'Manrope, sans-serif',
+              color: 'var(--color-green)', fontFamily: 'Manrope, sans-serif',
               fontWeight: 600, fontSize: '0.75rem', cursor: 'pointer',
               transition: 'all 0.15s',
             }}
@@ -985,7 +985,7 @@ function StatsBar({ blocks, onReset, onRemoveTamper }) {
             padding: '6px 14px', borderRadius: 8,
             background: 'rgba(59,140,255,0.1)',
             border: '1px solid rgba(59,140,255,0.25)',
-            color: '#6aaeff', fontFamily: 'Manrope, sans-serif',
+            color: 'var(--color-electric-blue)', fontFamily: 'Manrope, sans-serif',
             fontWeight: 600, fontSize: '0.75rem', cursor: 'pointer',
             transition: 'all 0.15s',
           }}
@@ -1036,11 +1036,11 @@ function TamperBanner({ info, onDismiss }) {
         >⚠️</motion.span>
         <span style={{
           fontFamily: 'Manrope, sans-serif', fontWeight: 600,
-          fontSize: '0.84rem', color: '#f87171',
+          fontSize: '0.84rem', color: 'var(--color-red)',
         }}>
           Tamper detected — chain integrity broken from Tranche #{info.fromTranche} onward.
           {' '}
-          <span style={{ fontWeight: 400, color: '#ef444490' }}>
+          <span style={{ fontWeight: 400, color: 'var(--badge-red-border)' }}>
             The ledger fingerprint chain has been compromised.
           </span>
         </span>
@@ -1048,7 +1048,7 @@ function TamperBanner({ info, onDismiss }) {
       <button
         onClick={onDismiss}
         style={{
-          background: 'none', border: 'none', color: '#ef444460',
+          background: 'none', border: 'none', color: 'var(--badge-red-border)',
           cursor: 'pointer', fontFamily: 'Manrope, sans-serif', fontSize: '0.78rem',
           padding: '2px 6px',
         }}
@@ -1288,7 +1288,7 @@ export default function LedgerTab({ blocks, setBlocks }) {
                     <div style={{
                       width: 238, flexShrink: 0, borderRadius: 13,
                       border: '1.5px dashed rgba(59,140,255,0.25)',
-                      background: 'rgba(15,26,46,0.4)',
+                      background: 'var(--glass-bg)',
                       overflow: 'hidden',
                     }}>
                       <div style={{ padding: '10px 14px', borderBottom: '1px solid rgba(59,140,255,0.1)' }}>
@@ -1323,7 +1323,7 @@ export default function LedgerTab({ blocks, setBlocks }) {
           {blocks.length > 2 && !isMobile && (
             <div style={{
               fontFamily: 'Manrope, sans-serif', fontSize: '0.72rem',
-              color: '#243352', textAlign: 'center',
+              color: 'var(--text-secondary)', textAlign: 'center',
             }}>
               ← scroll chain horizontally · click any hash to expand
             </div>

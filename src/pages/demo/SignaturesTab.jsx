@@ -66,7 +66,7 @@ function CopyButton({ text }) {
         display: 'inline-flex', alignItems: 'center', gap: 4,
         padding: '3px 9px', borderRadius: 6, border: 'none',
         background: copied ? 'rgba(16,185,129,0.15)' : 'rgba(59,140,255,0.1)',
-        color: copied ? '#34d399' : '#6aaeff',
+        color: copied ? 'var(--color-green)' : 'var(--color-electric-blue)',
         fontFamily: 'Manrope, sans-serif', fontSize: '0.65rem',
         fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s',
         flexShrink: 0,
@@ -150,7 +150,7 @@ function TrancheMsgCard({ tranche, editable = false, editAmount, onEditAmount })
         <span style={{ fontSize: '0.9rem' }}><ClipboardList size={16} /></span>
         <span style={{
           fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem',
-          color: '#6aaeff', textTransform: 'uppercase', letterSpacing: '0.08em',
+          color: 'var(--color-electric-blue)', textTransform: 'uppercase', letterSpacing: '0.08em',
         }}>Tranche Message (to be signed)</span>
       </div>
       <div style={{ padding: '14px', display: 'flex', flexDirection: 'column', gap: 7 }}>
@@ -158,16 +158,16 @@ function TrancheMsgCard({ tranche, editable = false, editAmount, onEditAmount })
           { k: 'LOAN',      v: 'EDU-2024-001',    c: 'var(--text-secondary)' },
           { k: 'FROM',      v: tranche.from,       c: 'var(--color-teal)' },
           { k: 'TO',        v: tranche.to,         c: 'var(--color-teal)' },
-          { k: 'MILESTONE', v: tranche.milestone,  c: '#a78bfa' },
+          { k: 'MILESTONE', v: tranche.milestone,  c: 'var(--color-electric-blue)' },
         ].map(({ k, v, c }) => (
           <div key={k} style={{ display: 'grid', gridTemplateColumns: '90px 1fr', gap: 6, alignItems: 'center' }}>
-            <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem', color: '#243352', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{k}</span>
+            <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{k}</span>
             <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.78rem', color: c }}>{v}</span>
           </div>
         ))}
         {/* Amount row — conditionally editable */}
         <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', gap: 6, alignItems: 'center' }}>
-          <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem', color: '#243352', textTransform: 'uppercase', letterSpacing: '0.06em' }}>AMOUNT</span>
+          <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>AMOUNT</span>
           {editable ? (
             <input
               value={editAmount}
@@ -177,7 +177,7 @@ function TrancheMsgCard({ tranche, editable = false, editAmount, onEditAmount })
                 fontWeight: 700, background: 'rgba(245,158,11,0.1)',
                 border: '1.5px solid rgba(245,158,11,0.4)',
                 borderRadius: 6, padding: '4px 10px',
-                color: '#fbbf24', outline: 'none', width: '100%', boxSizing: 'border-box',
+                color: 'var(--color-gold)', outline: 'none', width: '100%', boxSizing: 'border-box',
               }}
               onFocus={e => { e.target.style.borderColor = 'rgba(245,158,11,0.7)' }}
               onBlur={e => { e.target.style.borderColor = 'rgba(245,158,11,0.4)' }}
@@ -235,13 +235,13 @@ function ProgressBar({ activeStep }) {
                   <span style={{
                     fontFamily: 'JetBrains Mono, monospace', fontWeight: 700,
                     fontSize: '0.78rem',
-                    color: current ? '#fff' : '#243352',
+                    color: current ? '#fff' : 'var(--text-secondary)',
                   }}>{s.n}</span>
                 )}
               </motion.div>
               <span style={{
                 fontFamily: 'Manrope, sans-serif', fontSize: '0.68rem',
-                color: done ? 'var(--color-green)' : current ? '#6aaeff' : '#243352',
+                color: done ? 'var(--color-green)' : current ? 'var(--color-electric-blue)' : 'var(--text-secondary)',
                 fontWeight: current ? 700 : 500,
                 whiteSpace: 'nowrap', transition: 'color 0.3s',
               }}>{s.label}</span>
@@ -249,7 +249,7 @@ function ProgressBar({ activeStep }) {
             {/* Connector line */}
             {i < STEPS.length - 1 && (
               <motion.div
-                animate={{ background: done ? '#10b98160' : 'rgba(255,255,255,0.07)' }}
+                animate={{ background: done ? 'var(--badge-teal-bg)' : 'rgba(255,255,255,0.07)' }}
                 transition={{ duration: 0.4 }}
                 style={{ flex: 1, height: 2, borderRadius: 1, marginBottom: 22 }}
               />
@@ -312,7 +312,7 @@ function Step1({ onComplete }) {
             display: 'flex', alignItems: 'center', gap: 10,
             padding: '14px 30px', borderRadius: 12, border: 'none',
             background: 'linear-gradient(135deg, #3b8cff, #1d6fe8)',
-            color: '#fff', fontFamily: 'Manrope, sans-serif',
+            color: '#ffffff', fontFamily: 'Manrope, sans-serif',
             fontWeight: 700, fontSize: '0.95rem', cursor: 'pointer',
             boxShadow: '0 6px 24px rgba(59,140,255,0.3)',
             marginBottom: 28,
@@ -336,7 +336,7 @@ function Step1({ onComplete }) {
             transition={{ duration: 0.9, repeat: Infinity, ease: 'linear' }}
             style={{ display: 'inline-block', fontSize: '1.1rem' }}
           ><Settings size={16} /></motion.span>
-          <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.88rem', color: '#6aaeff' }}>
+          <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.88rem', color: 'var(--color-electric-blue)' }}>
             Generating P-256 key pair via Web Crypto API…
           </span>
         </div>
@@ -421,7 +421,7 @@ function Step1({ onComplete }) {
                 color: 'var(--text-secondary)', lineHeight: 1.6,
               }}
             >
-              <Key size={16} /> These are <strong style={{ color: '#6aaeff' }}>real ECDSA P-256 keys</strong> freshly generated
+              <Key size={16} /> These are <strong style={{ color: 'var(--color-electric-blue)' }}>real ECDSA P-256 keys</strong> freshly generated
               by your browser's Web Crypto API. The private key is a 256-bit secret. From it, the public key
               is derived as a point on the elliptic curve — but you cannot go backwards.
             </motion.div>
@@ -439,7 +439,7 @@ function Step1({ onComplete }) {
                 display: 'flex', alignItems: 'center', gap: 8,
                 padding: '12px 26px', borderRadius: 10, border: 'none',
                 background: 'linear-gradient(135deg, #10b981, #059669)',
-                color: '#fff', fontFamily: 'Manrope, sans-serif',
+                color: '#ffffff', fontFamily: 'Manrope, sans-serif',
                 fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer',
                 boxShadow: '0 4px 18px rgba(16,185,129,0.3)',
               }}
@@ -527,7 +527,7 @@ function Step2({ keys, tranche, onComplete }) {
               style={{
                 padding: '10px 16px', borderRadius: 9,
                 background: 'var(--badge-red-border)', border: '1px solid rgba(239,68,68,0.3)',
-                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.72rem', color: '#f87171',
+                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.72rem', color: 'var(--color-red)',
                 maxWidth: 140, textAlign: 'center',
               }}
             >
@@ -544,7 +544,7 @@ function Step2({ keys, tranche, onComplete }) {
               style={{
                 padding: '10px 16px', borderRadius: 9,
                 background: 'rgba(59,140,255,0.1)', border: '1px solid rgba(59,140,255,0.3)',
-                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.72rem', color: '#6aaeff',
+                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.72rem', color: 'var(--color-electric-blue)',
                 maxWidth: 140, textAlign: 'center',
               }}
             >
@@ -560,7 +560,7 @@ function Step2({ keys, tranche, onComplete }) {
               style={{
                 padding: '10px 16px', borderRadius: 9,
                 background: 'var(--badge-teal-border)', border: '1px dashed rgba(16,185,129,0.4)',
-                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.72rem', color: '#34d399',
+                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.72rem', color: 'var(--color-green)',
                 maxWidth: 140, textAlign: 'center',
               }}
             >
@@ -580,7 +580,7 @@ function Step2({ keys, tranche, onComplete }) {
             display: 'flex', alignItems: 'center', gap: 10,
             padding: '13px 28px', borderRadius: 11, border: 'none',
             background: 'linear-gradient(135deg, #14b8a6, #0d9488)',
-            color: '#fff', fontFamily: 'Manrope, sans-serif',
+            color: '#ffffff', fontFamily: 'Manrope, sans-serif',
             fontWeight: 700, fontSize: '0.92rem', cursor: 'pointer',
             boxShadow: '0 6px 22px rgba(20,184,166,0.3)',
             marginBottom: 24,
@@ -616,7 +616,7 @@ function Step2({ keys, tranche, onComplete }) {
               fontFamily: 'Manrope, sans-serif', fontSize: '0.82rem',
               color: 'var(--text-secondary)', lineHeight: 1.6,
             }}>
-              <Fingerprint size={16} /> The wax seal is applied. Anyone with NBFC 2's <strong style={{ color: '#34d399' }}>public key</strong> can
+              <Fingerprint size={16} /> The wax seal is applied. Anyone with NBFC 2's <strong style={{ color: 'var(--color-green)' }}>public key</strong> can
               verify this — but only NBFC 2 (holder of the private key) could have <em>created</em> it.
             </div>
 
@@ -629,7 +629,7 @@ function Step2({ keys, tranche, onComplete }) {
                 display: 'flex', alignItems: 'center', gap: 8,
                 padding: '12px 26px', borderRadius: 10, border: 'none',
                 background: 'linear-gradient(135deg, #10b981, #059669)',
-                color: '#fff', fontFamily: 'Manrope, sans-serif',
+                color: '#ffffff', fontFamily: 'Manrope, sans-serif',
                 fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer',
                 boxShadow: '0 4px 18px rgba(16,185,129,0.3)',
               }}
@@ -680,7 +680,7 @@ function Step3({ keys, tranche, sig, onComplete }) {
           color: 'var(--text-secondary)', margin: 0, lineHeight: 1.6, maxWidth: 600,
         }}>
           Anyone — the institution, the regulator, the auditor — can verify this signature
-          using <strong style={{ color: '#34d399' }}>only the public key, the message, and the signature</strong>.
+          using <strong style={{ color: 'var(--color-green)' }}>only the public key, the message, and the signature</strong>.
           No private key required. No trust in any institution required.
         </p>
       </div>
@@ -705,7 +705,7 @@ function Step3({ keys, tranche, sig, onComplete }) {
                 display: 'flex', alignItems: 'center', gap: 10,
                 padding: '13px 28px', borderRadius: 11, border: 'none',
                 background: 'linear-gradient(135deg, #10b981, #059669)',
-                color: '#fff', fontFamily: 'Manrope, sans-serif',
+                color: '#ffffff', fontFamily: 'Manrope, sans-serif',
                 fontWeight: 700, fontSize: '0.92rem', cursor: 'pointer',
                 boxShadow: '0 6px 22px rgba(16,185,129,0.3)',
                 marginBottom: 20,
@@ -731,7 +731,7 @@ function Step3({ keys, tranche, sig, onComplete }) {
               transition={{ duration: 0.9, repeat: Infinity, ease: 'linear' }}
               style={{ display: 'inline-block', fontSize: '1.1rem' }}
             ><Settings size={16} /></motion.span>
-            <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.88rem', color: '#34d399' }}>
+            <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: '0.88rem', color: 'var(--color-green)' }}>
               Running ECDSA verification…
             </span>
           </motion.div>
@@ -796,7 +796,7 @@ function Step3({ keys, tranche, sig, onComplete }) {
               display: 'flex', alignItems: 'center', gap: 8,
               padding: '12px 26px', borderRadius: 10, border: 'none',
               background: 'linear-gradient(135deg, #f59e0b, #d97706)',
-              color: '#fff', fontFamily: 'Manrope, sans-serif',
+              color: '#ffffff', fontFamily: 'Manrope, sans-serif',
               fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer',
               boxShadow: '0 4px 18px rgba(245,158,11,0.3)',
             }}
@@ -890,7 +890,7 @@ function Step4({ keys, tranche, sig }) {
               background: 'rgba(245,158,11,0.1)',
               border: '1px solid rgba(245,158,11,0.3)',
               fontFamily: 'Manrope, sans-serif', fontSize: '0.78rem',
-              color: '#fbbf24',
+              color: 'var(--color-gold)',
             }}>
               <AlertTriangle size={16} /> Amount has been tampered: <strong>{tranche.amount}</strong> → <strong>{editAmount}</strong>.
               The attacker is still presenting the original signature.
@@ -924,7 +924,7 @@ function Step4({ keys, tranche, sig }) {
             background: phase === 'invalid'
               ? 'linear-gradient(135deg, rgba(239,68,68,0.2), rgba(239,68,68,0.12))'
               : 'linear-gradient(135deg, #3b8cff, #1d6fe8)',
-            color: phase === 'invalid' ? '#f87171' : '#fff',
+            color: phase === 'invalid' ? 'var(--color-red)' : '#fff',
             borderColor: phase === 'invalid' ? 'rgba(239,68,68,0.4)' : 'transparent',
             borderWidth: phase === 'invalid' ? 1 : 0,
             borderStyle: 'solid',
@@ -996,7 +996,7 @@ function Step4({ keys, tranche, sig }) {
                 }}><XCircle size={16} /> Signature Invalid</div>
                 <div style={{
                   fontFamily: 'Manrope, sans-serif', fontSize: '0.88rem',
-                  color: '#ef444490',
+                  color: 'var(--badge-red-border)',
                 }}>Message does not match what was signed by NBFC 2</div>
               </div>
             </div>
@@ -1009,7 +1009,7 @@ function Step4({ keys, tranche, sig }) {
             }}>
               <div style={{
                 fontFamily: 'Manrope, sans-serif', fontWeight: 700,
-                fontSize: '0.82rem', color: '#f87171', marginBottom: 4,
+                fontSize: '0.82rem', color: 'var(--color-red)', marginBottom: 4,
               }}>Why this happened:</div>
               {[
                 'The signature is cryptographically bound to the exact message that was signed — including the original amount.',
@@ -1045,7 +1045,7 @@ function Step4({ keys, tranche, sig }) {
               background: 'rgba(16,185,129,0.08)',
               border: '1px solid rgba(16,185,129,0.3)',
               fontFamily: 'Manrope, sans-serif', fontSize: '0.88rem',
-              color: '#34d399',
+              color: 'var(--color-green)',
             }}
           >
             <CheckCircle2 size={16} /> Signature valid — you didn't change the amount (or changed it back to the original).
@@ -1068,7 +1068,7 @@ function Step4({ keys, tranche, sig }) {
               color: 'var(--text-secondary)', lineHeight: 1.65,
             }}
           >
-            <GraduationCap size={16} /> <strong style={{ color: '#6aaeff' }}>Course link:</strong> This is <strong style={{ color: '#b8c9df' }}>Layer 1 protection</strong> —
+            <GraduationCap size={16} /> <strong style={{ color: 'var(--color-electric-blue)' }}>Course link:</strong> This is <strong style={{ color: 'var(--text-primary)' }}>Layer 1 protection</strong> —
             the digital wax seal. Even before we check the hash chain (Layer 2), the signature
             already catches the fraud. In TrancheChain, every disbursement block carries
             both layers simultaneously.
