@@ -820,6 +820,12 @@ function Step4({ keys, tranche, sig }) {
   const [phase, setPhase] = useState('idle') // 'idle' | 'verifying' | 'invalid' | 'valid'
   const [forgeryPhase, setForgeryPhase] = useState('idle') // 'idle' | 'forging' | 'failed'
   const [shakeKey, setShakeKey] = useState(0)
+  const [forgeryPhase, setForgeryPhase] = useState('idle') // 'idle' | 'forging' | 'failed'
+
+  const handleForge = () => {
+    setForgeryPhase('forging');
+    setTimeout(() => setForgeryPhase('failed'), 1200);
+  }
 
   const handleForge = () => {
     setForgeryPhase('forging');
@@ -831,6 +837,7 @@ function Step4({ keys, tranche, sig }) {
 
   const handleVerify = useCallback(async () => {
     setPhase('verifying')
+    setForgeryPhase('idle')
     try {
       const msg = msgOf(tamperedTranche)
       const valid = await verifyMsg(keys.publicKey, msg, sig.sigBuf)
