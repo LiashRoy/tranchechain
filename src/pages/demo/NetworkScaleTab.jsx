@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Play } from 'lucide-react'
+import React from 'react'
 
 const NBFCS = [
   { id: 'nbfc1', name: 'NBFC 1', color: '#3b82f6' },
@@ -10,7 +11,7 @@ const NBFCS = [
 ]
 
 const INSTITUTIONS = [
-  'Fintech Company', 'Partner Institute', 'EdTech Startup', 'SME Aggregator'
+  'Narayana School', 'Sri Chaitanya', 'VIBGYOR Group', 'Delhi Public School'
 ]
 
 const MILESTONES = [
@@ -21,35 +22,50 @@ function generateHash() {
   return Array.from({length: 40}, () => Math.floor(Math.random()*16).toString(16)).join('')
 }
 
-const BLOCKS_PER_LANE = 84
+const BLOCKS_PER_INSTITUTION = 21
+const BLOCKS_PER_LANE = BLOCKS_PER_INSTITUTION * INSTITUTIONS.length
 
-function generateLaneData(nbfc, tamperedIndex) {
+function generateLaneData(nbfc, tamperedInstitution = null, tamperedOffset = 0) {
   const blocks = []
-  for (let i = 0; i < BLOCKS_PER_LANE; i++) {
-    const inst = INSTITUTIONS[Math.floor(Math.random() * INSTITUTIONS.length)]
-    const amt = Math.floor(Math.random() * 50) * 1000 + 10000
-    
-    blocks.push({
-      id: `${nbfc.id}-blk-${i}`,
-      index: i,
-      laneId: nbfc.id,
-      nbfc,
-      institution: inst,
-      amount: `₹${amt.toLocaleString()}`,
-      milestone: MILESTONES[Math.floor(Math.random() * MILESTONES.length)],
-      hash: generateHash(),
-      isTamperSource: i === tamperedIndex,
-      timestamp: new Date(Date.now() - Math.random() * 10000000000).toISOString()
-    })
+  
+  INSTITUTIONS.forEach(inst => {
+    for (let i = 0; i < BLOCKS_PER_INSTITUTION; i++) {
+      const amt = Math.floor(Math.random() * 50) * 1000 + 10000
+      blocks.push({
+        laneId: nbfc.id,
+        nbfc,
+        institution: inst,
+        amount: `₹${amt.toLocaleString()}`,
+        milestone: MILESTONES[Math.floor(Math.random() * MILESTONES.length)],
+        hash: generateHash(),
+        tampered: false,
+        timestamp: new Date(Date.now() - Math.random() * 10000000000).toISOString()
+      })
+    }
+  })
+
+  // Assign global sequential index within the lane
+  blocks.forEach((b, i) => {
+    b.id = `${nbfc.id}-blk-${i}`
+    b.index = i
+  })
+
+  // Seed tampered block if requested
+  if (tamperedInstitution) {
+    const clusterStart = blocks.findIndex(b => b.institution === tamperedInstitution)
+    if (clusterStart !== -1 && tamperedOffset < BLOCKS_PER_INSTITUTION) {
+      blocks[clusterStart + tamperedOffset].tampered = true
+    }
   }
+
   return blocks
 }
 
-// Generate static data on load
+// Generate static data on load with 2 intentional tampered blocks across the dataset
 const STATIC_LANES = [
-  { nbfc: NBFCS[0], blocks: generateLaneData(NBFCS[0], -1), firstTamperedIndex: -1 },       // Clean lane
-  { nbfc: NBFCS[1], blocks: generateLaneData(NBFCS[1], 35), firstTamperedIndex: 35 },       // Tampered early
-  { nbfc: NBFCS[2], blocks: generateLaneData(NBFCS[2], 68), firstTamperedIndex: 68 },       // Tampered late
+  { nbfc: NBFCS[0], blocks: generateLaneData(NBFCS[0], null) },                                       // Clean lane
+  { nbfc: NBFCS[1], blocks: generateLaneData(NBFCS[1], 'Sri Chaitanya', 8) },                         // 1 tamper
+  { nbfc: NBFCS[2], blocks: generateLaneData(NBFCS[2], 'VIBGYOR Group', 14) },                        // 1 tamper
 ]
 
 const TOTAL_BLOCKS = BLOCKS_PER_LANE * 3
@@ -67,7 +83,6 @@ export default function NetworkScaleTab() {
     setProgress(-1)
     if (intervalRef.current) clearInterval(intervalRef.current)
     
-    // Give it a tiny beat in 'pending' state before starting
     setTimeout(() => {
       intervalRef.current = setInterval(() => {
         setProgress(p => {
@@ -104,6 +119,7 @@ export default function NetworkScaleTab() {
         <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 16 }}>
           <StatBox label="Total Blocks" value={TOTAL_BLOCKS} />
           <StatBox label="Active NBFCs" value={3} />
+          <StatBox label="Active Institutions" value={INSTITUTIONS.length} />
           <StatBox 
             label="Network Status" 
             value={progress >= BLOCKS_PER_LANE ? '⚠ Anomalies Detected' : 'Verifying...'} 
@@ -150,7 +166,7 @@ export default function NetworkScaleTab() {
 
       {/* Footer */}
       <div style={{ textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.85rem', padding: '0 20px', fontStyle: 'italic' }}>
-        Every block shown here is independently hash-linked and signature-verified within its respective lane.
+        Every block shown here is independently hash-linked and signature-verified within its respective institution cluster.
       </div>
 
     </div>
@@ -158,10 +174,28 @@ export default function NetworkScaleTab() {
 }
 
 function NbfcLane({ lane, progress, onHover, filterStatus, isDimmed }) {
-  // Determine endpoint status based on sweep progress
   const isFinished = progress >= BLOCKS_PER_LANE
-  const isBroken = lane.firstTamperedIndex !== -1
-  const badCount = isBroken ? BLOCKS_PER_LANE - lane.firstTamperedIndex : 0
+
+  // Pre-calculate the first tampered index for EACH institution in this lane
+  const firstTamperedPerInst = useMemo(() => {
+    const map = {}
+    lane.blocks.forEach(b => {
+      if (b.tampered && map[b.institution] === undefined) {
+        map[b.institution] = b.index
+      }
+    })
+    return map
+  }, [lane.blocks])
+
+  // Group blocks by institution for rendering clusters
+  const clusters = useMemo(() => {
+    const map = {}
+    INSTITUTIONS.forEach(inst => map[inst] = [])
+    lane.blocks.forEach(b => {
+      map[b.institution].push(b)
+    })
+    return Object.entries(map).map(([name, blocks]) => ({ name, blocks }))
+  }, [lane.blocks])
 
   return (
     <div 
@@ -192,57 +226,82 @@ function NbfcLane({ lane, progress, onHover, filterStatus, isDimmed }) {
           gap: 6,
           alignContent: 'start',
         }}>
-          {lane.blocks.map(block => {
-            // Determine state for this block
-            let state = 'pending'
-            if (progress >= block.index) {
-              if (lane.firstTamperedIndex !== -1 && block.index > lane.firstTamperedIndex) {
-                state = 'broken_downstream'
-              } else if (lane.firstTamperedIndex !== -1 && block.index === lane.firstTamperedIndex) {
-                state = 'tampered'
-              } else {
-                state = 'valid'
-              }
-            }
+          {clusters.map(cluster => (
+            <React.Fragment key={cluster.name}>
+              {/* Cluster Divider */}
+              <div style={{ 
+                gridColumn: '1 / -1', fontSize: '0.65rem', color: 'var(--text-secondary)', 
+                textTransform: 'uppercase', letterSpacing: '0.05em', 
+                borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: 4, marginTop: 8 
+              }}>
+                → {cluster.name}
+              </div>
 
-            // Filtering visibility
-            const isFlagged = state === 'tampered' || state === 'broken_downstream'
-            if (filterStatus === 'Valid Only' && (isFlagged || state === 'pending')) return null
-            if (filterStatus === 'Flagged Only' && !isFlagged) return null
+              {/* Cluster Blocks */}
+              {cluster.blocks.map(block => {
+                let state = 'pending'
+                const firstTamperIdx = firstTamperedPerInst[block.institution]
 
-            return (
-              <BlockTile 
-                key={block.id} 
-                block={block} 
-                state={state}
-                isActivelySweeping={progress === block.index}
-                onHover={(pos) => onHover({ block, state, pos })}
-              />
-            )
-          })}
+                if (progress >= block.index) {
+                  if (firstTamperIdx !== undefined && block.index > firstTamperIdx) {
+                    state = 'broken_downstream'
+                  } else if (firstTamperIdx !== undefined && block.index === firstTamperIdx) {
+                    state = 'tampered'
+                  } else {
+                    state = 'valid'
+                  }
+                }
+
+                // Filtering visibility
+                const isFlagged = state === 'tampered' || state === 'broken_downstream'
+                if (filterStatus === 'Valid Only' && (isFlagged || state === 'pending')) return null
+                if (filterStatus === 'Flagged Only' && !isFlagged) return null
+
+                return (
+                  <BlockTile 
+                    key={block.id} 
+                    block={block} 
+                    state={state}
+                    isActivelySweeping={progress === block.index}
+                    onHover={(pos) => onHover({ block, state, pos })}
+                  />
+                )
+              })}
+            </React.Fragment>
+          ))}
         </div>
       </div>
 
-      {/* Endpoint Node */}
-      <div style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid rgba(255,255,255,0.05)', textAlign: 'center' }}>
-        <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-secondary)', marginBottom: 8 }}>
+      {/* Multi-Endpoint Summary */}
+      <div style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+        <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-secondary)', marginBottom: 8, textAlign: 'center' }}>
           Endpoint: Partner Institutions
         </div>
-        {isFinished ? (
-          isBroken ? (
-            <div style={{ background: 'rgba(245,158,11,0.1)', border: '1px solid var(--color-amber)', color: 'var(--color-amber)', padding: '8px 12px', borderRadius: 8, fontSize: '0.75rem', fontWeight: 600 }}>
-              ⚠ Cannot confirm {badCount} tranches<br/>(Chain broken at #{lane.firstTamperedIndex})
-            </div>
-          ) : (
-            <div style={{ background: 'rgba(16,185,129,0.1)', border: '1px solid var(--color-green)', color: 'var(--color-green)', padding: '8px 12px', borderRadius: 8, fontSize: '0.75rem', fontWeight: 600 }}>
-              ✓ All {BLOCKS_PER_LANE} tranches verified
-            </div>
-          )
-        ) : (
-          <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px dashed rgba(255,255,255,0.1)', color: 'var(--text-secondary)', padding: '8px 12px', borderRadius: 8, fontSize: '0.75rem' }}>
-            Awaiting Verification...
-          </div>
-        )}
+        
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+          {clusters.map(cluster => {
+            const firstTamperIdx = firstTamperedPerInst[cluster.name]
+            const totalBlocks = cluster.blocks.length
+            let statusBadge = null
+            
+            if (!isFinished) {
+              statusBadge = <span style={{ color: 'var(--text-secondary)' }}>Awaiting Verification...</span>
+            } else if (firstTamperIdx !== undefined) {
+              const clusterStartIdx = cluster.blocks[0].index
+              const badCount = totalBlocks - (firstTamperIdx - clusterStartIdx)
+              statusBadge = <span style={{ color: 'var(--color-amber)' }}>⚠ Cannot confirm {badCount} tranches</span>
+            } else {
+              statusBadge = <span style={{ color: 'var(--color-green)' }}>✓ {totalBlocks} tranches verified</span>
+            }
+
+            return (
+              <div key={cluster.name} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', padding: '6px 8px', background: 'rgba(255,255,255,0.02)', borderRadius: 6, border: '1px solid rgba(255,255,255,0.05)' }}>
+                <span style={{ color: 'var(--text-primary)' }}>{cluster.name}</span>
+                {statusBadge}
+              </div>
+            )
+          })}
+        </div>
       </div>
     </div>
   )
@@ -283,7 +342,6 @@ const tileVariants = {
 }
 
 function BlockTile({ block, state, isActivelySweeping, onHover }) {
-  
   const isTampered = state === 'tampered'
   
   return (
