@@ -642,12 +642,25 @@ const selectStyle = {
 
 function AddBlockSidebar({ blocks, onAdd, addPhase, admissionConfirmations = [] }) {
   const [formMode, setFormMode] = useState('disbursement')
+  const [syndication, setSyndication] = useState({ enabled: false, nbfc1: 'NBFC 1', nbfc2: 'NBFC 2', split1: 60, split2: 40, agreedAmount: '' })
   const [form, setForm] = useState(EMPTY_FORM)
   const [error, setError] = useState(null)
   const [shakeKey, setShakeKey] = useState(0)
   const hashPreview = useRef('')
 
-  const usedMilestones = new Set(blocks.map(b => b.milestone))
+  const usedMilestones = new Set();
+  const seenGroups = new Set();
+  blocks.forEach(b => {
+    if (b.transaction_type === 'refund') return;
+    if (b.syndicationGroup) {
+      if (!seenGroups.has(b.syndicationGroup)) {
+        seenGroups.add(b.syndicationGroup);
+        usedMilestones.add(b.milestone);
+      }
+    } else {
+      usedMilestones.add(b.milestone);
+    }
+  });
 
   const set = (k, v) => {
     setForm(f => ({ ...f, [k]: v }))
@@ -704,15 +717,30 @@ function AddBlockSidebar({ blocks, onAdd, addPhase, admissionConfirmations = [] 
         setShakeKey(k => k + 1)
         return
       }
-      const blockData = {
-        transaction_type: 'disbursement',
-        from: form.from,
-        to: form.to,
-        milestone: form.milestone,
-        amount: fmtAmount(form.amount),
-      };
-      if (form.confirmationRef) blockData.confirmationRef = form.confirmationRef;
-      onAdd(blockData)
+      if (syndication.enabled) {
+        if (syndication.split1 + syndication.split2 !== 100) {
+          setError('⚠ Splits must equal exactly 100%.');
+          setShakeKey(k => k + 1);
+          return;
+        }
+        const amt1 = Math.round(amtNum * (syndication.split1 / 100));
+        const amt2 = amtNum - amt1;
+        const groupId = 'SYND-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+        const b1 = { transaction_type: 'disbursement', from: syndication.nbfc1, to: form.to, milestone: form.milestone, amount: fmtAmount(String(amt1)), syndicationGroup: groupId, splitPercent: syndication.split1 };
+        const b2 = { transaction_type: 'disbursement', from: syndication.nbfc2, to: form.to, milestone: form.milestone, amount: fmtAmount(String(amt2)), syndicationGroup: groupId, splitPercent: syndication.split2 };
+        if (form.confirmationRef) { b1.confirmationRef = form.confirmationRef; b2.confirmationRef = form.confirmationRef; }
+        onAdd([b1, b2]);
+      } else {
+        const blockData = {
+          transaction_type: 'disbursement',
+          from: form.from,
+          to: form.to,
+          milestone: form.milestone,
+          amount: fmtAmount(form.amount),
+        };
+        if (form.confirmationRef) blockData.confirmationRef = form.confirmationRef;
+        onAdd(blockData)
+      }
     }
     setForm(EMPTY_FORM)
     setError(null)
@@ -778,6 +806,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase, admissionConfirmations = [] 
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 13 }}>
           {/* From */}
+          {!(formMode === 'disbursement' && syndication.enabled) && (
           <div>
             <label style={{
               fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem',
@@ -800,6 +829,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase, admissionConfirmations = [] 
               </svg>
             </div>
           </div>
+          )}
 
           {/* To */}
           <div>
@@ -1020,6 +1050,51 @@ function AddBlockSidebar({ blocks, onAdd, addPhase, admissionConfirmations = [] 
             {btnLabel}
           </motion.button>
         </div>
+      </motion.div>
+
+      {/* Syndication Panel */}
+      <motion.div className="glass-card" style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '0.85rem', color: 'var(--text-primary)' }}>Syndicated Loan</span>
+          <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+            <input type="checkbox" checked={syndication.enabled} onChange={e => setSyndication(s => ({ ...s, enabled: e.target.checked }))} style={{ accentColor: 'var(--color-electric-blue)', transform: 'scale(1.2)' }} />
+          </label>
+        </div>
+        
+        {syndication.enabled && formMode === 'disbursement' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 8 }}>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <div style={{ flex: 1 }}>
+                <label style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem', color: 'var(--text-secondary)', display: 'block', marginBottom: 4 }}>NBFC 1</label>
+                <select value={syndication.nbfc1} onChange={e => setSyndication(s => ({ ...s, nbfc1: e.target.value }))} style={selectStyle}>
+                  {FROM_OPTIONS.map(o => <option key={o} value={o}>{o}</option>)}
+                </select>
+              </div>
+              <div style={{ width: '60px' }}>
+                <label style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem', color: 'var(--text-secondary)', display: 'block', marginBottom: 4 }}>%</label>
+                <input type="number" value={syndication.split1} onChange={e => setSyndication(s => ({ ...s, split1: Number(e.target.value) }))} style={{ width: '100%', boxSizing: 'border-box', fontFamily: 'Manrope, sans-serif', fontSize: '0.84rem', background: 'rgba(59,140,255,0.06)', border: '1px solid rgba(59,140,255,0.2)', borderRadius: 9, padding: '9px 8px', color: 'var(--text-primary)' }} />
+              </div>
+            </div>
+            
+            <div style={{ display: 'flex', gap: 8 }}>
+              <div style={{ flex: 1 }}>
+                <label style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem', color: 'var(--text-secondary)', display: 'block', marginBottom: 4 }}>NBFC 2</label>
+                <select value={syndication.nbfc2} onChange={e => setSyndication(s => ({ ...s, nbfc2: e.target.value }))} style={selectStyle}>
+                  {FROM_OPTIONS.map(o => <option key={o} value={o}>{o}</option>)}
+                </select>
+              </div>
+              <div style={{ width: '60px' }}>
+                <label style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem', color: 'var(--text-secondary)', display: 'block', marginBottom: 4 }}>%</label>
+                <input type="number" value={syndication.split2} onChange={e => setSyndication(s => ({ ...s, split2: Number(e.target.value) }))} style={{ width: '100%', boxSizing: 'border-box', fontFamily: 'Manrope, sans-serif', fontSize: '0.84rem', background: 'rgba(59,140,255,0.06)', border: '1px solid rgba(59,140,255,0.2)', borderRadius: 9, padding: '9px 8px', color: 'var(--text-primary)' }} />
+              </div>
+            </div>
+
+            <div>
+              <label style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem', color: 'var(--text-secondary)', display: 'block', marginBottom: 4 }}>Agreed Cap Amount (₹)</label>
+              <input type="text" value={syndication.agreedAmount} onChange={e => setSyndication(s => ({ ...s, agreedAmount: e.target.value }))} placeholder="e.g. ₹5,00,000" style={{ width: '100%', boxSizing: 'border-box', fontFamily: 'Manrope, sans-serif', fontSize: '0.84rem', background: 'rgba(59,140,255,0.06)', border: '1px solid rgba(59,140,255,0.2)', borderRadius: 9, padding: '9px 12px', color: 'var(--text-primary)' }} />
+            </div>
+          </div>
+        )}
       </motion.div>
 
       {/* Info card */}

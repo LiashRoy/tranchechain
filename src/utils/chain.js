@@ -4,18 +4,16 @@ export const sha256 = (str) => CryptoJS.SHA256(str).toString()
 export const GENESIS_PREV = '0'.repeat(64)
 export const LOAN_ID = 'EDU-2024-001'
 
-export const blockContent = ({ from, to, amount, milestone, timestamp, prevHash, syndicationGroup, splitPercent }) =>
-  `${LOAN_ID}||${from}||${to}||${amount}||${milestone}||${timestamp}||${prevHash}${syndicationGroup ? `||${syndicationGroup}` : ''}${splitPercent ? `||${splitPercent}` : ''}`
+export const blockContent = ({ from, to, amount, milestone, timestamp, prevHash, transaction_type, reason, refundRef, confirmationRef, syndicationGroup, splitPercent }) =>
+  `${LOAN_ID}||${transaction_type || 'disbursement'}||${from}||${to}||${amount}||${milestone}||${timestamp}||${prevHash}||${reason||''}||${refundRef||''}||${confirmationRef||''}||${syndicationGroup||''}||${splitPercent||''}`
 export const computeHash = (block) => sha256(blockContent(block))
 
 let _uid = 100
 export const uid = () => `block-${++_uid}-${Date.now()}`
 
-export function makeBlock({ transaction_type = 'disbursement', reason, refundRef, ...data }, prevHash) {
-  data.transaction_type = transaction_type;
-  if (reason) data.reason = reason;
-  if (refundRef) data.refundRef = refundRef;
-  const b = { ...data, prevHash }
+export function makeBlock(data, prevHash) {
+  const transaction_type = data.transaction_type || 'disbursement';
+  const b = { ...data, prevHash, transaction_type }
   return { ...b, originalAmount: b.amount, hash: computeHash(b), status: 'valid', wasTampered: false, id: uid() }
 }
 
