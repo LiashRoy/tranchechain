@@ -445,6 +445,12 @@ function Tooltip({ block, state, pos }) {
           <span style={{ color: 'var(--text-secondary)' }}>To:</span>
           <span style={{ color: 'var(--text-primary)' }}>{block.institution}</span>
         </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem' }}>
+          <span style={{ color: 'var(--text-secondary)' }}>Time:</span>
+          <span style={{ color: 'var(--text-primary)' }}>
+            {new Date(block.timestamp).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+          </span>
+        </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', marginTop: 4 }}>
           <span style={{ color: 'var(--text-secondary)' }}>Hash:</span>
           <span style={{ color: statusColor, fontFamily: 'monospace' }}>
