@@ -916,6 +916,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase, admissionConfirmations = [] 
           )}
 
           {/* Amount */}
+          {!(formMode === 'disbursement' && syndication.enabled) && (
           <div>
             <label style={{
               fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem',
@@ -942,6 +943,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase, admissionConfirmations = [] 
               onKeyDown={e => { if (e.key === 'Enter' && !busy) handleSubmit() }}
             />
           </div>
+          )}
 
           {/* Hash preview during computing phase */}
           {error && (
@@ -1030,6 +1032,11 @@ function AddBlockSidebar({ blocks, onAdd, addPhase, admissionConfirmations = [] 
         
         {syndication.enabled && formMode === 'disbursement' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 8 }}>
+            <div>
+              <label style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem', color: 'var(--text-secondary)', display: 'block', marginBottom: 4 }}>Tranche Amount (₹)</label>
+              <input type="number" value={form.amount} onChange={e => set('amount', e.target.value)} placeholder="e.g. 24000" style={{ width: '100%', boxSizing: 'border-box', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.88rem', background: 'rgba(16,185,129,0.06)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: 9, padding: '9px 12px', color: 'var(--color-green)' }} />
+            </div>
+
             <div style={{ display: 'flex', gap: 8 }}>
               <div style={{ flex: 1 }}>
                 <label style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem', color: 'var(--text-secondary)', display: 'block', marginBottom: 4 }}>NBFC 1</label>
@@ -1473,24 +1480,28 @@ export default function LedgerTab({ blocks, setBlocks, admissionConfirmations = 
   useEffect(() => () => addTimers.current.forEach(clearTimeout), [])
 
   /* ── ADD BLOCK ─────────────────────────────────────────────────── */
-  const handleAdd = useCallback((formData) => {
+  const handleAdd = useCallback((formDataOrArray) => {
     setAddPhase('computing')
     addTimers.current.push(setTimeout(() => {
       setAddPhase('signing')
       addTimers.current.push(setTimeout(() => {
         setBlocks(prev => {
-          const prevBlock = prev[prev.length - 1]
-          const ts = new Date().toLocaleString('en-IN', {
-            year: 'numeric', month: '2-digit', day: '2-digit',
-            hour: '2-digit', minute: '2-digit', hour12: false,
-          }).replace(',', '')
-          const newBlock = makeBlock({
-            ...formData,
-            timestamp: ts,
-            index: prev.length + 1,
-          }, prevBlock.hash)
-          setNewestId(newBlock.id)
-          return [...prev, newBlock]
+          const forms = Array.isArray(formDataOrArray) ? formDataOrArray : [formDataOrArray];
+          let currentPrevHash = prev[prev.length - 1].hash;
+          let currentLength = prev.length;
+          const newBlocks = [];
+          for (const fd of forms) {
+            const ts = new Date().toLocaleString('en-IN', {
+              year: 'numeric', month: '2-digit', day: '2-digit',
+              hour: '2-digit', minute: '2-digit', hour12: false,
+            }).replace(',', '');
+            const nb = makeBlock({ ...fd, timestamp: ts, index: currentLength + 1 }, currentPrevHash);
+            newBlocks.push(nb);
+            currentPrevHash = nb.hash;
+            currentLength++;
+          }
+          setNewestId(newBlocks[newBlocks.length - 1].id)
+          return [...prev, ...newBlocks]
         })
         setAddPhase('done')
         addTimers.current.push(setTimeout(() => {
