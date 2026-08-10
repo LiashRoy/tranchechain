@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Play } from 'lucide-react'
+import { Play, Plus } from 'lucide-react'
 import React from 'react'
 
 const NBFCS = [
@@ -18,28 +18,34 @@ const MILESTONES = [
   'Admission Confirmed', 'Semester 1 Start', 'Semester 2 Start', 'Semester 3 Start', 'Disbursement 1', 'Disbursement 2'
 ]
 
-function generateHash() {
-  return Array.from({length: 40}, () => Math.floor(Math.random()*16).toString(16)).join('')
+// Seeded PRNG (Mulberry32)
+function mulberry32(a) {
+  return function() {
+    var t = a += 0x6D2B79F5;
+    t = Math.imul(t ^ t >>> 15, t | 1);
+    t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  }
 }
 
 const BLOCKS_PER_INSTITUTION = 21
 const BLOCKS_PER_LANE = BLOCKS_PER_INSTITUTION * INSTITUTIONS.length
 
-function generateLaneData(nbfc, tamperedInstitution = null, tamperedOffset = 0) {
+function generateLaneData(nbfc, random, tamperedInstitution = null, tamperedOffset = 0) {
   const blocks = []
   
   INSTITUTIONS.forEach(inst => {
     for (let i = 0; i < BLOCKS_PER_INSTITUTION; i++) {
-      const amt = Math.floor(Math.random() * 50) * 1000 + 10000
+      const amt = Math.floor(random() * 50) * 1000 + 10000
       blocks.push({
         laneId: nbfc.id,
         nbfc,
         institution: inst,
         amount: `₹${amt.toLocaleString()}`,
-        milestone: MILESTONES[Math.floor(Math.random() * MILESTONES.length)],
-        hash: generateHash(),
+        milestone: MILESTONES[Math.floor(random() * MILESTONES.length)],
+        hash: Array.from({length: 40}, () => Math.floor(random()*16).toString(16)).join(''),
         tampered: false,
-        timestamp: new Date(Date.now() - Math.random() * 10000000000).toISOString()
+        timestamp: new Date(Date.now() - random() * 10000000000).toISOString()
       })
     }
   })
@@ -59,17 +65,40 @@ function generateLaneData(nbfc, tamperedInstitution = null, tamperedOffset = 0) 
   return blocks
 }
 
-const STATIC_LANES = [
-  { nbfc: NBFCS[0], blocks: generateLaneData(NBFCS[0], null) },                                       
-  { nbfc: NBFCS[1], blocks: generateLaneData(NBFCS[1], 'Institution 2', 8) },                         
-  { nbfc: NBFCS[2], blocks: generateLaneData(NBFCS[2], 'Institution 3', 14) },                        
-]
+function getScenarioData(scenario) {
+  let seed = 300 // Default: Multi-NBFC Anomaly
+  if (scenario === 'Clean Network') seed = 100
+  if (scenario === 'Single Anomaly') seed = 200
 
-const TOTAL_BLOCKS = BLOCKS_PER_LANE * 3
+  const random = mulberry32(seed)
+
+  if (scenario === 'Clean Network') {
+    return [
+      { nbfc: NBFCS[0], blocks: generateLaneData(NBFCS[0], random, null) },
+      { nbfc: NBFCS[1], blocks: generateLaneData(NBFCS[1], random, null) },
+      { nbfc: NBFCS[2], blocks: generateLaneData(NBFCS[2], random, null) },
+    ]
+  } else if (scenario === 'Single Anomaly') {
+    return [
+      { nbfc: NBFCS[0], blocks: generateLaneData(NBFCS[0], random, null) },
+      { nbfc: NBFCS[1], blocks: generateLaneData(NBFCS[1], random, 'Institution 2', 8) },
+      { nbfc: NBFCS[2], blocks: generateLaneData(NBFCS[2], random, null) },
+    ]
+  } else {
+    // Multi-NBFC Anomaly
+    return [
+      { nbfc: NBFCS[0], blocks: generateLaneData(NBFCS[0], random, null) },
+      { nbfc: NBFCS[1], blocks: generateLaneData(NBFCS[1], random, 'Institution 2', 8) },
+      { nbfc: NBFCS[2], blocks: generateLaneData(NBFCS[2], random, 'Institution 3', 14) },
+    ]
+  }
+}
 
 export default function NetworkScaleTab() {
   const [highlightNBFC, setHighlightNBFC] = useState('All')
   const [filterStatus, setFilterStatus] = useState('All')
+  const [scenario, setScenario] = useState('Multi-NBFC Anomaly')
+  const [lanesData, setLanesData] = useState(() => getScenarioData('Multi-NBFC Anomaly'))
   const [hoveredBlock, setHoveredBlock] = useState(null)
   
   const [progress, setProgress] = useState(-1)
@@ -82,7 +111,7 @@ export default function NetworkScaleTab() {
     setTimeout(() => {
       intervalRef.current = setInterval(() => {
         setProgress(p => {
-          if (p >= BLOCKS_PER_LANE + 5) {
+          if (p >= BLOCKS_PER_LANE + 50) { // allow plenty of headroom for appended blocks
             clearInterval(intervalRef.current)
             return p
           }
@@ -93,11 +122,48 @@ export default function NetworkScaleTab() {
   }
 
   useEffect(() => {
+    setLanesData(getScenarioData(scenario))
     startSweep()
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current)
-    }
-  }, [])
+  }, [scenario])
+
+  const totalBlocks = lanesData.reduce((sum, lane) => sum + lane.blocks.length, 0)
+  const maxBlocksInLane = Math.max(...lanesData.map(l => l.blocks.length))
+  const isFinished = progress >= maxBlocksInLane
+
+  const simulateNewTranche = () => {
+    setLanesData(prevLanes => {
+      const newLanes = [...prevLanes]
+      // Target NBFC 1, Institution 1 (always predictable)
+      const targetLane = { ...newLanes[0], blocks: [...newLanes[0].blocks] }
+      
+      const clusterBlocks = targetLane.blocks.filter(b => b.institution === 'Institution 1')
+      const lastBlockInCluster = clusterBlocks[clusterBlocks.length - 1]
+      const insertionIndex = targetLane.blocks.indexOf(lastBlockInCluster) + 1
+      
+      // Use unseeded random for the single new block so it's fresh
+      const amt = Math.floor(Math.random() * 50) * 1000 + 10000
+      
+      const newBlock = {
+        id: `simulated-${Date.now()}`,
+        laneId: NBFCS[0].id,
+        nbfc: NBFCS[0],
+        institution: 'Institution 1',
+        amount: `₹${amt.toLocaleString()}`,
+        milestone: 'Disbursement ' + Math.floor(Math.random() * 10),
+        hash: Array.from({length: 40}, () => Math.floor(Math.random()*16).toString(16)).join(''),
+        tampered: false,
+        timestamp: new Date().toISOString()
+      }
+
+      targetLane.blocks.splice(insertionIndex, 0, newBlock)
+      
+      // Re-index all blocks in the lane
+      targetLane.blocks.forEach((b, i) => b.index = i)
+      
+      newLanes[0] = targetLane
+      return newLanes
+    })
+  }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: '24px 0', height: '100%', position: 'relative' }}>
@@ -111,33 +177,43 @@ export default function NetworkScaleTab() {
         </div>
         
         <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 16 }}>
-          <StatBox label="Total Blocks" value={TOTAL_BLOCKS} />
+          <StatBox label="Total Blocks" value={totalBlocks} />
           <StatBox label="Active NBFCs" value={3} />
           <StatBox label="Active Institutions" value={INSTITUTIONS.length} />
           <StatBox 
             label="Network Status" 
-            value={progress >= BLOCKS_PER_LANE ? '⚠ Anomalies Detected' : 'Verifying...'} 
-            color={progress >= BLOCKS_PER_LANE ? 'var(--color-red)' : 'var(--text-primary)'}
+            value={!isFinished ? 'Verifying...' : (scenario === 'Clean Network' ? '✓ Secure & Verified' : '⚠ Anomalies Detected')} 
+            color={!isFinished ? 'var(--text-primary)' : (scenario === 'Clean Network' ? 'var(--color-green)' : 'var(--color-red)')}
           />
         </div>
       </div>
 
       <div style={{ display: 'flex', gap: 16, alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }}>
-        <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: 16, alignItems: 'center', flexWrap: 'wrap' }}>
+          <Select label="Scenario" value={scenario} onChange={setScenario} options={['Clean Network', 'Single Anomaly', 'Multi-NBFC Anomaly']} />
           <Select label="Highlight Lane" value={highlightNBFC} onChange={setHighlightNBFC} options={['All', ...NBFCS.map(n => n.name)]} />
           <Select label="Status" value={filterStatus} onChange={setFilterStatus} options={['All', 'Valid Only', 'Flagged Only']} />
         </div>
-        <button 
-          className="btn-primary" 
-          onClick={startSweep}
-          style={{ padding: '8px 16px', fontSize: '0.8rem', display: 'flex', gap: 8, alignItems: 'center' }}
-        >
-          <Play size={14} /> Replay Verification
-        </button>
+        <div style={{ display: 'flex', gap: 12 }}>
+          <button 
+            className="btn-secondary" 
+            onClick={simulateNewTranche}
+            style={{ padding: '8px 16px', fontSize: '0.8rem', display: 'flex', gap: 8, alignItems: 'center' }}
+          >
+            <Plus size={14} /> Simulate New Tranche
+          </button>
+          <button 
+            className="btn-primary" 
+            onClick={startSweep}
+            style={{ padding: '8px 16px', fontSize: '0.8rem', display: 'flex', gap: 8, alignItems: 'center' }}
+          >
+            <Play size={14} /> Replay Verification
+          </button>
+        </div>
       </div>
 
       <div style={{ flex: 1, display: 'flex', gap: 20, minHeight: 400 }}>
-        {STATIC_LANES.map(lane => (
+        {lanesData.map(lane => (
           <NbfcLane 
             key={lane.nbfc.id} 
             lane={lane} 
@@ -164,6 +240,7 @@ export default function NetworkScaleTab() {
 
 function NbfcLane({ lane, progress, onHover, filterStatus, isDimmed }) {
   const [clusterPhases, setClusterPhases] = useState({}) // Maps cluster.name -> 'self_scanning' | 'consensus' | 'done'
+  const [prevLengths, setPrevLengths] = useState({})
 
   const firstTamperedPerInst = useMemo(() => {
     const map = {}
@@ -182,7 +259,35 @@ function NbfcLane({ lane, progress, onHover, filterStatus, isDimmed }) {
     return Object.entries(map).map(([name, blocks]) => ({ name, blocks }))
   }, [lane.blocks])
 
-  // Phase transition logic
+  // Watch for newly appended blocks in a cluster to reset its animation phase
+  useEffect(() => {
+    const nextLengths = {}
+    let phaseResetTriggered = false
+    
+    clusters.forEach(cluster => {
+      const currentLen = cluster.blocks.length
+      nextLengths[cluster.name] = currentLen
+      
+      if (prevLengths[cluster.name] && currentLen > prevLengths[cluster.name]) {
+        // A block was appended to this specific cluster. Reset its phase so it re-runs.
+        setClusterPhases(p => {
+          const next = { ...p }
+          delete next[cluster.name]
+          return next
+        })
+        phaseResetTriggered = true
+      }
+    })
+    
+    if (phaseResetTriggered) {
+      setPrevLengths(nextLengths)
+    } else if (Object.keys(prevLengths).length === 0) {
+      // initialize
+      setPrevLengths(nextLengths)
+    }
+  }, [clusters, prevLengths])
+
+  // Phase transition logic driven by progress (or lack of phase)
   useEffect(() => {
     if (progress === -1) {
       setClusterPhases({})
@@ -192,11 +297,9 @@ function NbfcLane({ lane, progress, onHover, filterStatus, isDimmed }) {
     clusters.forEach(cluster => {
       const lastIdx = cluster.blocks[cluster.blocks.length - 1].index
       
-      // As soon as primary sweep passes this cluster's last block
       if (progress > lastIdx) {
         setClusterPhases(prev => {
           if (!prev[cluster.name]) {
-            // Kick off self_scanning -> consensus -> done sequence
             setTimeout(() => {
               setClusterPhases(p => ({ ...p, [cluster.name]: 'consensus' }))
               setTimeout(() => {
@@ -228,7 +331,7 @@ function NbfcLane({ lane, progress, onHover, filterStatus, isDimmed }) {
         <div style={{ width: 12, height: 12, borderRadius: '50%', background: lane.nbfc.color, boxShadow: `0 0 10px ${lane.nbfc.color}` }} />
         <div style={{ flex: 1 }}>
           <div style={{ fontWeight: 800, fontSize: '1.1rem', color: 'var(--text-primary)' }}>{lane.nbfc.name}</div>
-          <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>{BLOCKS_PER_LANE} tranches</div>
+          <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>{lane.blocks.length} tranches</div>
         </div>
       </div>
 
@@ -359,7 +462,15 @@ function StatBox({ label, value, color = 'var(--text-primary)' }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
       <span style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-secondary)' }}>{label}</span>
-      <span style={{ fontSize: '1.2rem', fontWeight: 800, color }}>{value}</span>
+      <motion.span 
+        key={value}
+        initial={{ scale: 1.2, color: 'var(--color-green)' }}
+        animate={{ scale: 1, color }}
+        transition={{ duration: 0.5 }}
+        style={{ fontSize: '1.2rem', fontWeight: 800, color }}
+      >
+        {value}
+      </motion.span>
     </div>
   )
 }

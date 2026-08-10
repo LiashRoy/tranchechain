@@ -286,7 +286,7 @@ function ChainConnector({ broken, pulsing, isMobile }) {
    BLOCK CARD
 ═══════════════════════════════════════════════════════════════════════════ */
 
-function BlockCard({ block, isNew, visiblyInvalid, onTamper }) {
+function BlockCard({ block, isNew, visiblyInvalid, isSweeping, onTamper }) {
   const effectiveStatus = visiblyInvalid ? (block.status === 'invalid' ? 'invalid' : block.status) : (block.status === 'invalid' ? 'valid' : block.status)
 
   const borderColor =
@@ -309,7 +309,7 @@ function BlockCard({ block, isNew, visiblyInvalid, onTamper }) {
           : { opacity: 1, x: 0, scale: 1 }
       }
       transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-      style={{ width: 238, flexShrink: 0 }}
+      style={{ width: 238, flexShrink: 0, position: 'relative' }}
     >
       <div style={{
         borderRadius: 13,
@@ -323,6 +323,28 @@ function BlockCard({ block, isNew, visiblyInvalid, onTamper }) {
                    '0 4px 20px rgba(0,0,0,0.25)',
       }}>
 
+        {isSweeping && (
+          <motion.div
+            initial={{ opacity: 1, scale: 1 }}
+            animate={{ opacity: 0, scale: 1.5 }}
+            transition={{ duration: 0.4 }}
+            style={{
+              position: 'absolute', inset: 0, borderRadius: 13,
+              background: 'var(--color-teal)', zIndex: 10, pointerEvents: 'none'
+            }}
+          />
+        )}
+                {isSweeping && (
+          <motion.div
+            initial={{ opacity: 1, scale: 1 }}
+            animate={{ opacity: 0, scale: 1.5 }}
+            transition={{ duration: 0.4 }}
+            style={{
+              position: 'absolute', inset: 0, borderRadius: 13,
+              background: 'var(--color-teal)', zIndex: 10, pointerEvents: 'none'
+            }}
+          />
+        )}
         {/* Card header */}
         <div style={{
           padding: '10px 14px',
@@ -617,7 +639,8 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
       return
     }
     if (usedMilestones.has(form.milestone)) {
-      setError('Tranche already disbursed — duplicate rejected.')
+      const dupIdx = blocks.find(b => b.milestone === form.milestone).index
+      setError('⚠ Milestone already disbursed — duplicate tranche rejected. This loan\'s \'' + form.milestone + '\' tranche was already recorded in Block #' + dupIdx + '.')
       setShakeKey(k => k + 1)
       return
     }
@@ -733,7 +756,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
               >
                 <option value="">Select milestone…</option>
                 {MILESTONES.map(m => (
-                  <option key={m} value={m} disabled={usedMilestones.has(m)}>
+                  <option key={m} value={m}>
                     {m}{usedMilestones.has(m) ? ' ✓ disbursed' : ''}
                   </option>
                 ))}
@@ -774,6 +797,12 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
           </div>
 
           {/* Hash preview during computing phase */}
+          {error && (
+            <div style={{ color: 'var(--color-red)', fontSize: '0.75rem', padding: '8px 12px', background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', borderRadius: 6, lineHeight: 1.4, marginBottom: 16 }}>
+              {error}
+            </div>
+          )}
+
           <AnimatePresence>
             {isComputing && (
               <motion.div
@@ -904,7 +933,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
    STATS BAR
 ═══════════════════════════════════════════════════════════════════════════ */
 
-function StatsBar({ blocks, onReset, onRemoveTamper }) {
+function StatsBar({ blocks, onReset, onRemoveTamper, onVerify, onExport }) {
   const valid   = blocks.filter(b => b.status === 'valid').length
   const broken  = blocks.filter(b => b.status === 'invalid' || b.status === 'tampered').length
   const isClean = broken === 0
@@ -1014,6 +1043,65 @@ function StatsBar({ blocks, onReset, onRemoveTamper }) {
 ═══════════════════════════════════════════════════════════════════════════ */
 
 function TamperBanner({ info, onDismiss }) {
+  if (info.passed) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: -12 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -12 }}
+        style={{
+          background: 'rgba(16,185,129,0.12)', border: '1px solid rgba(16,185,129,0.3)',
+          borderRadius: 12, padding: '16px 20px', display: 'flex', alignItems: 'center',
+          justifyContent: 'space-between', flexWrap: 'wrap', gap: 16,
+        }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          <div style={{
+            width: 40, height: 40, borderRadius: 10, background: 'rgba(16,185,129,0.15)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem',
+          }}>✓</div>
+          <div>
+            <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, color: 'var(--color-green)' }}>
+              Integrity Check Passed
+            </div>
+            <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
+              All block hashes align. The cryptographic chain is completely unbroken and mathematically secure.
+            </div>
+          </div>
+        </div>
+        <button onClick={onDismiss} style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', fontSize: '1.2rem', padding: '0 8px' }}>✕</button>
+      </motion.div>
+    )
+  }
+  if (info.failed) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: -12 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -12 }}
+        style={{
+          background: 'rgba(239,68,68,0.12)', border: '1px solid rgba(239,68,68,0.3)',
+          borderRadius: 12, padding: '16px 20px', display: 'flex', alignItems: 'center',
+          justifyContent: 'space-between', flexWrap: 'wrap', gap: 16,
+        }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          <div style={{
+            width: 40, height: 40, borderRadius: 10, background: 'rgba(239,68,68,0.15)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem',
+          }}>✗</div>
+          <div>
+            <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, color: 'var(--color-red)' }}>
+              Integrity Check Failed
+            </div>
+            <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
+              The verification sweep detected tampered blocks or orphaned connections. The chain is compromised.
+            </div>
+          </div>
+        </div>
+        <button onClick={onDismiss} style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', fontSize: '1.2rem', padding: '0 8px' }}>✕</button>
+      </motion.div>
+    )
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: -12 }}
@@ -1063,6 +1151,52 @@ function TamperBanner({ info, onDismiss }) {
 
 export default function LedgerTab({ blocks, setBlocks }) {
   const [visibleInvalid, setVisibleInvalid] = useState(new Set())
+  const [sweepProgress, setSweepProgress] = useState(-1)
+  const sweepInterval = useRef(null)
+
+  const handleVerifySweep = () => {
+    setSweepProgress(0)
+    if (sweepInterval.current) clearInterval(sweepInterval.current)
+    let p = 0
+    sweepInterval.current = setInterval(() => {
+      p++
+      if (p >= blocks.length + 1) {
+        clearInterval(sweepInterval.current)
+        setTimeout(() => {
+          setSweepProgress(-1)
+          const isBroken = blocks.some((b, i) => b.status === 'invalid' || b.status === 'tampered' || visibleInvalid.has(i))
+          setBannerInfo(isBroken ? { failed: true } : { passed: true })
+        }, 800)
+      } else {
+        setSweepProgress(p)
+      }
+    }, 150)
+  }
+
+  const handleExportJson = () => {
+    const exportData = blocks.map(b => ({
+      id: b.id,
+      index: b.index,
+      from: b.from,
+      to: b.to,
+      amount: b.amount,
+      milestone: b.milestone,
+      timestamp: b.timestamp,
+      prevHash: b.prevHash,
+      hash: b.hash,
+      wasTampered: b.wasTampered,
+      status: b.status
+    }))
+    const dataStr = JSON.stringify(exportData, null, 2)
+    const blob = new Blob([dataStr], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'tranchechain-ledger-export.json'
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
   const [tamperModal, setTamperModal] = useState(null)
   const [addPhase, setAddPhase] = useState('idle')
   const [bannerInfo, setBannerInfo] = useState(null)
@@ -1200,7 +1334,7 @@ export default function LedgerTab({ blocks, setBlocks }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <StatsBar blocks={blocks} onReset={handleReset} onRemoveTamper={handleRemoveTamper} />
+          <StatsBar blocks={blocks} onReset={handleReset} onRemoveTamper={handleRemoveTamper} onVerify={handleVerifySweep} onExport={handleExportJson} />
         </motion.div>
 
         {/* Tamper banner */}
@@ -1249,6 +1383,7 @@ export default function LedgerTab({ blocks, setBlocks }) {
                       block={block}
                       isNew={block.id === newestId}
                       visiblyInvalid={visibleInvalid.has(i)}
+                      isSweeping={sweepProgress === i + 1}
                       onTamper={(b) => setTamperModal(b)}
                     />
                     {i < blocks.length - 1 && (
