@@ -11,7 +11,7 @@ const NBFCS = [
 ]
 
 const INSTITUTIONS = [
-  'Narayana School', 'Sri Chaitanya', 'VIBGYOR Group', 'Delhi Public School'
+  'Institution 1', 'Institution 2', 'Institution 3', 'Institution 4'
 ]
 
 const MILESTONES = [
@@ -64,8 +64,8 @@ function generateLaneData(nbfc, tamperedInstitution = null, tamperedOffset = 0) 
 // Generate static data on load with 2 intentional tampered blocks across the dataset
 const STATIC_LANES = [
   { nbfc: NBFCS[0], blocks: generateLaneData(NBFCS[0], null) },                                       // Clean lane
-  { nbfc: NBFCS[1], blocks: generateLaneData(NBFCS[1], 'Sri Chaitanya', 8) },                         // 1 tamper
-  { nbfc: NBFCS[2], blocks: generateLaneData(NBFCS[2], 'VIBGYOR Group', 14) },                        // 1 tamper
+  { nbfc: NBFCS[1], blocks: generateLaneData(NBFCS[1], 'Institution 2', 8) },                         // 1 tamper
+  { nbfc: NBFCS[2], blocks: generateLaneData(NBFCS[2], 'Institution 3', 14) },                        // 1 tamper
 ]
 
 const TOTAL_BLOCKS = BLOCKS_PER_LANE * 3
