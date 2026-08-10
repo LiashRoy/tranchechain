@@ -11,8 +11,8 @@ const sha256 = (str) => CryptoJS.SHA256(str).toString()
 const GENESIS_PREV = '0'.repeat(64)
 const LOAN_ID = 'EDU-2024-001'
 
-const blockContent = ({ from, to, amount, milestone, timestamp, prevHash }) =>
-  `${LOAN_ID}||${from}||${to}||${amount}||${milestone}||${timestamp}||${prevHash}`
+const blockContent = ({ from, to, amount, milestone, timestamp, prevHash, transaction_type }) =>
+  `${LOAN_ID}||${transaction_type || 'disbursement'}||${from}||${to}||${amount}||${milestone}||${timestamp}||${prevHash}`
 
 const computeHash = (block) => sha256(blockContent(block))
 
@@ -44,12 +44,18 @@ const ENTITIES = {
 const FROM_OPTIONS = ['NBFC 1', 'NBFC 2', 'NBFC 3']
 const TO_OPTIONS   = ['Fintech Company', 'Partner Institute']
 const MILESTONES   = ['Admission Confirmed', 'Semester 1 Start', 'Semester 2 Start', 'Semester 3 Start', 'Semester 4 Start', 'Semester 5 Start', 'Final Disbursement']
+const REFUND_REASONS = ['Mid-Semester Withdrawal', 'Course Cancellation', 'Overpayment Correction']
+const REFUND_FROM_OPTIONS = ['Partner Institute', 'Fintech Company']
+const REFUND_TO_OPTIONS = ['NBFC 1', 'NBFC 2', 'NBFC 3']
 
 /* ═══════════════════════════════════════════════════════════════════════════
    INITIAL CHAIN (real hashes, computed at module load)
 ═══════════════════════════════════════════════════════════════════════════ */
 
-function makeBlock(data, prevHash) {
+function makeBlock({ transaction_type = 'disbursement', reason, refundRef, ...data }, prevHash) {
+  data.transaction_type = transaction_type;
+  if (reason) data.reason = reason;
+  if (refundRef) data.refundRef = refundRef;
   const b = { ...data, prevHash }
   return { ...b, hash: computeHash(b), status: 'valid', wasTampered: false, id: uid() }
 }
@@ -57,19 +63,19 @@ function makeBlock(data, prevHash) {
 function buildInitialChain() {
   const b1 = makeBlock({
     from: 'NBFC 1', to: 'Partner Institute',
-    amount: '₹18,000', milestone: 'Admission Confirmed',
+    amount: '₹18,000', milestone: 'Admission Confirmed', transaction_type: 'disbursement',
     timestamp: '2024-06-01 09:14', index: 1,
   }, GENESIS_PREV)
 
   const b2 = makeBlock({
     from: 'NBFC 2', to: 'Partner Institute',
-    amount: '₹24,000', milestone: 'Semester 1 Start',
+    amount: '₹24,000', milestone: 'Semester 1 Start', transaction_type: 'disbursement',
     timestamp: '2024-10-02 11:22', index: 2,
   }, b1.hash)
 
   const b3 = makeBlock({
     from: 'NBFC 3', to: 'Partner Institute',
-    amount: '₹24,000', milestone: 'Semester 2 Start',
+    amount: '₹24,000', milestone: 'Semester 2 Start', transaction_type: 'disbursement',
     timestamp: '2025-02-01 08:45', index: 3,
   }, b2.hash)
 
@@ -287,16 +293,19 @@ function ChainConnector({ broken, pulsing, isMobile }) {
 ═══════════════════════════════════════════════════════════════════════════ */
 
 function BlockCard({ block, isNew, visiblyInvalid, isSweeping, onTamper }) {
+  const isRefund = block.transaction_type === 'refund'
   const effectiveStatus = visiblyInvalid ? (block.status === 'invalid' ? 'invalid' : block.status) : (block.status === 'invalid' ? 'valid' : block.status)
 
   const borderColor =
     effectiveStatus === 'invalid'  ? 'rgba(239,68,68,0.45)'  :
     effectiveStatus === 'tampered' ? 'rgba(245,158,11,0.45)' :
+    isRefund ? 'rgba(245,158,11,0.35)' :
     'rgba(59,140,255,0.18)'
 
   const headerGlow =
     effectiveStatus === 'invalid'  ? 'rgba(239,68,68,0.07)'  :
     effectiveStatus === 'tampered' ? 'rgba(245,158,11,0.07)' :
+    isRefund ? 'rgba(245,158,11,0.05)' :
     'rgba(59,140,255,0.05)'
 
   return (
@@ -357,9 +366,9 @@ function BlockCard({ block, isNew, visiblyInvalid, isSweeping, onTamper }) {
             <div style={{
               width: 7, height: 7, borderRadius: '50%',
               background: effectiveStatus === 'invalid' ? 'var(--color-red)' :
-                          effectiveStatus === 'tampered' ? 'var(--color-gold)' : 'var(--color-green)',
+                          effectiveStatus === 'tampered' ? 'var(--color-gold)' : (isRefund ? 'var(--color-gold)' : 'var(--color-green)'),
               boxShadow: `0 0 6px ${effectiveStatus === 'invalid' ? '#ef444480' :
-                           effectiveStatus === 'tampered' ? '#f59e0b80' : '#10b98180'}`,
+                           effectiveStatus === 'tampered' ? '#f59e0b80' : (isRefund ? '#f59e0b80' : '#10b98180')}`,
               transition: 'background 0.4s, box-shadow 0.4s',
             }} />
             <span style={{
@@ -387,14 +396,21 @@ function BlockCard({ block, isNew, visiblyInvalid, isSweeping, onTamper }) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             <div style={{
               fontFamily: 'JetBrains Mono, monospace', fontWeight: 800,
-              fontSize: '1.12rem', color: 'var(--color-green)', letterSpacing: '-0.01em',
+              fontSize: '1.12rem', color: isRefund ? 'var(--color-gold)' : 'var(--color-green)', letterSpacing: '-0.01em',
             }}>
+              {isRefund && <span style={{ fontSize: '0.9rem', marginRight: 4 }}>↩</span>}
               {block.amount}
             </div>
             <div style={{
               fontFamily: 'Manrope, sans-serif', fontSize: '0.76rem',
               color: 'var(--color-electric-blue)', fontWeight: 800,
-            }}>{block.milestone}</div>
+            }}>{isRefund ? block.reason : block.milestone}</div>
+            {isRefund && block.refundRef && (
+              <div style={{
+                fontFamily: 'Manrope, sans-serif', fontSize: '0.65rem',
+                color: 'var(--color-gold)', fontWeight: 600,
+              }}>Ref: {block.refundRef}</div>
+            )}
             <div style={{
               fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem',
               color: 'var(--text-secondary)',
@@ -601,7 +617,7 @@ function TamperModal({ block, onSave, onClose }) {
    ADD BLOCK SIDEBAR
 ═══════════════════════════════════════════════════════════════════════════ */
 
-const EMPTY_FORM = { from: '', to: '', milestone: '', amount: '' }
+const EMPTY_FORM = { from: '', to: '', milestone: '', amount: '', refundRef: '' }
 
 const selectStyle = {
   width: '100%', boxSizing: 'border-box',
@@ -614,6 +630,7 @@ const selectStyle = {
 }
 
 function AddBlockSidebar({ blocks, onAdd, addPhase }) {
+  const [formMode, setFormMode] = useState('disbursement')
   const [form, setForm] = useState(EMPTY_FORM)
   const [error, setError] = useState(null)
   const [shakeKey, setShakeKey] = useState(0)
@@ -627,7 +644,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
   }
 
   const handleSubmit = () => {
-    if (!form.from || !form.to || !form.milestone || !form.amount) {
+    if (!form.from || !form.to || !form.milestone || !form.amount || (formMode === 'refund' && !form.refundRef)) {
       setError('All fields are required.')
       setShakeKey(k => k + 1)
       return
@@ -638,18 +655,40 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
       setShakeKey(k => k + 1)
       return
     }
-    if (usedMilestones.has(form.milestone)) {
-      const dupIdx = blocks.find(b => b.milestone === form.milestone).index
-      setError('⚠ Milestone already disbursed — duplicate tranche rejected. This loan\'s \'' + form.milestone + '\' tranche was already recorded in Block #' + dupIdx + '.')
-      setShakeKey(k => k + 1)
-      return
+    if (formMode === 'refund') {
+      const refIndex = parseInt(form.refundRef.replace(/[^0-9]/g, ''), 10);
+      const refBlock = blocks.find(b => b.index === refIndex);
+      if (refBlock) {
+        const origAmt = parseInt(refBlock.amount.replace(/[^0-9]/g, ''), 10);
+        if (amtNum > origAmt) {
+          setError(`⚠ Refund amount exceeds original disbursement of ₹${origAmt.toLocaleString('en-IN')} — rejected.`);
+          setShakeKey(k => k + 1);
+          return;
+        }
+      }
+      onAdd({
+        transaction_type: 'refund',
+        from: form.from,
+        to: form.to,
+        reason: form.milestone,
+        refundRef: form.refundRef,
+        amount: fmtAmount(form.amount),
+      });
+    } else {
+      if (usedMilestones.has(form.milestone)) {
+        const dupIdx = blocks.find(b => b.milestone === form.milestone).index
+        setError('⚠ Milestone already disbursed — duplicate tranche rejected. This loan\'s \'' + form.milestone + '\' tranche was already recorded in Block #' + dupIdx + '.')
+        setShakeKey(k => k + 1)
+        return
+      }
+      onAdd({
+        transaction_type: 'disbursement',
+        from: form.from,
+        to: form.to,
+        milestone: form.milestone,
+        amount: fmtAmount(form.amount),
+      })
     }
-    onAdd({
-      from: form.from,
-      to: form.to,
-      milestone: form.milestone,
-      amount: fmtAmount(form.amount),
-    })
     setForm(EMPTY_FORM)
     setError(null)
   }
@@ -661,14 +700,14 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
   const btnLabel =
     isComputing ? '⚙ Computing SHA-256…' :
     isSigning   ? '🔏 Signing with private key…' :
-    addPhase === 'done' ? '✓ Block added!' :
-    '⛓ Sign & Add Block'
+    addPhase === 'done' ? (formMode === 'refund' ? '✓ Refund added!' : '✓ Block added!') :
+    (formMode === 'refund' ? '↩ Sign & Add Refund' : '⛓ Sign & Add Block')
 
   const btnColor =
     isComputing ? '#3b8cff' :
     isSigning   ? '#14b8a6' :
     addPhase === 'done' ? '#10b981' :
-    '#3b8cff'
+    (formMode === 'refund' ? '#f59e0b' : '#3b8cff')
 
   return (
     <div style={{
@@ -691,6 +730,27 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
           <span>⛓</span> Add New Tranche
         </div>
 
+        <div style={{ display: 'flex', gap: 6, marginBottom: 16, background: 'rgba(255,255,255,0.05)', padding: 4, borderRadius: 8 }}>
+          <button
+            onClick={() => { setFormMode('disbursement'); setForm(EMPTY_FORM); setError(null); }}
+            style={{
+              flex: 1, padding: '6px 12px', borderRadius: 6, border: 'none', cursor: 'pointer',
+              background: formMode === 'disbursement' ? 'rgba(59,140,255,0.2)' : 'transparent',
+              color: formMode === 'disbursement' ? 'var(--color-electric-blue)' : 'var(--text-secondary)',
+              fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '0.75rem',
+            }}
+          >Disbursement</button>
+          <button
+            onClick={() => { setFormMode('refund'); setForm(EMPTY_FORM); setError(null); }}
+            style={{
+              flex: 1, padding: '6px 12px', borderRadius: 6, border: 'none', cursor: 'pointer',
+              background: formMode === 'refund' ? 'rgba(245,158,11,0.2)' : 'transparent',
+              color: formMode === 'refund' ? 'var(--color-gold)' : 'var(--text-secondary)',
+              fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '0.75rem',
+            }}
+          >Refund</button>
+        </div>
+
         <div style={{ display: 'flex', flexDirection: 'column', gap: 13 }}>
           {/* From */}
           <div>
@@ -698,7 +758,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
               fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem',
               color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.08em',
               display: 'block', marginBottom: 5,
-            }}>From (NBFC Node)</label>
+            }}>{formMode === 'refund' ? 'From (Institution)' : 'From (NBFC Node)'}</label>
             <div style={{ position: 'relative' }}>
               <select
                 value={form.from}
@@ -706,8 +766,8 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
                 disabled={busy}
                 style={{ ...selectStyle, opacity: busy ? 0.5 : 1 }}
               >
-                <option value="">Select NBFC…</option>
-                {FROM_OPTIONS.map(o => <option key={o} value={o}>{o}</option>)}
+                <option value="">{formMode === 'refund' ? 'Select institution…' : 'Select NBFC…'}</option>
+                {(formMode === 'refund' ? REFUND_FROM_OPTIONS : FROM_OPTIONS).map(o => <option key={o} value={o}>{o}</option>)}
               </select>
               <svg style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}
                 width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" strokeWidth="2">
@@ -722,7 +782,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
               fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem',
               color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.08em',
               display: 'block', marginBottom: 5,
-            }}>To (Institution / Platform)</label>
+            }}>{formMode === 'refund' ? 'To (NBFC Node)' : 'To (Institution / Platform)'}</label>
             <div style={{ position: 'relative' }}>
               <select
                 value={form.to}
@@ -730,8 +790,8 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
                 disabled={busy}
                 style={{ ...selectStyle, opacity: busy ? 0.5 : 1 }}
               >
-                <option value="">Select recipient…</option>
-                {TO_OPTIONS.map(o => <option key={o} value={o}>{o}</option>)}
+                <option value="">{formMode === 'refund' ? 'Select NBFC…' : 'Select recipient…'}</option>
+                {(formMode === 'refund' ? REFUND_TO_OPTIONS : TO_OPTIONS).map(o => <option key={o} value={o}>{o}</option>)}
               </select>
               <svg style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}
                 width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" strokeWidth="2">
@@ -746,7 +806,7 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
               fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem',
               color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.08em',
               display: 'block', marginBottom: 5,
-            }}>Milestone</label>
+            }}>{formMode === 'refund' ? 'Reason' : 'Milestone'}</label>
             <div style={{ position: 'relative' }}>
               <select
                 value={form.milestone}
@@ -754,12 +814,15 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
                 disabled={busy}
                 style={{ ...selectStyle, opacity: busy ? 0.5 : 1 }}
               >
-                <option value="">Select milestone…</option>
-                {MILESTONES.map(m => (
-                  <option key={m} value={m}>
-                    {m}{usedMilestones.has(m) ? ' ✓ disbursed' : ''}
-                  </option>
-                ))}
+                <option value="">{formMode === 'refund' ? 'Select reason…' : 'Select milestone…'}</option>
+                {formMode === 'refund' 
+                  ? REFUND_REASONS.map(m => <option key={m} value={m}>{m}</option>)
+                  : MILESTONES.map(m => (
+                    <option key={m} value={m}>
+                      {m}{usedMilestones.has(m) ? ' ✓ disbursed' : ''}
+                    </option>
+                  ))
+                }
               </select>
               <svg style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}
                 width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" strokeWidth="2">
@@ -767,6 +830,35 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
               </svg>
             </div>
           </div>
+
+          {formMode === 'refund' && (
+            <div>
+              <label style={{
+                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem',
+                color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.08em',
+                display: 'block', marginBottom: 5,
+              }}>Original Tranche Reference</label>
+              <div style={{ position: 'relative' }}>
+                <select
+                  value={form.refundRef}
+                  onChange={e => set('refundRef', e.target.value)}
+                  disabled={busy}
+                  style={{ ...selectStyle, opacity: busy ? 0.5 : 1 }}
+                >
+                  <option value="">Select original block…</option>
+                  {blocks.filter(b => (b.transaction_type || 'disbursement') === 'disbursement').map(b => (
+                    <option key={b.id} value={`Block #${b.index}`}>
+                      Block #{b.index} — {b.amount} ({b.milestone})
+                    </option>
+                  ))}
+                </select>
+                <svg style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}
+                  width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" strokeWidth="2">
+                  <path d="M6 9l6 6 6-6"/>
+                </svg>
+              </div>
+            </div>
+          )}
 
           {/* Amount */}
           <div>
@@ -784,14 +876,14 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
               style={{
                 width: '100%', boxSizing: 'border-box',
                 fontFamily: 'JetBrains Mono, monospace', fontSize: '0.88rem',
-                background: 'rgba(16,185,129,0.06)',
-                border: '1px solid rgba(16,185,129,0.2)',
+                background: formMode === 'refund' ? 'rgba(245,158,11,0.06)' : 'rgba(16,185,129,0.06)',
+                border: formMode === 'refund' ? '1px solid rgba(245,158,11,0.2)' : '1px solid rgba(16,185,129,0.2)',
                 borderRadius: 9, padding: '9px 12px',
-                color: 'var(--color-green)', outline: 'none',
+                color: formMode === 'refund' ? 'var(--color-gold)' : 'var(--color-green)', outline: 'none',
                 opacity: busy ? 0.5 : 1,
               }}
-              onFocus={e => { e.target.style.borderColor = 'rgba(16,185,129,0.5)' }}
-              onBlur={e => { e.target.style.borderColor = 'rgba(16,185,129,0.2)' }}
+              onFocus={e => { e.target.style.borderColor = formMode === 'refund' ? 'rgba(245,158,11,0.5)' : 'rgba(16,185,129,0.5)' }}
+              onBlur={e => { e.target.style.borderColor = formMode === 'refund' ? 'rgba(245,158,11,0.2)' : 'rgba(16,185,129,0.2)' }}
               onKeyDown={e => { if (e.key === 'Enter' && !busy) handleSubmit() }}
             />
           </div>
@@ -937,6 +1029,11 @@ function StatsBar({ blocks, onReset, onRemoveTamper, onVerify, onExport }) {
   const valid   = blocks.filter(b => b.status === 'valid').length
   const broken  = blocks.filter(b => b.status === 'invalid' || b.status === 'tampered').length
   const isClean = broken === 0
+  
+  const parseAmt = (v) => parseInt(String(v).replace(/[^0-9]/g, ''), 10) || 0;
+  const disbursedTotal = blocks.filter(b => (b.transaction_type || 'disbursement') === 'disbursement').reduce((sum, b) => sum + parseAmt(b.amount), 0)
+  const refundTotal = blocks.filter(b => b.transaction_type === 'refund').reduce((sum, b) => sum + parseAmt(b.amount), 0)
+  const netDisbursed = disbursedTotal - refundTotal
 
   return (
     <div style={{
@@ -962,6 +1059,7 @@ function StatsBar({ blocks, onReset, onRemoveTamper, onVerify, onExport }) {
       {[
         { label: 'Chain Length', value: `${blocks.length}` },
         { label: 'Valid Blocks', value: `${valid}`, color: 'var(--color-green)' },
+        { label: 'Net Disbursed', value: `₹${netDisbursed.toLocaleString('en-IN')}`, color: 'var(--color-gold)' },
         { label: 'Status', value: isClean ? '✓ Verified' : '⚠ Compromised', color: isClean ? 'var(--color-green)' : 'var(--color-red)' },
         { label: 'Verification Time', value: '<12ms', color: 'var(--color-electric-blue)' },
       ].map(s => (

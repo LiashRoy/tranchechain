@@ -1,311 +1,160 @@
 const fs = require('fs');
 
-let content = fs.readFileSync('src/pages/demo/LedgerTab.jsx', 'utf-8');
+function patchChain() {
+  const file = 'src/utils/chain.js';
+  let content = fs.readFileSync(file, 'utf8');
 
-// 1. Update AddBlockSidebar handleSubmit
-let old_submit = `    if (usedMilestones.has(form.milestone)) {
-      setError('Tranche already disbursed — duplicate rejected.')
-      setShakeKey(k => k + 1)
-      return
-    }`;
-let new_submit = `    if (usedMilestones.has(form.milestone)) {
-      const dupIdx = blocks.find(b => b.milestone === form.milestone).index
-      setError('⚠ Milestone already disbursed — duplicate tranche rejected. This loan\\'s \\'' + form.milestone + '\\' tranche was already recorded in Block #' + dupIdx + '.')
-      setShakeKey(k => k + 1)
-      return
-    }`;
-content = content.replace(old_submit, new_submit);
+  // 1. blockContent
+  content = content.replace(
+    /export const blockContent = \(\{(.*?)prevHash\}\) =>\r?\n\s*`(.*?)`/s,
+    "export const blockContent = ({ from, to, amount, milestone, timestamp, prevHash, transaction_type }) =>\n  `${LOAN_ID}||${transaction_type || 'disbursement'}||${from}||${to}||${amount}||${milestone}||${timestamp}||${prevHash}`"
+  );
+  
+  // 2. makeBlock
+  content = content.replace(
+    /export function makeBlock\(data, prevHash\) \{/g,
+    "export function makeBlock({ transaction_type = 'disbursement', reason, refundRef, ...data }, prevHash) {\n  data.transaction_type = transaction_type;\n  if (reason) data.reason = reason;\n  if (refundRef) data.refundRef = refundRef;"
+  );
 
-// 2. Update milestone options disabled
-let old_option = `<option key={m} value={m} disabled={usedMilestones.has(m)}>`;
-let new_option = `<option key={m} value={m}>`;
-content = content.replace(old_option, new_option);
+  // 3. buildInitialChain - add transaction_type
+  content = content.replace(
+    /amount: '₹18,000', milestone: 'Admission Confirmed',/g,
+    "amount: '₹18,000', milestone: 'Admission Confirmed', transaction_type: 'disbursement',"
+  ).replace(
+    /amount: '₹24,000', milestone: 'Semester 1 Start',/g,
+    "amount: '₹24,000', milestone: 'Semester 1 Start', transaction_type: 'disbursement',"
+  ).replace(
+    /amount: '₹24,000', milestone: 'Semester 2 Start',/g,
+    "amount: '₹24,000', milestone: 'Semester 2 Start', transaction_type: 'disbursement',"
+  );
 
-// 3. Add error display in AddBlockSidebar
-let old_button = `          <AnimatePresence>
-            {isComputing && (`;
-let new_button = `          {error && (
-            <div style={{ color: 'var(--color-red)', fontSize: '0.75rem', padding: '8px 12px', background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', borderRadius: 6, lineHeight: 1.4, marginBottom: 16 }}>
-              {error}
+  fs.writeFileSync(file, content);
+}
+
+function patchLedgerTab() {
+  const file = 'src/pages/demo/LedgerTab.jsx';
+  let content = fs.readFileSync(file, 'utf8');
+
+  // a) blockContent
+  content = content.replace(
+    /const blockContent = \(\{(.*?)prevHash \}\) =>\r?\n\s*`(.*?)`/g,
+    "const blockContent = ({ from, to, amount, milestone, timestamp, prevHash, transaction_type }) =>\n  `${LOAN_ID}||${transaction_type || 'disbursement'}||${from}||${to}||${amount}||${milestone}||${timestamp}||${prevHash}`"
+  );
+
+  content = content.replace(
+    /const blockContent = \(\{(.*?)prevHash\}\) =>\r?\n\s*`(.*?)`/s,
+    "const blockContent = ({ from, to, amount, milestone, timestamp, prevHash, transaction_type }) =>\n  `${LOAN_ID}||${transaction_type || 'disbursement'}||${from}||${to}||${amount}||${milestone}||${timestamp}||${prevHash}`"
+  );
+
+  // a) makeBlock
+  content = content.replace(
+    /function makeBlock\(data, prevHash\) \{/g,
+    "function makeBlock({ transaction_type = 'disbursement', reason, refundRef, ...data }, prevHash) {\n  data.transaction_type = transaction_type;\n  if (reason) data.reason = reason;\n  if (refundRef) data.refundRef = refundRef;"
+  );
+
+  // a) buildInitialChain
+  content = content.replace(
+    /amount: '₹18,000', milestone: 'Admission Confirmed',/g,
+    "amount: '₹18,000', milestone: 'Admission Confirmed', transaction_type: 'disbursement',"
+  ).replace(
+    /amount: '₹24,000', milestone: 'Semester 1 Start',/g,
+    "amount: '₹24,000', milestone: 'Semester 1 Start', transaction_type: 'disbursement',"
+  ).replace(
+    /amount: '₹24,000', milestone: 'Semester 2 Start',/g,
+    "amount: '₹24,000', milestone: 'Semester 2 Start', transaction_type: 'disbursement',"
+  );
+
+  // b) Constants
+  content = content.replace(
+    /const MILESTONES   = \[(.*?)\]/g,
+    "const MILESTONES   = [$1]\nconst REFUND_REASONS = ['Mid-Semester Withdrawal', 'Course Cancellation', 'Overpayment Correction']\nconst REFUND_FROM_OPTIONS = ['Partner Institute', 'Fintech Company']\nconst REFUND_TO_OPTIONS = ['NBFC 1', 'NBFC 2', 'NBFC 3']"
+  );
+
+  // StatsBar changes
+  content = content.replace(
+    /const isClean = broken === 0/g,
+    `const isClean = broken === 0
+  
+  const parseAmt = (v) => parseInt(String(v).replace(/[^0-9]/g, ''), 10) || 0;
+  const disbursedTotal = blocks.filter(b => (b.transaction_type || 'disbursement') === 'disbursement').reduce((sum, b) => sum + parseAmt(b.amount), 0)
+  const refundTotal = blocks.filter(b => b.transaction_type === 'refund').reduce((sum, b) => sum + parseAmt(b.amount), 0)
+  const netDisbursed = disbursedTotal - refundTotal`
+  );
+
+  content = content.replace(
+    /\{ label: 'Valid Blocks', value: `\$\{valid\}`(.*?) \},/g,
+    "{ label: 'Valid Blocks', value: `${valid}`$1 },\n        { label: 'Net Disbursed', value: `₹${netDisbursed.toLocaleString('en-IN')}`, color: 'var(--color-gold)' },"
+  );
+
+  // BlockCard changes
+  content = content.replace(
+    /function BlockCard\(\{ block, isNew, visiblyInvalid, isSweeping, onTamper \}\) \{/g,
+    "function BlockCard({ block, isNew, visiblyInvalid, isSweeping, onTamper }) {\n  const isRefund = block.transaction_type === 'refund'"
+  );
+
+  content = content.replace(
+    /const borderColor =\r?\n    effectiveStatus === 'invalid'  \? 'rgba\(239,68,68,0\.45\)'  :\r?\n    effectiveStatus === 'tampered' \? 'rgba\(245,158,11,0\.45\)' :\r?\n    'rgba\(59,140,255,0\.18\)'/g,
+    `const borderColor =
+    effectiveStatus === 'invalid'  ? 'rgba(239,68,68,0.45)'  :
+    effectiveStatus === 'tampered' ? 'rgba(245,158,11,0.45)' :
+    isRefund ? 'rgba(245,158,11,0.35)' :
+    'rgba(59,140,255,0.18)'`
+  );
+
+  content = content.replace(
+    /const headerGlow =\r?\n    effectiveStatus === 'invalid'  \? 'rgba\(239,68,68,0\.07\)'  :\r?\n    effectiveStatus === 'tampered' \? 'rgba\(245,158,11,0\.07\)' :\r?\n    'rgba\(59,140,255,0\.05\)'/g,
+    `const headerGlow =
+    effectiveStatus === 'invalid'  ? 'rgba(239,68,68,0.07)'  :
+    effectiveStatus === 'tampered' ? 'rgba(245,158,11,0.07)' :
+    isRefund ? 'rgba(245,158,11,0.05)' :
+    'rgba(59,140,255,0.05)'`
+  );
+
+  content = content.replace(
+    /background: effectiveStatus === 'invalid' \? 'var\(--color-red\)' :\r?\n                          effectiveStatus === 'tampered' \? 'var\(--color-gold\)' : 'var\(--color-green\)',/g,
+    "background: effectiveStatus === 'invalid' ? 'var(--color-red)' :\n                          effectiveStatus === 'tampered' ? 'var(--color-gold)' : (isRefund ? 'var(--color-gold)' : 'var(--color-green)'),"
+  );
+
+  content = content.replace(
+    /boxShadow: `0 0 6px \$\{effectiveStatus === 'invalid' \? '#ef444480' :\r?\n                           effectiveStatus === 'tampered' \? '#f59e0b80' : '#10b98180'\}`/g,
+    "boxShadow: `0 0 6px ${effectiveStatus === 'invalid' ? '#ef444480' :\n                           effectiveStatus === 'tampered' ? '#f59e0b80' : (isRefund ? '#f59e0b80' : '#10b98180')}`"
+  );
+
+  content = content.replace(
+    /<span>Block #\{block\.index\}<\/span>\r?\n          <\/div>/g,
+    `<span>Block #{block.index}</span>
+            {isRefund && (
+              <span style={{
+                padding: '2px 6px', borderRadius: '999px',
+                background: 'rgba(245,158,11,0.12)', border: '1px solid rgba(245,158,11,0.35)',
+                fontFamily: 'Manrope, sans-serif', fontWeight: 800,
+                fontSize: '0.6rem', color: 'var(--color-gold)', letterSpacing: '0.02em',
+              }}>REFUND</span>
+            )}
+          </div>`
+  );
+
+  content = content.replace(
+    /color: 'var\(--color-green\)', letterSpacing: '-0\.01em',\r?\n            \}\}>\r?\n              \{block\.amount\}\r?\n            <\/div>\r?\n            <div style=\{\{\r?\n              fontFamily: 'Manrope, sans-serif', fontSize: '0\.76rem',\r?\n              color: 'var\(--color-electric-blue\)', fontWeight: 800,\r?\n            \}\}>\{block\.milestone\}<\/div>/g,
+    `color: isRefund ? 'var(--color-gold)' : 'var(--color-green)', letterSpacing: '-0.01em',
+            }}>
+              {isRefund && <span style={{ fontSize: '0.9rem', marginRight: 4 }}>↩</span>}
+              {block.amount}
             </div>
-          )}
+            <div style={{
+              fontFamily: 'Manrope, sans-serif', fontSize: '0.76rem',
+              color: 'var(--color-electric-blue)', fontWeight: 800,
+            }}>{isRefund ? block.reason : block.milestone}</div>
+            {isRefund && block.refundRef && (
+              <div style={{
+                fontFamily: 'Manrope, sans-serif', fontSize: '0.65rem',
+                color: 'var(--color-gold)', fontWeight: 600,
+              }}>Ref: {block.refundRef}</div>
+            )}`
+  );
 
-          <AnimatePresence>
-            {isComputing && (`;
-content = content.replace(old_button, new_button);
+  fs.writeFileSync(file, content);
+}
 
-// 4. Add sweep state and functions to LedgerTab
-let old_ledger_state = `export default function LedgerTab({ blocks, setBlocks }) {
-  const [visibleInvalid, setVisibleInvalid] = useState(new Set())
-  const [tamperModal, setTamperModal] = useState(null)`;
-let new_ledger_state = `export default function LedgerTab({ blocks, setBlocks }) {
-  const [visibleInvalid, setVisibleInvalid] = useState(new Set())
-  const [sweepProgress, setSweepProgress] = useState(-1)
-  const sweepInterval = useRef(null)
-
-  const handleVerifySweep = () => {
-    setSweepProgress(0)
-    if (sweepInterval.current) clearInterval(sweepInterval.current)
-    let p = 0
-    sweepInterval.current = setInterval(() => {
-      p++
-      if (p >= blocks.length + 1) {
-        clearInterval(sweepInterval.current)
-        setTimeout(() => {
-          setSweepProgress(-1)
-          const isBroken = blocks.some((b, i) => b.status === 'invalid' || b.status === 'tampered' || visibleInvalid.has(i))
-          setBannerInfo(isBroken ? { failed: true } : { passed: true })
-        }, 800)
-      } else {
-        setSweepProgress(p)
-      }
-    }, 150)
-  }
-
-  const handleExportJson = () => {
-    const exportData = blocks.map(b => ({
-      id: b.id,
-      index: b.index,
-      from: b.from,
-      to: b.to,
-      amount: b.amount,
-      milestone: b.milestone,
-      timestamp: b.timestamp,
-      prevHash: b.prevHash,
-      hash: b.hash,
-      wasTampered: b.wasTampered,
-      status: b.status
-    }))
-    const dataStr = JSON.stringify(exportData, null, 2)
-    const blob = new Blob([dataStr], { type: 'application/json' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = 'tranchechain-ledger-export.json'
-    a.click()
-    URL.revokeObjectURL(url)
-  }
-
-  const [tamperModal, setTamperModal] = useState(null)`;
-content = content.replace(old_ledger_state, new_ledger_state);
-
-// 5. Pass them to StatsBar
-let old_statsbar_call = `<StatsBar blocks={blocks} onReset={handleReset} onRemoveTamper={handleRemoveTamper} />`;
-let new_statsbar_call = `<StatsBar blocks={blocks} onReset={handleReset} onRemoveTamper={handleRemoveTamper} onVerify={handleVerifySweep} onExport={handleExportJson} />`;
-content = content.replace(old_statsbar_call, new_statsbar_call);
-
-// 6. Pass isSweeping to BlockCard
-let old_blockcard = `<BlockCard
-                      block={block}
-                      isNew={block.id === newestId}
-                      visiblyInvalid={visibleInvalid.has(i)}
-                      onTamper={(b) => setTamperModal(b)}
-                    />`;
-let new_blockcard = `<BlockCard
-                      block={block}
-                      isNew={block.id === newestId}
-                      visiblyInvalid={visibleInvalid.has(i)}
-                      isSweeping={sweepProgress === i + 1}
-                      onTamper={(b) => setTamperModal(b)}
-                    />`;
-content = content.replace(new RegExp(old_blockcard.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'g'), new_blockcard);
-
-// 7. Add isSweeping to BlockCard component definition
-let old_blockcard_def = `function BlockCard({ block, isNew, visiblyInvalid, onTamper }) {`;
-let new_blockcard_def = `function BlockCard({ block, isNew, visiblyInvalid, isSweeping, onTamper }) {`;
-content = content.replace(old_blockcard_def, new_blockcard_def);
-
-// 8. Add pulse effect to BlockCard
-let old_blockcard_glow = `        {/* Card header */}`;
-let new_blockcard_glow = `        {isSweeping && (
-          <motion.div
-            initial={{ opacity: 1, scale: 1 }}
-            animate={{ opacity: 0, scale: 1.5 }}
-            transition={{ duration: 0.4 }}
-            style={{
-              position: 'absolute', inset: 0, borderRadius: 13,
-              background: 'var(--color-teal)', zIndex: 10, pointerEvents: 'none'
-            }}
-          />
-        )}
-        {/* Card header */}`;
-content = content.replace(old_blockcard_glow, new_blockcard_glow);
-
-// 9. Update StatsBar definition to include buttons
-let old_statsbar_def = `function StatsBar({ blocks, onReset, onRemoveTamper }) {`;
-let new_statsbar_def = `function StatsBar({ blocks, onReset, onRemoveTamper, onVerify, onExport }) {`;
-content = content.replace(old_statsbar_def, new_statsbar_def);
-
-// 10. Add Verify/Export buttons to StatsBar
-let old_buttons = `        <button
-          onClick={onReset}
-          style={{
-            display: 'flex', alignItems: 'center', gap: 6,
-            padding: '6px 14px', borderRadius: 8,
-            background: 'rgba(59,140,255,0.1)',
-            border: '1px solid rgba(59,140,255,0.25)',
-            color: 'var(--color-electric-blue)', fontFamily: 'Manrope, sans-serif',
-            fontWeight: 800, fontSize: '0.75rem', cursor: 'pointer',
-            transition: 'all 0.15s',
-          }}
-          onMouseEnter={e => {
-            e.currentTarget.style.background = 'rgba(59,140,255,0.18)'
-            e.currentTarget.style.borderColor = 'rgba(59,140,255,0.5)'
-          }}
-          onMouseLeave={e => {
-            e.currentTarget.style.background = 'rgba(59,140,255,0.1)'
-            e.currentTarget.style.borderColor = 'rgba(59,140,255,0.25)'
-          }}
-        >
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
-          Reset Chain
-        </button>
-      </div>`;
-
-let new_buttons = `        <button
-          onClick={onVerify}
-          style={{
-            display: 'flex', alignItems: 'center', gap: 6,
-            padding: '6px 14px', borderRadius: 8,
-            background: 'var(--badge-teal-border)',
-            border: '1px solid rgba(16,185,129,0.25)',
-            color: 'var(--color-green)', fontFamily: 'Manrope, sans-serif',
-            fontWeight: 800, fontSize: '0.75rem', cursor: 'pointer',
-            transition: 'all 0.15s',
-          }}
-          onMouseEnter={e => {
-            e.currentTarget.style.background = 'rgba(16,185,129,0.18)'
-            e.currentTarget.style.borderColor = 'rgba(16,185,129,0.5)'
-          }}
-          onMouseLeave={e => {
-            e.currentTarget.style.background = 'var(--badge-teal-border)'
-            e.currentTarget.style.borderColor = 'rgba(16,185,129,0.25)'
-          }}
-        >
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-          Verify Full Chain
-        </button>
-
-        <button
-          onClick={onExport}
-          style={{
-            display: 'flex', alignItems: 'center', gap: 6,
-            padding: '6px 14px', borderRadius: 8,
-            background: 'rgba(255,255,255,0.05)',
-            border: '1px solid rgba(255,255,255,0.15)',
-            color: 'var(--text-primary)', fontFamily: 'Manrope, sans-serif',
-            fontWeight: 800, fontSize: '0.75rem', cursor: 'pointer',
-            transition: 'all 0.15s',
-          }}
-          onMouseEnter={e => {
-            e.currentTarget.style.background = 'rgba(255,255,255,0.1)'
-            e.currentTarget.style.borderColor = 'rgba(255,255,255,0.25)'
-          }}
-          onMouseLeave={e => {
-            e.currentTarget.style.background = 'rgba(255,255,255,0.05)'
-            e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'
-          }}
-        >
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-          Export JSON
-        </button>
-
-        <button
-          onClick={onReset}
-          style={{
-            display: 'flex', alignItems: 'center', gap: 6,
-            padding: '6px 14px', borderRadius: 8,
-            background: 'rgba(59,140,255,0.1)',
-            border: '1px solid rgba(59,140,255,0.25)',
-            color: 'var(--color-electric-blue)', fontFamily: 'Manrope, sans-serif',
-            fontWeight: 800, fontSize: '0.75rem', cursor: 'pointer',
-            transition: 'all 0.15s',
-          }}
-          onMouseEnter={e => {
-            e.currentTarget.style.background = 'rgba(59,140,255,0.18)'
-            e.currentTarget.style.borderColor = 'rgba(59,140,255,0.5)'
-          }}
-          onMouseLeave={e => {
-            e.currentTarget.style.background = 'rgba(59,140,255,0.1)'
-            e.currentTarget.style.borderColor = 'rgba(59,140,255,0.25)'
-          }}
-        >
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
-          Reset Chain
-        </button>
-      </div>`;
-content = content.replace(old_buttons, new_buttons);
-
-// 11. Update TamperBanner to show Verify passes/fails
-let old_banner_def = `function TamperBanner({ info, onDismiss }) {
-  return (
-    <div style={{
-      background: 'rgba(239,68,68,0.12)', border: '1px solid rgba(239,68,68,0.3)',
-      borderRadius: 12, padding: '16px 20px', display: 'flex', alignItems: 'center',
-      justifyContent: 'space-between', flexWrap: 'wrap', gap: 16,
-    }}>`;
-let new_banner_def = `function TamperBanner({ info, onDismiss }) {
-  if (info.passed) {
-    return (
-      <div style={{
-        background: 'rgba(16,185,129,0.12)', border: '1px solid rgba(16,185,129,0.3)',
-        borderRadius: 12, padding: '16px 20px', display: 'flex', alignItems: 'center',
-        justifyContent: 'space-between', flexWrap: 'wrap', gap: 16,
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-          <div style={{
-            width: 40, height: 40, borderRadius: 10, background: 'rgba(16,185,129,0.15)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem',
-          }}>✓</div>
-          <div>
-            <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, color: 'var(--color-green)' }}>
-              Integrity Check Passed
-            </div>
-            <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
-              All block hashes align. The cryptographic chain is completely unbroken and mathematically secure.
-            </div>
-          </div>
-        </div>
-        <button onClick={onDismiss} style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', fontSize: '1.2rem', padding: '0 8px' }}>✕</button>
-      </div>
-    )
-  }
-  if (info.failed) {
-    return (
-      <div style={{
-        background: 'rgba(239,68,68,0.12)', border: '1px solid rgba(239,68,68,0.3)',
-        borderRadius: 12, padding: '16px 20px', display: 'flex', alignItems: 'center',
-        justifyContent: 'space-between', flexWrap: 'wrap', gap: 16,
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-          <div style={{
-            width: 40, height: 40, borderRadius: 10, background: 'rgba(239,68,68,0.15)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem',
-          }}>✗</div>
-          <div>
-            <div style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, color: 'var(--color-red)' }}>
-              Integrity Check Failed
-            </div>
-            <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
-              The verification sweep detected tampered blocks or orphaned connections. The chain is compromised.
-            </div>
-          </div>
-        </div>
-        <button onClick={onDismiss} style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', fontSize: '1.2rem', padding: '0 8px' }}>✕</button>
-      </div>
-    )
-  }
-
-  return (
-    <div style={{
-      background: 'rgba(239,68,68,0.12)', border: '1px solid rgba(239,68,68,0.3)',
-      borderRadius: 12, padding: '16px 20px', display: 'flex', alignItems: 'center',
-      justifyContent: 'space-between', flexWrap: 'wrap', gap: 16,
-    }}>`;
-content = content.replace(old_banner_def, new_banner_def);
-
-// Finally, update position: relative on the BlockCard container so the glow is constrained
-content = content.replace(`style={{ width: 238, flexShrink: 0 }}`, `style={{ width: 238, flexShrink: 0, position: 'relative' }}`);
-
-fs.writeFileSync('src/pages/demo/LedgerTab.jsx', content, 'utf-8');
-console.log('Patched successfully!');
+patchChain();
+patchLedgerTab();
