@@ -4,8 +4,8 @@ export const sha256 = (str) => CryptoJS.SHA256(str).toString()
 export const GENESIS_PREV = '0'.repeat(64)
 export const LOAN_ID = 'EDU-2024-001'
 
-export const blockContent = ({ from, to, amount, milestone, timestamp, prevHash }) =>
-  `${LOAN_ID}||${from}||${to}||${amount}||${milestone}||${timestamp}||${prevHash}`
+export const blockContent = ({ from, to, amount, milestone, timestamp, prevHash, syndicationGroup, splitPercent }) =>
+  `${LOAN_ID}||${from}||${to}||${amount}||${milestone}||${timestamp}||${prevHash}${syndicationGroup ? `||${syndicationGroup}` : ''}${splitPercent ? `||${splitPercent}` : ''}`
 export const computeHash = (block) => sha256(blockContent(block))
 
 let _uid = 100

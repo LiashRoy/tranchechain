@@ -655,7 +655,8 @@ function AddBlockSidebar({ blocks, onAdd, addPhase, admissionConfirmations = [] 
   }
 
   const handleSubmit = () => {
-    if (!form.from || !form.to || !form.milestone || !form.amount || (formMode === 'refund' && !form.refundRef)) {
+    const isSyndicated = formMode === 'disbursement' && syndication.enabled;
+    if ((!isSyndicated && !form.from) || !form.to || !form.milestone || !form.amount || (formMode === 'refund' && !form.refundRef)) {
       setError('All fields are required.')
       setShakeKey(k => k + 1)
       return
