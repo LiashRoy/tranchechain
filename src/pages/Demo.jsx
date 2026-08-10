@@ -14,7 +14,7 @@ const TABS = [
 
 export default function Demo() {
   const [activeTab, setActiveTab] = useState('ledger')
-  const { demoBlocks: blocks, setDemoBlocks: setBlocks } = useGlobalChain()
+  const { demoBlocks: blocks, setDemoBlocks: setBlocks, admissionConfirmations, addAdmissionConfirmation } = useGlobalChain()
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -75,7 +75,7 @@ export default function Demo() {
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.3, ease: 'easeOut' }}
             >
-              <LedgerTab blocks={blocks} setBlocks={setBlocks} />
+              <LedgerTab blocks={blocks} setBlocks={setBlocks} admissionConfirmations={admissionConfirmations} />
             </motion.div>
           )}
 
@@ -87,7 +87,7 @@ export default function Demo() {
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.3, ease: 'easeOut' }}
             >
-              <SignaturesTab latestBlock={blocks[blocks.length - 1]} />
+              <SignaturesTab latestBlock={blocks[blocks.length - 1]} onAdmissionConfirmed={addAdmissionConfirmation} />
             </motion.div>
           )}
 

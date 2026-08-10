@@ -135,7 +135,21 @@ function HexCard({ label, value, icon, color, note, glow = false }) {
   )
 }
 
-function TrancheMsgCard({ tranche, editable = false, editAmount, onEditAmount }) {
+function TrancheMsgCard({ tranche, editable = false, editAmount, onEditAmount, signerRole = 'nbfc' }) {
+  const isInst = signerRole === 'institution';
+  const displayFields = isInst ? [
+    { k: 'RECORD', v: 'ADMISSION_CONF', c: 'var(--text-secondary)' },
+    { k: 'STUDENT', v: ADMISSION_RECORD.studentRef, c: 'var(--color-teal)' },
+    { k: 'INSTITUTION', v: ADMISSION_RECORD.institution, c: 'var(--color-teal)' },
+    { k: 'COURSE', v: ADMISSION_RECORD.course, c: 'var(--color-electric-blue)' },
+    { k: 'DATE', v: ADMISSION_RECORD.date, c: 'var(--color-electric-blue)' }
+  ] : [
+    { k: 'LOAN',      v: 'EDU-2024-001',    c: 'var(--text-secondary)' },
+    { k: 'FROM',      v: tranche.from,       c: 'var(--color-teal)' },
+    { k: 'TO',        v: tranche.to,         c: 'var(--color-teal)' },
+    { k: 'MILESTONE', v: tranche.milestone,  c: 'var(--color-electric-blue)' },
+  ];
+
   return (
     <div style={{
       borderRadius: 10, overflow: 'hidden',
@@ -265,7 +279,7 @@ function ProgressBar({ activeStep }) {
    STEP 1 — GENERATE KEYS
 ═══════════════════════════════════════════════════════════════════════════ */
 
-function Step1({ onComplete }) {
+function Step1({ onComplete, signerRole = 'nbfc' }) {
   const [phase, setPhase] = useState('idle') // 'idle' | 'generating' | 'done'
   const [keys, setKeys] = useState(null)
 
@@ -292,7 +306,7 @@ function Step1({ onComplete }) {
           fontFamily: 'Manrope, sans-serif', fontWeight: 800,
           fontSize: 'clamp(1.4rem, 3vw, 2rem)', color: 'var(--text-primary)',
           margin: '0 0 8px', letterSpacing: '-0.02em',
-        }}>Generate NBFC Key Pair</h2>
+        }}>{signerRole === 'institution' ? 'Generate Institution Key Pair' : 'Generate NBFC Key Pair'}</h2>
         <p style={{
           fontFamily: 'Manrope, sans-serif', fontSize: '0.9rem',
           color: 'var(--text-secondary)', margin: 0, lineHeight: 1.6, maxWidth: 600,
@@ -319,7 +333,7 @@ function Step1({ onComplete }) {
           }}
         >
           <span style={{ fontSize: '1.1rem' }}><Key size={16} /></span>
-          Generate NBFC Key Pair (ECDSA P-256)
+          {signerRole === 'institution' ? 'Generate Institution Key Pair' : 'Generate NBFC Key Pair'} (ECDSA P-256)
         </motion.button>
       )}
 
@@ -458,14 +472,14 @@ function Step1({ onComplete }) {
    STEP 2 — SIGN A TRANCHE
 ═══════════════════════════════════════════════════════════════════════════ */
 
-function Step2({ keys, tranche, onComplete }) {
+function Step2({ keys, tranche, onComplete, signerRole = 'nbfc' }) {
   const [phase, setPhase] = useState('idle') // 'idle' | 'combining' | 'signed'
   const [sig, setSig] = useState(null)
 
   const handleSign = useCallback(async () => {
     setPhase('combining')
     try {
-      const msg = msgOf(tranche)
+      const msg = signerRole === 'institution' ? msgOfAdmission(ADMISSION_RECORD) : msgOf(tranche)
       const result = await signMsg(keys.privateKey, msg)
       setTimeout(() => {
         setSig(result)
@@ -501,7 +515,7 @@ function Step2({ keys, tranche, onComplete }) {
 
       {/* Tranche message */}
       <div style={{ marginBottom: 20 }}>
-        <TrancheMsgCard tranche={tranche} />
+        <TrancheMsgCard tranche={tranche} signerRole={signerRole} />
       </div>
 
       {/* Combining animation */}
@@ -648,13 +662,14 @@ function Step2({ keys, tranche, onComplete }) {
    STEP 3 — VERIFY
 ═══════════════════════════════════════════════════════════════════════════ */
 
-function Step3({ keys, tranche, sig, onComplete }) {
+function Step3({ keys, tranche, sig, onComplete, signerRole = 'nbfc', onAdmissionConfirmed }) {
+  const [toast, setToast] = useState(null)
   const [phase, setPhase] = useState('idle') // 'idle' | 'verifying' | 'valid'
 
   const handleVerify = useCallback(async () => {
     setPhase('verifying')
     try {
-      const msg = msgOf(tranche)
+      const msg = signerRole === 'institution' ? msgOfAdmission(ADMISSION_RECORD) : msgOf(tranche)
       const valid = await verifyMsg(keys.publicKey, msg, sig.sigBuf)
       setTimeout(() => setPhase(valid ? 'valid' : 'invalid'), 800)
     } catch (e) {
@@ -691,7 +706,7 @@ function Step3({ keys, tranche, sig, onComplete }) {
         gap: 12, marginBottom: 20,
       }}>
         <HexCard label="Public Key (NBFC 2)" value={keys.pubHex} icon=<Unlock size={16} /> color="#10b981" />
-        <TrancheMsgCard tranche={tranche} />
+        <TrancheMsgCard tranche={tranche} signerRole={signerRole} />
         <HexCard label="Signature (from block)" value={sig.sigHex} icon=<Fingerprint size={16} /> color="#14b8a6" />
       </div>
 
@@ -814,7 +829,7 @@ function Step3({ keys, tranche, sig, onComplete }) {
    STEP 4 — TRY TO TAMPER
 ═══════════════════════════════════════════════════════════════════════════ */
 
-function Step4({ keys, tranche, sig }) {
+function Step4({ keys, tranche, sig, signerRole = 'nbfc' }) {
   const [editAmount, setEditAmount] = useState(tranche.amount)
   const [phase, setPhase] = useState('idle') // 'idle' | 'verifying' | 'invalid' | 'valid'
   const [forgeryPhase, setForgeryPhase] = useState('idle') // 'idle' | 'forging' | 'failed'
@@ -1168,22 +1183,22 @@ export default function SignaturesTab({ latestBlock }) {
           <AnimatePresence mode="wait">
             {activeStep === 1 && (
               <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.3 }}>
-                <Step1 onComplete={(k) => { setKeys(k); setActiveStep(2) }} />
+                <Step1 onComplete={(k) => { setKeys(k); setActiveStep(2) }} signerRole={signerRole} />
               </motion.div>
             )}
             {activeStep === 2 && (
               <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.3 }}>
-                <Step2 keys={keys} tranche={latestBlock || {}} onComplete={(s) => { setSig(s); setActiveStep(3) }} />
+                <Step2 keys={keys} tranche={latestBlock || {}} onComplete={(s) => { setSig(s); setActiveStep(3) }} signerRole={signerRole} />
               </motion.div>
             )}
             {activeStep === 3 && (
               <motion.div key="step3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.3 }}>
-                <Step3 keys={keys} tranche={latestBlock || {}} sig={sig} onComplete={() => setActiveStep(4)} />
+                <Step3 keys={keys} tranche={latestBlock || {}} sig={sig} onComplete={() => setActiveStep(4)} signerRole={signerRole} onAdmissionConfirmed={onAdmissionConfirmed} />
               </motion.div>
             )}
             {activeStep === 4 && (
               <motion.div key="step4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.3 }}>
-                <Step4 keys={keys} tranche={latestBlock || {}} sig={sig} />
+                <Step4 keys={keys} tranche={latestBlock || {}} sig={sig} signerRole={signerRole} />
               </motion.div>
             )}
           </AnimatePresence>

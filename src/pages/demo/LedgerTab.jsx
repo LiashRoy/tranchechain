@@ -405,6 +405,17 @@ function BlockCard({ block, isNew, visiblyInvalid, isSweeping, onTamper }) {
               fontFamily: 'Manrope, sans-serif', fontSize: '0.76rem',
               color: 'var(--color-electric-blue)', fontWeight: 800,
             }}>{isRefund ? block.reason : block.milestone}</div>
+            {block.confirmationRef && (
+              <div style={{ 
+                marginTop: 4, display: 'inline-block',
+                background: 'rgba(16,185,129,0.1)', color: 'var(--color-green)',
+                padding: '2px 8px', borderRadius: 12,
+                fontSize: '0.65rem', fontWeight: 700,
+                border: '1px solid rgba(16,185,129,0.2)'
+              }}>
+                ✓ Institution confirmed {block.confirmationRef}
+              </div>
+            )}
             {isRefund && block.refundRef && (
               <div style={{
                 fontFamily: 'Manrope, sans-serif', fontSize: '0.65rem',
@@ -629,7 +640,7 @@ const selectStyle = {
   appearance: 'none',
 }
 
-function AddBlockSidebar({ blocks, onAdd, addPhase }) {
+function AddBlockSidebar({ blocks, onAdd, addPhase, admissionConfirmations = [] }) {
   const [formMode, setFormMode] = useState('disbursement')
   const [form, setForm] = useState(EMPTY_FORM)
   const [error, setError] = useState(null)
@@ -655,6 +666,17 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
       setShakeKey(k => k + 1)
       return
     }
+    
+    if (formMode === 'disbursement' && form.milestone === 'Admission Confirmed') {
+      const validConfirmation = admissionConfirmations.find(c => c.verified);
+      if (!validConfirmation) {
+        setError('⚠ No signed Admission Confirmation on file — Institution must sign this first (see Sign & Verify tab).')
+        setShakeKey(k => k + 1)
+        return
+      }
+      form.confirmationRef = validConfirmation.signatureHash;
+    }
+
     if (formMode === 'refund') {
       const refIndex = parseInt(form.refundRef.replace(/[^0-9]/g, ''), 10);
       const refBlock = blocks.find(b => b.index === refIndex);
@@ -677,17 +699,19 @@ function AddBlockSidebar({ blocks, onAdd, addPhase }) {
     } else {
       if (usedMilestones.has(form.milestone)) {
         const dupIdx = blocks.find(b => b.milestone === form.milestone).index
-        setError('⚠ Milestone already disbursed — duplicate tranche rejected. This loan\'s \'' + form.milestone + '\' tranche was already recorded in Block #' + dupIdx + '.')
+        setError(`⚠ Milestone already disbursed — duplicate tranche rejected. This loan's '${form.milestone}' tranche was already recorded in Block #${dupIdx}.`)
         setShakeKey(k => k + 1)
         return
       }
-      onAdd({
+      const blockData = {
         transaction_type: 'disbursement',
         from: form.from,
         to: form.to,
         milestone: form.milestone,
         amount: fmtAmount(form.amount),
-      })
+      };
+      if (form.confirmationRef) blockData.confirmationRef = form.confirmationRef;
+      onAdd(blockData)
     }
     setForm(EMPTY_FORM)
     setError(null)
@@ -1293,7 +1317,7 @@ function TamperBanner({ info, onDismiss }) {
    MAIN LEDGER PAGE
 ═══════════════════════════════════════════════════════════════════════════ */
 
-export default function LedgerTab({ blocks, setBlocks }) {
+export default function LedgerTab({ blocks, setBlocks, admissionConfirmations = [] }) {
   const [visibleInvalid, setVisibleInvalid] = useState(new Set())
   const [sweepProgress, setSweepProgress] = useState(-1)
   const sweepInterval = useRef(null)
@@ -1619,6 +1643,7 @@ export default function LedgerTab({ blocks, setBlocks }) {
             blocks={blocks}
             onAdd={handleAdd}
             addPhase={addPhase}
+            admissionConfirmations={admissionConfirmations}
           />
         </div>
       </div>
