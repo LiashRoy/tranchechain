@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
+import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 
 // Mock Data Generator
@@ -281,7 +282,7 @@ function BlockTile({ block, isPulsing, onHover }) {
 
 function Tooltip({ block }) {
   // Use a slight vertical offset so it doesn't overlap the mouse
-  return (
+  return createPortal(
     <motion.div
       initial={{ opacity: 0, y: 10, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -330,6 +331,7 @@ function Tooltip({ block }) {
           </span>
         </div>
       </div>
-    </motion.div>
+    </motion.div>,
+    document.body
   )
 }
