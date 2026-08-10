@@ -1,0 +1,27 @@
+<html><body><h1></h1><br><br><h2></h2>
+TrancheChain is an interactive, browser-based blockchain simulator designed to demonstrate how funds (tranches) can be securely disbursed and verified using decentralized concepts. It provides a visual, step-by-step breakdown of how cryptographic hashes, digital signatures, and immutable ledgers work together to create a zero-trust, tamper-evident financial system.<br><br><h2></h2><br><br>#<h2></h2>
+The Dashboard provides a real-time overview of the network's health and financial status. It tracks:
+<ul><li><b></b></li></ul>
+<ul><li><b></b></li></ul>
+<ul><li><b></b></li></ul>
+This section allows users to simulate adding new financial transactions (tranches) to the blockchain. 
+<ul><li><b></b></li></ul>
+<ul><li><b></b></li></ul>
+<ul><li><b></b></li></ul>
+This module explains the cryptography behind authorization.
+<ul><li><b></b></li></ul>
+<ul><li><b></b></li></ul>
+<ul><li><b></b></li></ul>
+A hash is a one-way mathematical function that takes any amount of data and outputs a fixed-length string of characters (e.g., `dc534895f...`). 
+<ul><li><b></b></li></ul>
+<ul><li><b></b></li></ul>
+Blocks in TrancheChain are linked together. Every block contains the hash of the **previous block** in its own data structure.
+- When Block #2 is created, its hash includes the hash of Block #1.
+- If Block #1 is tampered with, its hash changes. Because Block #2 relies on Block #1's old hash, Block #2's hash also becomes invalid. This creates a domino effect that immediately invalidates the entire chain from the point of tampering onwards.<br><br>---<br><br><h2></h2><br><br>TrancheChain implements multiple layers of security to prevent fraud, double-spending, and tampering:<br><br>#<h2></h2>
+As explained above, because every block is cryptographically tethered to the one before it, it is impossible to alter historical data without invalidating every subsequent transaction. The Ledger UI actively calculates these hashes in real-time to detect discrepancies.<br><br>#<h2></h2>
+TrancheChain utilizes Elliptic Curve Digital Signature Algorithm (ECDSA). 
+- When an NBFC creates a block, they sign the exact payload (`amount`, `milestone`, `recipient`) using their highly guarded **Private Key**.
+- If a bad actor intercepts the block and alters the amount, the original signature will mathematically fail to verify against the new amount. This guarantees that only the authorized NBFC could have issued that specific transaction.<br><br>#<h2></h2>
+The system includes logic to prevent the same milestone from being funded twice. Before a block is added, the Ledger scans the entire chain to ensure the requested milestone hasn't already been disbursed for that specific loan. This mimics how a real smart contract prevents "double spending".<br><br>#<h2></h2>
+The React application maintains a strict state machine. If the validation engine detects a broken hash link, it immediately restricts the user's ability to add new blocks to the chain until the tampered block is fixed (or the chain is reset). This ensures that new legitimate transactions cannot be appended to a corrupted ledger.
+</body></html>

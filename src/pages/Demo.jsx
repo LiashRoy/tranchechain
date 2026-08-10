@@ -3,11 +3,13 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 import LedgerTab from './demo/LedgerTab'
 import SignaturesTab from './demo/SignaturesTab'
+import NetworkScaleTab from './demo/NetworkScaleTab'
 import { useGlobalChain } from '../context/GlobalChainContext'
 
 const TABS = [
   { id: 'ledger', label: '1. The Ledger' },
   { id: 'signatures', label: '2. Sign & Verify' },
+  { id: 'scale', label: '3. Network Scale' },
 ]
 
 export default function Demo() {
@@ -86,6 +88,19 @@ export default function Demo() {
               transition={{ duration: 0.3, ease: 'easeOut' }}
             >
               <SignaturesTab latestBlock={blocks[blocks.length - 1]} />
+            </motion.div>
+          )}
+
+          {activeTab === 'scale' && (
+            <motion.div
+              key="scale"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.3, ease: 'easeOut' }}
+              style={{ height: '100%' }}
+            >
+              <NetworkScaleTab />
             </motion.div>
           )}
         </AnimatePresence>
