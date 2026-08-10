@@ -44,13 +44,11 @@ function generateLaneData(nbfc, tamperedInstitution = null, tamperedOffset = 0) 
     }
   })
 
-  // Assign global sequential index within the lane
   blocks.forEach((b, i) => {
     b.id = `${nbfc.id}-blk-${i}`
     b.index = i
   })
 
-  // Seed tampered block if requested
   if (tamperedInstitution) {
     const clusterStart = blocks.findIndex(b => b.institution === tamperedInstitution)
     if (clusterStart !== -1 && tamperedOffset < BLOCKS_PER_INSTITUTION) {
@@ -61,11 +59,10 @@ function generateLaneData(nbfc, tamperedInstitution = null, tamperedOffset = 0) 
   return blocks
 }
 
-// Generate static data on load with 2 intentional tampered blocks across the dataset
 const STATIC_LANES = [
-  { nbfc: NBFCS[0], blocks: generateLaneData(NBFCS[0], null) },                                       // Clean lane
-  { nbfc: NBFCS[1], blocks: generateLaneData(NBFCS[1], 'Institution 2', 8) },                         // 1 tamper
-  { nbfc: NBFCS[2], blocks: generateLaneData(NBFCS[2], 'Institution 3', 14) },                        // 1 tamper
+  { nbfc: NBFCS[0], blocks: generateLaneData(NBFCS[0], null) },                                       
+  { nbfc: NBFCS[1], blocks: generateLaneData(NBFCS[1], 'Institution 2', 8) },                         
+  { nbfc: NBFCS[2], blocks: generateLaneData(NBFCS[2], 'Institution 3', 14) },                        
 ]
 
 const TOTAL_BLOCKS = BLOCKS_PER_LANE * 3
@@ -73,7 +70,6 @@ const TOTAL_BLOCKS = BLOCKS_PER_LANE * 3
 export default function NetworkScaleTab() {
   const [highlightNBFC, setHighlightNBFC] = useState('All')
   const [filterStatus, setFilterStatus] = useState('All')
-  
   const [hoveredBlock, setHoveredBlock] = useState(null)
   
   const [progress, setProgress] = useState(-1)
@@ -92,11 +88,10 @@ export default function NetworkScaleTab() {
           }
           return p + 1
         })
-      }, 35) // fast sweep speed
+      }, 35)
     }, 400)
   }
 
-  // Trigger sweep on mount
   useEffect(() => {
     startSweep()
     return () => {
@@ -107,7 +102,6 @@ export default function NetworkScaleTab() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: '24px 0', height: '100%', position: 'relative' }}>
       
-      {/* Header Panel */}
       <div className="glass-card" style={{ padding: '20px 30px', display: 'flex', flexDirection: 'column', gap: 16 }}>
         <div>
           <h2 style={{ fontFamily: 'Manrope, sans-serif', fontSize: '1.6rem', margin: '0 0 8px 0', color: 'var(--text-primary)' }}>The Network at Scale</h2>
@@ -128,7 +122,6 @@ export default function NetworkScaleTab() {
         </div>
       </div>
 
-      {/* Control Bar */}
       <div style={{ display: 'flex', gap: 16, alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }}>
         <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
           <Select label="Highlight Lane" value={highlightNBFC} onChange={setHighlightNBFC} options={['All', ...NBFCS.map(n => n.name)]} />
@@ -143,7 +136,6 @@ export default function NetworkScaleTab() {
         </button>
       </div>
 
-      {/* Multi-Lane Canvas */}
       <div style={{ flex: 1, display: 'flex', gap: 20, minHeight: 400 }}>
         {STATIC_LANES.map(lane => (
           <NbfcLane 
@@ -156,7 +148,6 @@ export default function NetworkScaleTab() {
           />
         ))}
 
-        {/* Centralized Tooltip */}
         <AnimatePresence>
           {hoveredBlock && (
             <Tooltip block={hoveredBlock.block} state={hoveredBlock.state} pos={hoveredBlock.pos} />
@@ -164,19 +155,16 @@ export default function NetworkScaleTab() {
         </AnimatePresence>
       </div>
 
-      {/* Footer */}
       <div style={{ textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.85rem', padding: '0 20px', fontStyle: 'italic' }}>
         Every block shown here is independently hash-linked and signature-verified within its respective institution cluster.
       </div>
-
     </div>
   )
 }
 
 function NbfcLane({ lane, progress, onHover, filterStatus, isDimmed }) {
-  const isFinished = progress >= BLOCKS_PER_LANE
+  const [clusterPhases, setClusterPhases] = useState({}) // Maps cluster.name -> 'self_scanning' | 'consensus' | 'done'
 
-  // Pre-calculate the first tampered index for EACH institution in this lane
   const firstTamperedPerInst = useMemo(() => {
     const map = {}
     lane.blocks.forEach(b => {
@@ -187,15 +175,42 @@ function NbfcLane({ lane, progress, onHover, filterStatus, isDimmed }) {
     return map
   }, [lane.blocks])
 
-  // Group blocks by institution for rendering clusters
   const clusters = useMemo(() => {
     const map = {}
     INSTITUTIONS.forEach(inst => map[inst] = [])
-    lane.blocks.forEach(b => {
-      map[b.institution].push(b)
-    })
+    lane.blocks.forEach(b => map[b.institution].push(b))
     return Object.entries(map).map(([name, blocks]) => ({ name, blocks }))
   }, [lane.blocks])
+
+  // Phase transition logic
+  useEffect(() => {
+    if (progress === -1) {
+      setClusterPhases({})
+      return
+    }
+    
+    clusters.forEach(cluster => {
+      const lastIdx = cluster.blocks[cluster.blocks.length - 1].index
+      
+      // As soon as primary sweep passes this cluster's last block
+      if (progress > lastIdx) {
+        setClusterPhases(prev => {
+          if (!prev[cluster.name]) {
+            // Kick off self_scanning -> consensus -> done sequence
+            setTimeout(() => {
+              setClusterPhases(p => ({ ...p, [cluster.name]: 'consensus' }))
+              setTimeout(() => {
+                setClusterPhases(p => ({ ...p, [cluster.name]: 'done' }))
+              }, 1400) // consensus takes 1.4s
+            }, 600) // self_scan takes 600ms
+            
+            return { ...prev, [cluster.name]: 'self_scanning' }
+          }
+          return prev
+        })
+      }
+    })
+  }, [progress, clusters])
 
   return (
     <div 
@@ -209,7 +224,6 @@ function NbfcLane({ lane, progress, onHover, filterStatus, isDimmed }) {
       }}
       onMouseLeave={() => onHover(null)}
     >
-      {/* Lane Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16, borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: 12 }}>
         <div style={{ width: 12, height: 12, borderRadius: '50%', background: lane.nbfc.color, boxShadow: `0 0 10px ${lane.nbfc.color}` }} />
         <div style={{ flex: 1 }}>
@@ -218,7 +232,6 @@ function NbfcLane({ lane, progress, onHover, filterStatus, isDimmed }) {
         </div>
       </div>
 
-      {/* Grid of Blocks */}
       <div style={{ flex: 1, overflowY: 'auto', paddingRight: 8 }}>
         <div style={{
           display: 'grid',
@@ -228,7 +241,6 @@ function NbfcLane({ lane, progress, onHover, filterStatus, isDimmed }) {
         }}>
           {clusters.map(cluster => (
             <React.Fragment key={cluster.name}>
-              {/* Cluster Divider */}
               <div style={{ 
                 gridColumn: '1 / -1', fontSize: '0.65rem', color: 'var(--text-secondary)', 
                 textTransform: 'uppercase', letterSpacing: '0.05em', 
@@ -237,10 +249,10 @@ function NbfcLane({ lane, progress, onHover, filterStatus, isDimmed }) {
                 → {cluster.name}
               </div>
 
-              {/* Cluster Blocks */}
               {cluster.blocks.map(block => {
                 let state = 'pending'
                 const firstTamperIdx = firstTamperedPerInst[block.institution]
+                const phase = clusterPhases[cluster.name] || 'waiting'
 
                 if (progress >= block.index) {
                   if (firstTamperIdx !== undefined && block.index > firstTamperIdx) {
@@ -252,7 +264,6 @@ function NbfcLane({ lane, progress, onHover, filterStatus, isDimmed }) {
                   }
                 }
 
-                // Filtering visibility
                 const isFlagged = state === 'tampered' || state === 'broken_downstream'
                 if (filterStatus === 'Valid Only' && (isFlagged || state === 'pending')) return null
                 if (filterStatus === 'Flagged Only' && !isFlagged) return null
@@ -262,6 +273,7 @@ function NbfcLane({ lane, progress, onHover, filterStatus, isDimmed }) {
                     key={block.id} 
                     block={block} 
                     state={state}
+                    phase={phase}
                     isActivelySweeping={progress === block.index}
                     onHover={(pos) => onHover({ block, state, pos })}
                   />
@@ -272,7 +284,6 @@ function NbfcLane({ lane, progress, onHover, filterStatus, isDimmed }) {
         </div>
       </div>
 
-      {/* Multi-Endpoint Summary */}
       <div style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-secondary)', marginBottom: 8, textAlign: 'center' }}>
           Endpoint: Partner Institutions
@@ -281,21 +292,28 @@ function NbfcLane({ lane, progress, onHover, filterStatus, isDimmed }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
           {clusters.map(cluster => {
             const firstTamperIdx = firstTamperedPerInst[cluster.name]
+            const isTampered = firstTamperIdx !== undefined
             const totalBlocks = cluster.blocks.length
+            const phase = clusterPhases[cluster.name] || 'waiting'
+            
             let statusBadge = null
             
-            if (!isFinished) {
-              statusBadge = <span style={{ color: 'var(--text-secondary)' }}>Awaiting Verification...</span>
-            } else if (firstTamperIdx !== undefined) {
-              const clusterStartIdx = cluster.blocks[0].index
-              const badCount = totalBlocks - (firstTamperIdx - clusterStartIdx)
-              statusBadge = <span style={{ color: 'var(--color-amber)' }}>⚠ Cannot confirm {badCount} tranches</span>
-            } else {
-              statusBadge = <span style={{ color: 'var(--color-green)' }}>✓ {totalBlocks} tranches verified</span>
+            if (phase === 'waiting' || phase === 'self_scanning') {
+              statusBadge = <span style={{ color: 'var(--text-secondary)', fontStyle: 'italic' }}>{phase === 'waiting' ? 'Awaiting...' : 'Checking local ledger...'}</span>
+            } else if (phase === 'consensus') {
+              statusBadge = <ConsensusIndicator isTampered={isTampered} />
+            } else if (phase === 'done') {
+              if (isTampered) {
+                const clusterStartIdx = cluster.blocks[0].index
+                const badCount = totalBlocks - (firstTamperIdx - clusterStartIdx)
+                statusBadge = <span style={{ color: 'var(--color-amber)' }}>⚠ Cannot confirm {badCount} tranches</span>
+              } else {
+                statusBadge = <span style={{ color: 'var(--color-green)' }}>✓ {totalBlocks} tranches verified</span>
+              }
             }
 
             return (
-              <div key={cluster.name} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', padding: '6px 8px', background: 'rgba(255,255,255,0.02)', borderRadius: 6, border: '1px solid rgba(255,255,255,0.05)' }}>
+              <div key={cluster.name} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.7rem', padding: '6px 8px', background: 'rgba(255,255,255,0.02)', borderRadius: 6, border: '1px solid rgba(255,255,255,0.05)', minHeight: 28 }}>
                 <span style={{ color: 'var(--text-primary)' }}>{cluster.name}</span>
                 {statusBadge}
               </div>
@@ -304,6 +322,36 @@ function NbfcLane({ lane, progress, onHover, filterStatus, isDimmed }) {
         </div>
       </div>
     </div>
+  )
+}
+
+function ConsensusIndicator({ isTampered }) {
+  const finalColor = isTampered ? '#f59e0b' : '#10b981'; // amber or green
+  return (
+    <div style={{ display: 'flex', gap: 6, alignItems: 'center', height: 16 }}>
+      <NodeDot label="NBFC Node" popDelay={0.1} isDissent={false} finalColor={finalColor} />
+      <NodeDot label="Platform Node" popDelay={0.4} isDissent={false} finalColor={finalColor} />
+      <NodeDot label="Institution Node" popDelay={0.7} isDissent={isTampered} finalColor={finalColor} />
+    </div>
+  )
+}
+
+function NodeDot({ label, popDelay, isDissent, finalColor }) {
+  const popColor = isDissent ? '#ef4444' : '#4b5563'; // red or gray
+  return (
+    <motion.div
+      initial={{ scale: 0, backgroundColor: popColor }}
+      animate={{ 
+        scale: [0, 1.2, 1],
+        backgroundColor: [popColor, finalColor]
+      }}
+      transition={{
+        scale: { delay: popDelay, duration: 0.3 },
+        backgroundColor: { delay: 1.1, duration: 0.2 } // Converge all together
+      }}
+      style={{ width: 8, height: 8, borderRadius: '50%' }}
+      title={label}
+    />
   )
 }
 
@@ -341,8 +389,9 @@ const tileVariants = {
   broken_downstream: { background: 'rgba(245, 158, 11, 0.1)', borderColor: 'rgba(245, 158, 11, 0.4)', scale: 1 }
 }
 
-function BlockTile({ block, state, isActivelySweeping, onHover }) {
+function BlockTile({ block, state, phase, isActivelySweeping, onHover }) {
   const isTampered = state === 'tampered'
+  const isSelfScanning = phase === 'self_scanning' && state !== 'pending'
   
   return (
     <motion.div
@@ -378,7 +427,7 @@ function BlockTile({ block, state, isActivelySweeping, onHover }) {
         />
       )}
 
-      {/* Sweeping pulse effect */}
+      {/* Primary Sweeping pulse effect */}
       <AnimatePresence>
         {isActivelySweeping && state === 'valid' && (
           <motion.div
@@ -389,6 +438,21 @@ function BlockTile({ block, state, isActivelySweeping, onHover }) {
             style={{
               position: 'absolute', inset: 0, borderRadius: 4,
               background: 'var(--color-teal)', zIndex: 1
+            }}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Secondary self-scan sweep effect */}
+      <AnimatePresence>
+        {isSelfScanning && state === 'valid' && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: [0, 0.8, 0] }}
+            transition={{ duration: 0.4, delay: (block.index % 21) * 0.02 }}
+            style={{
+              position: 'absolute', inset: 0, borderRadius: 4,
+              background: 'var(--color-teal)', zIndex: 2
             }}
           />
         )}
