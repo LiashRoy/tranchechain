@@ -653,7 +653,6 @@ function Step3({ keys, tranche, sig, onComplete }) {
 
   const handleVerify = useCallback(async () => {
     setPhase('verifying')
-    setForgeryPhase('idle')
     try {
       const msg = msgOf(tranche)
       const valid = await verifyMsg(keys.publicKey, msg, sig.sigBuf)
