@@ -4,9 +4,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 // Mock Data Generator
 const NBFCS = [
-  { id: 'nbfc1', name: 'Mirae Asset' },
-  { id: 'nbfc2', name: 'Arka Fincap' },
-  { id: 'nbfc3', name: 'Ratnaafin Lite' }
+  { id: 'nbfc1', name: 'NBFC 1' },
+  { id: 'nbfc2', name: 'NBFC 2' },
+  { id: 'nbfc3', name: 'NBFC 3' }
 ]
 
 const INSTITUTIONS = [
