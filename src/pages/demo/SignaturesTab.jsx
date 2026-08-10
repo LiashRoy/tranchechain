@@ -1174,17 +1174,30 @@ function Step4({ keys, tranche, sig, signerRole = 'nbfc' }) {
 
 // TRANCHE is now derived from latestBlock props
 
-export default function SignaturesTab({ latestBlock }) {
+export default function SignaturesTab({ latestBlock, onAdmissionConfirmed }) {
   const [activeStep, setActiveStep] = useState(1)
   const [keys,  setKeys]  = useState(null)
   const [sig,   setSig]   = useState(null)
+  const [signerRole, setSignerRole] = useState('nbfc')
 
   return (
     <div style={{ minHeight: '100vh', padding: '28px 24px 60px' }}>
       <div style={{ maxWidth: 1400, margin: '0 auto' }}>
 
-        {/* Page header */}
-        
+        {/* Page header and Role Selector */}
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 40 }}>
+          <div style={{ display: 'flex', background: 'rgba(59,140,255,0.06)', padding: 6, borderRadius: 12, border: '1px solid rgba(59,140,255,0.15)' }}>
+            {['nbfc', 'institution'].map(role => (
+              <button
+                key={role}
+                onClick={() => { setSignerRole(role); setActiveStep(1); setKeys(null); setSig(null); }}
+                style={{ padding: '8px 20px', borderRadius: 8, border: 'none', background: signerRole === role ? 'var(--color-electric-blue)' : 'transparent', color: signerRole === role ? '#fff' : 'var(--text-secondary)', fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '0.85rem', cursor: 'pointer', textTransform: 'capitalize', transition: 'all 0.2s' }}
+              >
+                {role === 'nbfc' ? 'NBFC' : 'Institution'}
+              </button>
+            ))}
+          </div>
+        </div>
 
         {/* Progress bar */}
         <ProgressBar activeStep={activeStep} />
