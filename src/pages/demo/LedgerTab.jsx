@@ -1063,10 +1063,6 @@ function AddBlockSidebar({ blocks, onAdd, addPhase, admissionConfirmations = [] 
               </div>
             </div>
 
-            <div>
-              <label style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem', color: 'var(--text-secondary)', display: 'block', marginBottom: 4 }}>Agreed Cap Amount (₹)</label>
-              <input type="text" value={syndication.agreedAmount} onChange={e => setSyndication(s => ({ ...s, agreedAmount: e.target.value }))} placeholder="e.g. ₹5,00,000" style={{ width: '100%', boxSizing: 'border-box', fontFamily: 'Manrope, sans-serif', fontSize: '0.84rem', background: 'rgba(59,140,255,0.06)', border: '1px solid rgba(59,140,255,0.2)', borderRadius: 9, padding: '9px 12px', color: 'var(--text-primary)' }} />
-            </div>
           </div>
         )}
       </motion.div>
