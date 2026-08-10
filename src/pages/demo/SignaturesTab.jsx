@@ -12,6 +12,17 @@ const bufToHex = (buf) =>
 const msgOf = ({ from, to, amount, milestone }) =>
   `LOAN:EDU-2024-001 | FROM:${from} | TO:${to} | AMOUNT:${amount} | MILESTONE:${milestone}`
 
+const ADMISSION_RECORD = {
+  studentRef: 'STU-2024-001',
+  institution: 'Partner Institute',
+  course: 'B.Tech CSE',
+  date: '2024-06-01',
+  amount: '₹18,000',
+}
+
+const msgOfAdmission = (record) =>
+  `ADMISSION_CONF | STUDENT:${record.studentRef} | INSTITUTION:${record.institution} | COURSE:${record.course} | DATE:${record.date} | AMOUNT:${record.amount}`
+
 async function genKeyPair() {
   const kp = await window.crypto.subtle.generateKey(
     { name: 'ECDSA', namedCurve: 'P-256' }, true, ['sign', 'verify']
