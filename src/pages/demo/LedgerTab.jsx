@@ -1019,41 +1019,8 @@ function AddBlockSidebar({ blocks, onAdd, addPhase, admissionConfirmations = [] 
             )}
           </AnimatePresence>
 
-          {/* Submit button */}
-          <motion.button
-            onClick={handleSubmit}
-            disabled={busy}
-            animate={busy ? { opacity: 0.85 } : { opacity: 1 }}
-            whileHover={!busy ? { scale: 1.02, y: -1 } : {}}
-            whileTap={!busy ? { scale: 0.98 } : {}}
-            style={{
-              width: '100%', padding: '11px',
-              borderRadius: 9, border: 'none',
-              background: busy
-                ? `linear-gradient(135deg, ${btnColor}30, ${btnColor}18)`
-                : `linear-gradient(135deg, ${btnColor}, ${btnColor}cc)`,
-              color: busy ? btnColor : 'var(--bg-body)',
-              fontFamily: 'Manrope, sans-serif', fontWeight: 800,
-              fontSize: '0.85rem', cursor: busy ? 'wait' : 'pointer',
-              transition: 'background 0.3s, color 0.3s',
-              border: busy ? `1px solid ${btnColor}40` : 'none',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-            }}
-          >
-            {busy && (
-              <motion.span
-                animate={{ rotate: 360 }}
-                transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                style={{ display: 'inline-block', fontSize: '0.9rem' }}
-              >⚙</motion.span>
-            )}
-            {btnLabel}
-          </motion.button>
-        </div>
-      </motion.div>
-
-      {/* Syndication Panel */}
-      <motion.div className="glass-card" style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {/* Syndication Panel */}
+      <motion.div style={{ padding: '16px', background: 'rgba(0,0,0,0.15)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', gap: 12 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <span style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '0.85rem', color: 'var(--text-primary)' }}>Syndicated Loan</span>
           <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
@@ -1097,7 +1064,40 @@ function AddBlockSidebar({ blocks, onAdd, addPhase, admissionConfirmations = [] 
         )}
       </motion.div>
 
-      {/* Info card */}
+          {/* Submit button */}
+          <motion.button
+            onClick={handleSubmit}
+            disabled={busy}
+            animate={busy ? { opacity: 0.85 } : { opacity: 1 }}
+            whileHover={!busy ? { scale: 1.02, y: -1 } : {}}
+            whileTap={!busy ? { scale: 0.98 } : {}}
+            style={{
+              width: '100%', padding: '11px',
+              borderRadius: 9, border: 'none',
+              background: busy
+                ? `linear-gradient(135deg, ${btnColor}30, ${btnColor}18)`
+                : `linear-gradient(135deg, ${btnColor}, ${btnColor}cc)`,
+              color: busy ? btnColor : 'var(--bg-body)',
+              fontFamily: 'Manrope, sans-serif', fontWeight: 800,
+              fontSize: '0.85rem', cursor: busy ? 'wait' : 'pointer',
+              transition: 'background 0.3s, color 0.3s',
+              border: busy ? `1px solid ${btnColor}40` : 'none',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+            }}
+          >
+            {busy && (
+              <motion.span
+                animate={{ rotate: 360 }}
+                transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                style={{ display: 'inline-block', fontSize: '0.9rem' }}
+              >⚙</motion.span>
+            )}
+            {btnLabel}
+          </motion.button>
+        </div>
+      </motion.div>
+
+{/* Info card */}
       <div className="glass-card" style={{ padding: '14px 16px' }}>
         <div style={{
           fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem',
