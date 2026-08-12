@@ -705,9 +705,9 @@ function Step3({ keys, tranche, sig, onComplete, signerRole = 'nbfc', onAdmissio
           fontFamily: 'Manrope, sans-serif', fontSize: '0.9rem',
           color: 'var(--text-secondary)', margin: 0, lineHeight: 1.6, maxWidth: 600,
         }}>
-          Anyone — the institution, the regulator, the auditor — can verify this signature
+          Anyone — {signerRole === 'institution' ? 'the NBFC' : 'the institution'}, the regulator, the auditor — can verify this signature
           using <strong style={{ color: 'var(--color-green)' }}>only the public key, the message, and the signature</strong>.
-          No private key required. No trust in any institution required.
+          No private key required. No trust in {signerRole === 'institution' ? 'the institution' : 'the NBFC'} required.
         </p>
       </div>
 
