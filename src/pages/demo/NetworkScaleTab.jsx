@@ -155,10 +155,17 @@ export default function NetworkScaleTab() {
         timestamp: new Date().toISOString()
       }
 
-      targetLane.blocks.splice(insertionIndex, 0, newBlock)
+      // Add to the very end of the blockchain ledger for this lane
+      targetLane.blocks.push(newBlock)
       
       // Re-index all blocks in the lane
       targetLane.blocks.forEach((b, i) => b.index = i)
+      
+      // If the global progress was finished, we pull it back slightly so the sweep animation catches this new block
+      setProgress(p => {
+        const newMax = Math.max(...newLanes.map(l => l.blocks.length))
+        return p >= newMax - 1 ? newMax - 2 : p
+      })
       
       newLanes[0] = targetLane
       return newLanes
