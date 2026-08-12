@@ -176,7 +176,7 @@ function TrancheMsgCard({ tranche, editable = false, editAmount, onEditAmount, s
         <span style={{
           fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem',
           color: 'var(--color-electric-blue)', textTransform: 'uppercase', letterSpacing: '0.08em',
-        }}>Tranche Message (to be signed)</span>
+        }}>{signerRole === 'institution' ? 'Admission Record' : 'Tranche Message'} (to be signed)</span>
       </div>
       <div style={{ padding: '14px', display: 'flex', flexDirection: 'column', gap: 7 }}>
         {[
@@ -389,11 +389,11 @@ function Step1({ onComplete, signerRole = 'nbfc' }) {
                 transition={{ delay: 0.1, duration: 0.4 }}
               >
                 <HexCard
-                  label="Private Key — NBFC 2 ONLY"
+                  label={`Private Key — ${signerRole === 'institution' ? 'Institution' : 'NBFC 2'} ONLY`}
                   value={keys.privHex}
                   icon=<Lock size={16} />
                   color="#ef4444"
-                  note="NEVER shared. Used only to sign. Without this, no one can forge NBFC 2's signature."
+                  note={`NEVER shared. Used only to sign. Without this, no one can forge ${signerRole === 'institution' ? 'the Institution\'s' : 'NBFC 2\'s'} signature.`}
                   glow
                 />
               </motion.div>
@@ -427,7 +427,7 @@ function Step1({ onComplete, signerRole = 'nbfc' }) {
                   value={keys.pubHex}
                   icon=<Unlock size={16} />
                   color="#10b981"
-                  note="Published by NBFC 2. Anyone can use it to verify signatures — cannot be used to sign."
+                  note={`Published by ${signerRole === 'institution' ? 'the Institution' : 'NBFC 2'}. Anyone can use it to verify signatures — cannot be used to sign.`}
                   glow
                 />
               </motion.div>
@@ -469,7 +469,7 @@ function Step1({ onComplete, signerRole = 'nbfc' }) {
                 boxShadow: '0 4px 18px rgba(16,185,129,0.3)',
               }}
             >
-              Next: Sign a Tranche
+              {signerRole === 'institution' ? 'Next: Sign Admission Record' : 'Next: Sign a Tranche'}
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </motion.button>
           </motion.div>
@@ -513,14 +513,14 @@ function Step2({ keys, tranche, onComplete, signerRole = 'nbfc' }) {
           fontFamily: 'Manrope, sans-serif', fontWeight: 800,
           fontSize: 'clamp(1.4rem, 3vw, 2rem)', color: 'var(--text-primary)',
           margin: '0 0 8px', letterSpacing: '-0.02em',
-        }}>Sign a Tranche</h2>
+        }}>{signerRole === 'institution' ? 'Sign Admission Record' : 'Sign a Tranche'}</h2>
         <p style={{
           fontFamily: 'Manrope, sans-serif', fontSize: '0.9rem',
           color: 'var(--text-secondary)', margin: 0, lineHeight: 1.6, maxWidth: 600,
         }}>
-          NBFC 2 applies their private key to the exact tranche message to produce a
+          {signerRole === 'institution' ? 'The Institution' : 'NBFC 2'} applies their private key to the exact {signerRole === 'institution' ? 'admission record' : 'tranche message'} to produce a
           digital signature — their wax seal. The signature is mathematically bound to both
-          the private key <em>and</em> this exact message.
+          the private key <em>and</em> this exact data.
         </p>
       </div>
 
@@ -573,7 +573,7 @@ function Step2({ keys, tranche, onComplete, signerRole = 'nbfc' }) {
                 maxWidth: 140, textAlign: 'center',
               }}
             >
-              <ClipboardList size={16} /> Tranche Message
+              <ClipboardList size={16} /> {signerRole === 'institution' ? 'Admission Record' : 'Tranche Message'}
             </motion.div>
 
             <span style={{ color: 'var(--text-secondary)', fontSize: '1.3rem' }}>→</span>
@@ -630,7 +630,7 @@ function Step2({ keys, tranche, onComplete, signerRole = 'nbfc' }) {
               value={sig.sigHex}
               icon=<Fingerprint size={16} />
               color="#10b981"
-              note="This signature is uniquely bound to NBFC 2's private key AND the exact tranche message above. Change even one character in the message → signature becomes invalid."
+              note={`This signature is uniquely bound to ${signerRole === 'institution' ? 'the Institution\'s' : 'NBFC 2\'s'} private key AND the exact ${signerRole === 'institution' ? 'admission record' : 'tranche message'} above. Change even one character in the data → signature becomes invalid.`}
               glow
             />
 
@@ -641,8 +641,8 @@ function Step2({ keys, tranche, onComplete, signerRole = 'nbfc' }) {
               fontFamily: 'Manrope, sans-serif', fontSize: '0.82rem',
               color: 'var(--text-secondary)', lineHeight: 1.6,
             }}>
-              <Fingerprint size={16} /> The wax seal is applied. Anyone with NBFC 2's <strong style={{ color: 'var(--color-green)' }}>public key</strong> can
-              verify this — but only NBFC 2 (holder of the private key) could have <em>created</em> it.
+              <Fingerprint size={16} /> The wax seal is applied. Anyone with {signerRole === 'institution' ? 'the Institution\'s' : 'NBFC 2\'s'} <strong style={{ color: 'var(--color-green)' }}>public key</strong> can
+              verify this — but only {signerRole === 'institution' ? 'the Institution' : 'NBFC 2'} (holder of the private key) could have <em>created</em> it.
             </div>
 
             <motion.button
@@ -716,7 +716,7 @@ function Step3({ keys, tranche, sig, onComplete, signerRole = 'nbfc', onAdmissio
         display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
         gap: 12, marginBottom: 20,
       }}>
-        <HexCard label="Public Key (NBFC 2)" value={keys.pubHex} icon=<Unlock size={16} /> color="#10b981" />
+        <HexCard label={`Public Key (${signerRole === 'institution' ? 'Institution' : 'NBFC 2'})`} value={keys.pubHex} icon=<Unlock size={16} /> color="#10b981" />
         <TrancheMsgCard tranche={tranche} signerRole={signerRole} />
         <HexCard label="Signature (from block)" value={sig.sigHex} icon=<Fingerprint size={16} /> color="#14b8a6" />
       </div>
@@ -802,7 +802,7 @@ function Step3({ keys, tranche, sig, onComplete, signerRole = 'nbfc', onAdmissio
               <div style={{
                 fontFamily: 'Manrope, sans-serif', fontSize: '0.88rem',
                 color: '#34d39990',
-              }}>Authorized by NBFC 2 · P-256 ECDSA · SHA-256</div>
+              }}>Authorized by {signerRole === 'institution' ? 'Institution' : 'NBFC 2'} · P-256 ECDSA · SHA-256</div>
             </div>
           </motion.div>
         )}
@@ -894,9 +894,9 @@ function Step4({ keys, tranche, sig, signerRole = 'nbfc' }) {
           fontFamily: 'Manrope, sans-serif', fontSize: '0.9rem',
           color: 'var(--text-secondary)', margin: 0, lineHeight: 1.6, maxWidth: 600,
         }}>
-          An attacker intercepts the tranche and changes the amount. They use the same
+          An attacker intercepts the {signerRole === 'institution' ? 'admission record' : 'tranche'} and changes the {signerRole === 'institution' ? 'course fee' : 'amount'}. They use the same
           signature — but the original signature was created over a <em>different</em> message.
-          Change the amount below and try to verify.
+          Change the {signerRole === 'institution' ? 'course fee' : 'amount'} below and try to verify.
         </p>
       </div>
 
