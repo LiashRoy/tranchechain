@@ -322,7 +322,7 @@ function Step1({ onComplete, signerRole = 'nbfc' }) {
           fontFamily: 'Manrope, sans-serif', fontSize: '0.9rem',
           color: 'var(--text-secondary)', margin: 0, lineHeight: 1.6, maxWidth: 600,
         }}>
-          NBFC 2 generates an ECDSA P-256 key pair. The private key is a trapdoor — easy to
+          {signerRole === 'institution' ? 'The Institution' : 'The NBFC'} generates an ECDSA P-256 key pair. The private key is a trapdoor — easy to
           derive the public key from it, computationally infeasible to reverse.
         </p>
       </div>
